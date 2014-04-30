@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Node and Bower
 logs/*
@@ -15,6 +16,8 @@ web/tmp
 .vagrant
 
 
+=======
+>>>>>>> b0c5eff692f41214249b98ee35cb37691072e47d
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
