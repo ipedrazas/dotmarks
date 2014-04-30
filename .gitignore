@@ -1,12 +1,11 @@
-<<<<<<< HEAD
 
 # Node and Bower
 logs/*
 !.gitkeep
 
-web/node_modules
-web/bower_components
-web/tmp
+node_modules
+bower_components
+tmp
 
 .DS_Store
 .idea%    
@@ -17,7 +16,6 @@ web/tmp
 
 
 =======
->>>>>>> b0c5eff692f41214249b98ee35cb37691072e47d
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
