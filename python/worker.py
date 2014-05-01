@@ -32,10 +32,11 @@ celery = make_celery(flask_app)
 
 @celery.task()
 def populate_dotmark(item):
-	if 'url' and '_id' in item:
-		print "processing %s" % item['url']
-		soup = BeautifulSoup(urllib2.urlopen(item['url']))
-		title = soup.title.string
-		updates = {'title': title}
-		db.dotmarks.update({'_id': item['_id']}, {"$set": updates}, upsert=False)
+	if 'url' and '_id' in item:		
+		if 'title' not in item:
+			print "processing %s" % item['url']
+			soup = BeautifulSoup(urllib2.urlopen(item['url']))
+			title = soup.title.string
+			updates = {'title': title}
+			db.dotmarks.update({'_id': item['_id']}, {"$set": updates}, upsert=False)
 		return 1

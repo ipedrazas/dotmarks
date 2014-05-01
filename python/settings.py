@@ -36,11 +36,47 @@ dotmarks = {
             'type': 'list'
         }
     }
+}
 
+entries = {
+    'item_title': 'entry',
+    'additional_lookup': {
+        'url': 'regex("[\w]+")',
+        'field': 'username'
+    },
+    'schema':{
+        'title': {
+            'type': 'string',
+            'required': True
+        },
+        'start': {
+            'type': 'datetime',
+            'required': True
+        },
+        'end': {
+            'type': 'datetime'
+        },
+        'image': {
+            'type': 'string'
+        },
+        'group': {
+            'type': 'string'
+        },
+        'tags': {
+            'type': 'list'
+        },
+        'username':{
+            'type': 'string',
+            'required': True,
+        },
+    }
 }
 
 # The DOMAIN dict explains which resources will be available and how they will
 # be accessible to the API consumer.
 DOMAIN = {
-    'dotmarks': dotmarks
+    'dotmarks': dotmarks,
+    'entries': entries
 }
+
+X_DOMAINS = "*"
