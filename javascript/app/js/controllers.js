@@ -10,7 +10,7 @@ Date.prototype.yyyymmdd = function() {
    var yyyy = this.getFullYear().toString();
    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
    var dd  = this.getDate().toString();
-   return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
+   return yyyy + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + (dd[1]?dd:"0"+dd[0]); // padding
   };
 
 /* Controllers */
@@ -33,6 +33,7 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
 
 
 angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeParams', function ($scope, api, $routeParams) {
+    var timeline;
   	$scope.refreshEntries = function(){
         api.getWNEntries().success(function (data) {
         	var elems = new Array()
@@ -45,7 +46,18 @@ angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeP
         	 	log(item);      	 	
         	 	elems.push(item);
         	 });
-        	 $scope.entries = elems;
+            var locale = $('*[name=language]').val();
+            // var elems = [];
+            timeline = new links.Timeline(document.getElementById('mytimeline'));
+            var options = {
+                'width':  '100%',
+                'height': '300px',
+                'editable': true,   // enable dragging and editing events
+                'style': 'box',
+                'locale': locale
+            };
+            timeline.draw(elems, options);
+        	$scope.entries = elems;
         });
     };
     $scope.refreshEntries();

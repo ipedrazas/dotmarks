@@ -1,6 +1,48 @@
+ <link rel="stylesheet" type="text/css" href="assets/css/timeline.css">
+    <link type="text/css" href="assets/css/jquery.simple-dtpicker.css" rel="stylesheet" />
+<style type="text/css">
+        body { background-color: #fefefe; padding-left: 2%; padding-bottom: 100px; color: #101010; }
+        footer{ font-size:small;position:fixed;right:5px;bottom:5px; }
+        a:link, a:visited  { color: #0000ee; }
+        pre{ background-color: #eeeeee; margin-left: 1%; margin-right: 2%; padding: 2% 2% 2% 5%; }
+        p { font-size: 0.9rem; }
+        ul { font-size: 0.9rem; }
+        hr { border: 2px solid #eeeeee; margin: 2% 0% 2% -3%; }
+        h3 { border-bottom: 2px solid #eeeeee; margin: 2rem 0 2rem -1%; padding-left: 1%; padding-bottom: 0.1em; }
+        h4 { border-bottom: 1px solid #eeeeee; margin-top: 2rem; margin-left: -1%; padding-left: 1%; padding-bottom: 0.1em; }
+        .newEntry{
+            width: 350px;
+            height: 220px;
+            border: 1px solid black;
+            margin-top: 35px;
+            margin-left: 0px;
+        }
+        .newEntry .title{
+            background: black;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+        }
+        .newEntry .body{
+            padding: 20px;
+        }
+        #title, #start_date, #end_date, #group{
+            width: 255px;
+            float: right;
+        }
+</style>
+
 <p>This is the partial for Entries.</p>
 
 <div ng-repeat="entry in entries">
 	<h2>{{entry.title}}</h2>
 	<span>{{entry.start}}</span> - <span>{{entry.end}}</span>
 </div>
+
+<select name="language">
+    <option value="en">English</option>
+    <option value="fr">French</option>
+    <option value="es">Spanish</option>
+</select>
+<div id="mytimeline"></div>
