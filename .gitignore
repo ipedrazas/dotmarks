@@ -6,7 +6,7 @@ logs/*
 node_modules
 bower_components
 tmp
-test/unit
+test
 
 .DS_Store
 .idea%    
