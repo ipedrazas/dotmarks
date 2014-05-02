@@ -1,0 +1,152 @@
+<html>
+<head>
+    <title>Whastnext + :blibb</title>
+
+    <style type="text/css">
+        body {font: 10pt arial;}
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/timeline.css">
+    <link type="text/css" href="assets/css/jquery.simple-dtpicker.css" rel="stylesheet" />
+<style type="text/css">
+        body { background-color: #fefefe; padding-left: 2%; padding-bottom: 100px; color: #101010; }
+        footer{ font-size:small;position:fixed;right:5px;bottom:5px; }
+        a:link, a:visited  { color: #0000ee; }
+        pre{ background-color: #eeeeee; margin-left: 1%; margin-right: 2%; padding: 2% 2% 2% 5%; }
+        p { font-size: 0.9rem; }
+        ul { font-size: 0.9rem; }
+        hr { border: 2px solid #eeeeee; margin: 2% 0% 2% -3%; }
+        h3 { border-bottom: 2px solid #eeeeee; margin: 2rem 0 2rem -1%; padding-left: 1%; padding-bottom: 0.1em; }
+        h4 { border-bottom: 1px solid #eeeeee; margin-top: 2rem; margin-left: -1%; padding-left: 1%; padding-bottom: 0.1em; }
+        .newEntry{
+            width: 350px;
+            height: 220px;
+            border: 1px solid black;
+            margin-top: 35px;
+            margin-left: 0px;
+        }
+        .newEntry .title{
+            background: black;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+        }
+        .newEntry .body{
+            padding: 20px;
+        }
+        #title, #start_date, #end_date, #group{
+            width: 255px;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+
+<select name="language">
+    <option value="en">English</option>
+    <option value="fr">French</option>
+    <option value="es">Spanish</option>
+</select>
+
+<div id="mytimeline"></div>
+
+<div class="newEntry">
+    <div class="title">Add New Entry</div>
+    <div class="body">
+        <div id="title">
+            <input type="text" name="title" value="">
+        </div>
+        <div id="titleLabel">
+            <p>Title:</p>
+        </div>
+        <div id="start_date">
+            <input type="text" name="dtpicker_start" value="">
+        </div>
+        <div id="st_dateLabel">
+            <p>Start:</p>
+        </div>
+         <div id="end_date">
+            <input type="text" name="dtpicker_end" value="">
+         </div>
+         <div id="end_date_label">
+            <p>End:</p>
+        </div>
+         <div id="group">
+            <input type="text" name="group" value="">
+         </div>
+         <div id="group_label">
+            <p>Group:</p>
+         </div>
+         <input type="button" value="Add" name="add_entry" />
+
+    </div>
+
+
+</div>
+
+
+    <script type="text/javascript" src="assets/js/lib/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="assets/js/timeline.js"></script>
+    <script type="text/javascript" src="assets/js/timeline-locales.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.simple-dtpicker.js"></script>
+        <script type="text/javascript">
+        var timeline;
+        var data;
+        var blibbAPI = "http://localhost:5000/entries";
+
+        function refresh(){
+            $.getJSON( blibbAPI)
+                .done(function( data ) {
+                        var locale = $('*[name=language]').val();
+                        var elems = [];
+                        timeline = new links.Timeline(document.getElementById('mytimeline'));
+                        var options = {
+                            'width':  '100%',
+                            'height': '300px',
+                            'editable': true,   // enable dragging and editing events
+                            'style': 'box',
+                            'locale': locale
+                        };
+                        data._items.forEach(function(entry) {
+                            entry.tags.forEach(function(tag){
+                                var obj = {'start': new Date(entry.start), 'end': new Date(entry.end), 'content': entry.title, 'group': tag}
+                                elems.push(obj);
+                            });
+                        });
+                        timeline.draw(elems, options);
+                });
+        }
+
+        $(document).ready(function () {
+            refresh();
+            $('*[name=dtpicker_start]').appendDtpicker();
+            $('*[name=dtpicker_end]').appendDtpicker();
+        });
+
+
+        $( "input[name=add_entry]" ).click(function() {
+                var title = $('input[name=title]').val();
+                var group = $('input[name=group]').val();
+                var start = $('*[name=dtpicker_start]').val();
+                var end = $('*[name=dtpicker_end]').val();
+
+                $.post(blibbAPI, { app_token: '0cda51e4ec23b7c8bf1b51d18abf29673b8785d4', start: start, end: end, content: title, group: group, img: '',  tags: '' },
+                        function(data) {
+                            refresh();
+                            $('input[name=title]').val('');
+                            $('input[name=group]').val('');
+                            $('*[name=dtpicker_start]').val('');
+                            $('*[name=dtpicker_end]').val('');
+                        }
+                    );
+        });
+
+        $( '*[name=language]').change(function() {
+            refresh();
+        });
+
+    </script>
+</body>
+</html>
