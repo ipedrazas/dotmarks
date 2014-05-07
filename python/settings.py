@@ -16,6 +16,8 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
+# Enable CORS for all domains
+X_DOMAINS = "*"
 
 dotmarks = {
 
@@ -78,5 +80,3 @@ DOMAIN = {
     'dotmarks': dotmarks,
     'entries': entries
 }
-
-X_DOMAINS = "*"

@@ -1,0 +1,44 @@
+<!--<html contenteditable>
+<head>
+    <title>Vli</title>
+    <style type="text/css">
+        body { font-size: 32px; font-family: 'courier'; text-align: center;}
+        .hiline{
+            background-color: rgb(240, 240, 240);
+        }
+    </style>
+</head>
+<body class="vli">
+    
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        var n=0;
+        $('body').on('keydown',function(e){
+            
+            if (e.which == 13) {
+                n++;
+                console.log(e.target.attributes);
+                if(n==5){
+                    debugger;;
+                }
+            }
+        });
+
+        // $('div').keypress(function(e) {
+        //     console.log("key");
+        
+        // });
+
+        $( "#foo" ).bind( "mouseenter mouseleave", function() {
+          $( this ).toggleClass( "hiline" );
+        });
+    </script>
+</body></html>-->
+
+<html>
+<body>
+<h1 align=center>Hola Nico</h1>
+<p align=center contenteditable /p>
+</body>
+</html>

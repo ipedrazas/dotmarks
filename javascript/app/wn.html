@@ -20,7 +20,7 @@
         h4 { border-bottom: 1px solid #eeeeee; margin-top: 2rem; margin-left: -1%; padding-left: 1%; padding-bottom: 0.1em; }
         .newEntry{
             width: 350px;
-            height: 220px;
+            height: 250px;
             border: 1px solid black;
             margin-top: 35px;
             margin-left: 0px;
@@ -129,10 +129,11 @@
         $( "input[name=add_entry]" ).click(function() {
                 var title = $('input[name=title]').val();
                 var group = $('input[name=group]').val();
-                var start = $('*[name=dtpicker_start]').val();
-                var end = $('*[name=dtpicker_end]').val();
+                var start = new Date($('*[name=dtpicker_start]').val());
+                var end = new Date($('*[name=dtpicker_end]').val());
 
-                $.post(blibbAPI, { app_token: '0cda51e4ec23b7c8bf1b51d18abf29673b8785d4', start: start, end: end, content: title, group: group, img: '',  tags: '' },
+
+                $.post(blibbAPI, { username: 'ivan', start: start.toUTCString(), end: end.toUTCString(), title: title, tags: group },
                         function(data) {
                             refresh();
                             $('input[name=title]').val('');
