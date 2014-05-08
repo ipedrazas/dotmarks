@@ -54,7 +54,13 @@ function addBookmark() {
     o['username'] = user;
     o['url'] = url;    
     if(tags !== undefined) {
-        o['tags'] = tags.split(" ");    
+        var aTags = tags.split(" ");
+        if(aTags.length >= 1){
+            if(aTags[0].length > 1){
+                o['tags'] = aTags;
+            }            
+        }
+        
     }
     if(title !== undefined) {
         o['title'] = title;
