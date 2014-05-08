@@ -6,7 +6,7 @@ from eve.methods.common import payload, parse
 
 
 def after_insert_dotmark(items):
-    print 'after insert'
+    print 'postfter insert'
     for item in items:
         populate_dotmark.delay(item)
 
