@@ -1,5 +1,5 @@
 dotmarks
 ========
 
-marks management api
+dotMarks management api
 
