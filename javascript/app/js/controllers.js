@@ -21,7 +21,7 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
         	var elems = new Array()
         	 _.each(data._items, function(item){
         	 	// log(item);
-        	 	// item.start = new Date(item.start);        	 	
+        	 	// item.start = new Date(item.start);
         	 	elems.push(item);
         	 });
         	 $scope.dotmarks = elems;
@@ -43,7 +43,7 @@ angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeP
         	 	if(item.end){
         	 		item.end = (new Date(item.end)).yyyymmdd();
         	 	}
-        	 	log(item);      	 	
+        	 	log(item);
         	 	elems.push(item);
         	 });
             var locale = $('*[name=language]').val();
@@ -66,7 +66,7 @@ angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeP
 
 
 angular.module('dotApp').factory('api', ['$http', function($http) {
-    var dotmarksUrl = "http://localhost:5000/dotmarks";
+    var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
     return {
         getDotMarksEntries: function() {
             return $http.get(dotmarksUrl);
@@ -84,7 +84,7 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
 }]);
 
 angular.module('dotApp').factory('wnapi', ['$http', function($http) {
-    var wnUrl = "http://localhost:5000/entries";
+    var wnUrl = "http://dotmarks.dev:5000/entries";
     return {
         getWNEntries: function() {
             return $http.get(wnUrl);

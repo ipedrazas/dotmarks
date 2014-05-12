@@ -1,10 +1,10 @@
-// This callback function is called when the content script has been 
+// This callback function is called when the content script has been
 // injected and returned its results
-function onPageInfo(o)  { 
-    document.getElementById('title').value = o.title; 
-    document.getElementById('url').value = o.url; 
-    // document.getElementById('summary').innerText = o.summary; 
-} 
+function onPageInfo(o)  {
+    document.getElementById('title').value = o.title;
+    document.getElementById('url').value = o.url;
+    // document.getElementById('summary').innerText = o.summary;
+}
 
 // Global reference to the status display SPAN
 var statusDisplay = null;
@@ -15,23 +15,23 @@ function addBookmark() {
     event.preventDefault();
 
     // The URL to POST our data to
-    var postUrl = 'http://localhost:5000/dotmarks';
+    var postUrl = 'http://dotmarks.dev:5000/dotmarks';
 
     // Set up an asynchronous AJAX POST request
     var xhr = new XMLHttpRequest();
     xhr.open('POST', postUrl, true);
-    
+
     // Prepare the data to be POSTed
     var title = document.getElementById('title').value;
-    var url = document.getElementById('url').value;    
+    var url = document.getElementById('url').value;
     var tags = document.getElementById('tags').value;
     var user = 'ivan';
-    
-    // Set correct header for form data 
+
+    // Set correct header for form data
     xhr.setRequestHeader('Content-type', 'application/json');
 
     // Handle request state change events
-    xhr.onreadystatechange = function() { 
+    xhr.onreadystatechange = function() {
         // If the request completed
         if (xhr.readyState == 4) {
             statusDisplay.innerHTML = '';
@@ -40,7 +40,18 @@ function addBookmark() {
                 statusDisplay.innerHTML = 'Saved!';
                 window.setTimeout(window.close, 1000);
             } else {// Show what went wrong
-                statusDisplay.innerHTML = 'Error saving: ' + xhr.statusText;
+                var res = JSON.parse(xhr.response);
+                var errorMsg = res._issues.url;
+                if( errorMsg !== undefined){
+                  if(errorMsg.indexOf("is not unique") > 0){
+                    statusDisplay.innerHTML = 'Error saving: url already saved!';
+                  }else{
+                    statusDisplay.innerHTML = 'Error saving: ' + res._issues.url;
+                  }
+                }else{
+                  statusDisplay.innerHTML = 'Error saving: ' + xhr.statusText;
+                }
+                window.setTimeout(window.close, 2500);
             }
         }
     };
@@ -52,21 +63,20 @@ function addBookmark() {
  function serializeObject(user, title, url, tags){
     var o = {};
     o['username'] = user;
-    o['url'] = url;    
+    o['url'] = url;
     if(tags !== undefined) {
         var aTags = tags.split(" ");
         if(aTags.length >= 1){
             if(aTags[0].length > 1){
                 o['tags'] = aTags;
-            }            
+            }
         }
-        
+
     }
     if(title !== undefined) {
         o['title'] = title;
     }
-    console.log(JSON.stringify(o));
-    
+
     return JSON.stringify(o);
 };
 
@@ -76,7 +86,7 @@ window.addEventListener('load', function(evt) {
     document.getElementById('addbookmark').addEventListener('submit', addBookmark);
     // Cache a reference to the status display SPAN
     statusDisplay = document.getElementById('status-display');
-    // Call the getPageInfo function in the background page, injecting content_script.js 
+    // Call the getPageInfo function in the background page, injecting content_script.js
     // into the current HTML page and passing in our onPageInfo function as the callback
     chrome.extension.getBackgroundPage().getPageInfo(onPageInfo);
 });

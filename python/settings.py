@@ -26,6 +26,7 @@ dotmarks = {
             'type': 'string',
             'minlength': 7,
             'required': True,
+            'unique': True,
             },
         'title':{
             'type': 'string'
