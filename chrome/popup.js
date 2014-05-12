@@ -33,13 +33,17 @@ function addBookmark() {
     // Handle request state change events
     xhr.onreadystatechange = function() {
         // If the request completed
+        var timeOut = 0;
         if (xhr.readyState == 4) {
             statusDisplay.innerHTML = '';
-            if (xhr.status == 201) {
+            if (xhr.status === 201) {
                 // If it was a success, close the popup after a short delay
                 statusDisplay.innerHTML = 'Saved!';
-                window.setTimeout(window.close, 1000);
-            } else {// Show what went wrong
+                timeOut = 1000;
+            } else if(xhr.status === 0){
+              statusDisplay.innerHTML = 'Error: dotMarks is unreachable!';
+              timeOut = 2500;
+            }else {// Show what went wrong
                 var res = JSON.parse(xhr.response);
                 var errorMsg = res._issues.url;
                 if( errorMsg !== undefined){
@@ -51,8 +55,9 @@ function addBookmark() {
                 }else{
                   statusDisplay.innerHTML = 'Error saving: ' + xhr.statusText;
                 }
-                window.setTimeout(window.close, 2500);
+                timeOut= 2500;
             }
+            window.setTimeout(window.close, timeOut);
         }
     };
 
