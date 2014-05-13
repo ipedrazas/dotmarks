@@ -41,7 +41,6 @@ Date.prototype.yyyymmdd = function() {
 angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
   	$scope.refreshEntries = function(){
         api.getDotMarksEntries().success(function (data) {
-            log("$scope.refreshEntries();");
         	var elems = new Array();
             var etags = new Array();
         	 _.each(data._items, function(item){
@@ -57,7 +56,6 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
 
     $scope.getTags = function(){
         api.getDotMarksByTag($routeParams.tag).success(function (data) {
-            log("$scope.getDotMarksByTag();");
             var elems = new Array();
             var etags = new Array();
              _.each(data._items, function(item){
@@ -70,11 +68,14 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
              $scope.tags = reduce(etags);
         });
     };
+    
+    $scope.editableFocus = function(){
+        log("editable tiene el foco");
+    };
+
     if($routeParams.tag !== undefined){
-        log("$scope.getTags();");
         $scope.getTags();  
     }else{
-        log("$scope.refreshEntries();");
         $scope.refreshEntries();          
     }
     
@@ -116,6 +117,7 @@ angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeP
 
 var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
 // var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
+// var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
 var wnUrl = "http://dotmarks.dev:5000/entries";
 
 angular.module('dotApp').factory('api', ['$http', function($http) {
@@ -163,3 +165,14 @@ angular.module('dotApp').factory('wnapi', ['$http', function($http) {
         }
     };
 }]);
+
+
+angular.module('dotApp').directive('typing', function () {
+    return function (scope, element, attrs) {
+      element.bind('keyup', function () {
+        if(element.text().length > 2){
+            log(element.text());
+        }
+      });
+    };
+  });

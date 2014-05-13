@@ -11,7 +11,7 @@
       <a class="navbar-brand" href="#/dotmarks">dotMarks</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">       
         <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as <b class="caret"></b></a>
@@ -31,7 +31,7 @@
 <div class="row">
     <div class="col-md-1">
         <ul class="list-group" id="tagList">
-          <li ng-repeat="elem in tags" data-tag="{{elem.label}}">
+          <li ng-repeat="elem in tags">
             <a href='#/dotmarks?tag={{elem.label}}' class="btn btn-info tag">
                 <span class="badge tagCount">{{elem.count}}</span>
                 {{elem.label}}
@@ -40,25 +40,22 @@
         </ul>
     </div>
     
-    <div class="col-md-10">
-        <div ng-repeat="dotmark in dotmarks">
-            <h2 class="urlTitle"><a href="{{dotmark.url}}">{{dotmark.title}}</a></h2>
-            <p class="dotMarkData">
-                <a href="{{dotmark.url}}">{{dotmark.url}}</a>
-            </p>
-            <ul class="list-inline tags">
-                <li ng-repeat="tag in dotmark.tags" class="tag"><a href=""></a>{{tag}}</li>
-            </ul>    
-        
+    <div class="col-md-10 rightCol">
+        <div class="row">
+            <form>
+                <h1 class="searchbar" contenteditable="true" onclick="document.execCommand('selectAll',false,null)" typing>...start typing to search</h1>
+            </form>
         </div>
+        <div class="row">            
+            <div ng-repeat="dotmark in dotmarks">
+                <h2 class="urlTitle"><a href="{{dotmark.url}}">{{dotmark.title}}</a></h2>
+                <p class="dotMarkData">
+                    <a href="{{dotmark.url}}">{{dotmark.url}}</a>
+                </p>
+                <ul class="list-inline tags">
+                    <li ng-repeat="tag in dotmark.tags" class="tag"><a href=""></a>{{tag}}</li>
+                </ul>            
+            </div>    
+        </div>        
     </div>
 </div>
-
-<script type="text/javascript">
-    
-    $("li").live('click', function(){
-        var tag = $(this).attr("data-tag");
-        console.log("tag: " + tag);
-    });
-    
-</script>
