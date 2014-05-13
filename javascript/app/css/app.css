@@ -28,3 +28,34 @@
   content: "";
   padding: 0;
 }
+
+.tags{
+ margin-left: 20px; 
+}
+
+.tag{
+  margin-left: 5px;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#5bc0de), to(#2aabd2));
+  background-image: -webkit-linear-gradient(top, #5bc0de, 0%, #2aabd2, 100%);
+  background-image: -moz-linear-gradient(top, #5bc0de 0%, #2aabd2 100%);
+  background-image: linear-gradient(to bottom, #5bc0de 0%, #2aabd2 100%);
+  background-repeat: repeat-x;
+  border-color: #28a4c9;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2aabd2', GradientType=0);
+  color: white;
+  margin-bottom: 5px;
+}
+
+.urlTitle{
+  margin-bottom: 0;
+}
+
+.dotMarkData{
+  margin-left: 20px;
+}
+
+.tagCount{
+  background-color: #1A99C2;
+  float: right;
+  margin-left: 10px;
+}

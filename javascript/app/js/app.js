@@ -2,7 +2,7 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('dotApp', ['ngRoute'])
+angular.module('dotApp', ['ngRoute','ui.bootstrap'])
 .config(function ($routeProvider) {
 	  $routeProvider
 		  .when('/dotmarks', {templateUrl: 'partials/dotmarks.html', controller: 'dotMarkController'})

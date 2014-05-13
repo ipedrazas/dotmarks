@@ -70,7 +70,7 @@ function addBookmark() {
     o['username'] = user;
     o['url'] = url;
     if(tags !== undefined) {
-        var aTags = tags.split(" ");
+        var aTags = tags.toLowerCase().split(" ");
         if(aTags.length >= 1){
             if(aTags[0].length > 1){
                 o['tags'] = aTags;

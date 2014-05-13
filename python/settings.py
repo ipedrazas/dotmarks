@@ -16,12 +16,15 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
+XML = False
 # Enable CORS for all domains
 X_DOMAINS = "*"
 
 dotmarks = {
 
     'schema': {
+        # 'public_methods': ['GET'],
+        # 'public_item_methods': ['GET'],
         'url': {
             'type': 'string',
             'minlength': 7,

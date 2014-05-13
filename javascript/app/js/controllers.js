@@ -6,6 +6,28 @@ function log(entry){
     }
 }
 
+function reduce(arr) {
+    var tags = [], a = [], b = [], prev;
+    
+    arr.sort();
+    for ( var i = 0; i < arr.length; i++ ) {
+        if ( arr[i] !== prev ) {
+            a.push(arr[i]);
+            b.push(1);
+        } else {
+            b[b.length-1]++;
+        }
+        prev = arr[i];
+    }
+    
+    for ( var i = 0; i < a.length; i++ ) {
+        tags.push({label: a[i], count: b[i]});
+    }
+    return tags
+
+}
+
+
 Date.prototype.yyyymmdd = function() {
    var yyyy = this.getFullYear().toString();
    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
@@ -15,19 +37,47 @@ Date.prototype.yyyymmdd = function() {
 
 /* Controllers */
 
+
 angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
   	$scope.refreshEntries = function(){
         api.getDotMarksEntries().success(function (data) {
-        	var elems = new Array()
+            log("$scope.refreshEntries();");
+        	var elems = new Array();
+            var etags = new Array();
         	 _.each(data._items, function(item){
-        	 	// log(item);
-        	 	// item.start = new Date(item.start);
         	 	elems.push(item);
+                _.each(item.tags, function(tag) {
+                    etags.push(tag.toLowerCase());
+                });
         	 });
         	 $scope.dotmarks = elems;
+             $scope.tags = reduce(etags);
         });
     };
-    $scope.refreshEntries();
+
+    $scope.getTags = function(){
+        api.getDotMarksByTag($routeParams.tag).success(function (data) {
+            log("$scope.getDotMarksByTag();");
+            var elems = new Array();
+            var etags = new Array();
+             _.each(data._items, function(item){
+                elems.push(item);
+                _.each(item.tags, function(tag) {
+                    etags.push(tag.toLowerCase());
+                });
+             });
+             $scope.dotmarks = elems;
+             $scope.tags = reduce(etags);
+        });
+    };
+    if($routeParams.tag !== undefined){
+        log("$scope.getTags();");
+        $scope.getTags();  
+    }else{
+        log("$scope.refreshEntries();");
+        $scope.refreshEntries();          
+    }
+    
 
   }]);
 
@@ -64,9 +114,11 @@ angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeP
 
   }]);
 
+var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
+// var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
+var wnUrl = "http://dotmarks.dev:5000/entries";
 
 angular.module('dotApp').factory('api', ['$http', function($http) {
-    var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
     return {
         getDotMarksEntries: function() {
             return $http.get(dotmarksUrl);
@@ -79,12 +131,23 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
                 responseType: "application/json",
             };
             return $http.post(projectUrl, entry, config);
+        },
+        
+        getDotMarksByTag: function(tag){
+             var config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                responseType: "application/json",
+            };
+            var tagFilter = "?where={\"tags\": \"" + tag + "\"}";
+            return $http.get(dotmarksUrl + tagFilter, config);
+
         }
     };
 }]);
 
 angular.module('dotApp').factory('wnapi', ['$http', function($http) {
-    var wnUrl = "http://dotmarks.dev:5000/entries";
     return {
         getWNEntries: function() {
             return $http.get(wnUrl);
