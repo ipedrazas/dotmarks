@@ -38,18 +38,31 @@ Date.prototype.yyyymmdd = function() {
 /* Controllers */
 
 
-angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
-  	$scope.refreshEntries = function(){
-        api.getDotMarksEntries().success(function (data) {
-        	var elems = new Array();
+function processDotMarks(data) {
+            var elems = new Array();
             var etags = new Array();
-        	 _.each(data._items, function(item){
-        	 	elems.push(item);
+             _.each(data._items, function(item){
+                elems.push(item);
                 _.each(item.tags, function(tag) {
                     etags.push(tag.toLowerCase());
                 });
-        	 });
-        	 $scope.dotmarks = elems;
+             });
+             $scope.dotmarks = elems;
+             $scope.tags = reduce(etags);
+        }
+
+angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
+  	$scope.refreshEntries = function(){
+        api.getDotMarksEntries().success(function processDotMarks(data) {
+            var elems = new Array();
+            var etags = new Array();
+             _.each(data._items, function(item){
+                elems.push(item);
+                _.each(item.tags, function(tag) {
+                    etags.push(tag.toLowerCase());
+                });
+             });
+             $scope.dotmarks = elems;
              $scope.tags = reduce(etags);
         });
     };
@@ -73,6 +86,16 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
         log("editable tiene el foco");
     };
 
+    $scope.searchDotMarks = function(query){
+        api.searchDotMarks(query).success(function (data) {
+            var elems = new Array();
+             _.each(data._items, function(item){
+                elems.push(item);                
+             });
+             $scope.dotmarks = elems;             
+        });
+    };
+
     if($routeParams.tag !== undefined){
         $scope.getTags();  
     }else{
@@ -83,42 +106,11 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
   }]);
 
 
-angular.module('dotApp').controller('wnController', ['$scope', 'wnapi', '$routeParams', function ($scope, api, $routeParams) {
-    var timeline;
-  	$scope.refreshEntries = function(){
-        api.getWNEntries().success(function (data) {
-        	var elems = new Array()
-        	 _.each(data._items, function(item){
-        	 	item.start = (new Date(item.start)).yyyymmdd();
 
-        	 	if(item.end){
-        	 		item.end = (new Date(item.end)).yyyymmdd();
-        	 	}
-        	 	log(item);
-        	 	elems.push(item);
-        	 });
-            var locale = $('*[name=language]').val();
-            // var elems = [];
-            timeline = new links.Timeline(document.getElementById('mytimeline'));
-            var options = {
-                'width':  '100%',
-                'height': '300px',
-                'editable': true,   // enable dragging and editing events
-                'style': 'box',
-                'locale': locale
-            };
-            timeline.draw(elems, options);
-        	$scope.entries = elems;
-        });
-    };
-    $scope.refreshEntries();
-
-  }]);
 
 var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
 // var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
 // var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
-var wnUrl = "http://dotmarks.dev:5000/entries";
 
 angular.module('dotApp').factory('api', ['$http', function($http) {
     return {
@@ -145,34 +137,24 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
             var tagFilter = "?where={\"tags\": \"" + tag + "\"}";
             return $http.get(dotmarksUrl + tagFilter, config);
 
-        }
-    };
-}]);
-
-angular.module('dotApp').factory('wnapi', ['$http', function($http) {
-    return {
-        getWNEntries: function() {
-            return $http.get(wnUrl);
         },
-        saveDotMark: function(entry) {
-            var config = {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                responseType: "application/json",
-            };
-            return $http.post(projectUrl, entry, config);
+        searchDotMarks: function(query){
+            log("searching");
+            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\"}}]}";            
+            return $http.get(dotmarksUrl + filter);
         }
     };
 }]);
 
 
-angular.module('dotApp').directive('typing', function () {
+
+angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {
       element.bind('keyup', function () {
         if(element.text().length > 2){
             log(element.text());
+            scope.searchDotMarks(element.text());
         }
       });
     };
-  });
+  }]);

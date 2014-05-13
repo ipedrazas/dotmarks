@@ -20,6 +20,8 @@ XML = False
 # Enable CORS for all domains
 X_DOMAINS = "*"
 
+MONGO_QUERY_BLACKLIST = ['$where']
+
 dotmarks = {
 
     'schema': {
