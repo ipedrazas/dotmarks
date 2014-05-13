@@ -89,6 +89,7 @@ function addBookmark() {
 window.addEventListener('load', function(evt) {
     // Handle the bookmark form submit event with our addBookmark function
     document.getElementById('addbookmark').addEventListener('submit', addBookmark);
+    document.getElementById('tags').focus();
     // Cache a reference to the status display SPAN
     statusDisplay = document.getElementById('status-display');
     // Call the getPageInfo function in the background page, injecting content_script.js
