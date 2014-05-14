@@ -140,7 +140,7 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
         },
         searchDotMarks: function(query){
             log("searching");
-            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\"}}]}";            
+            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";            
             return $http.get(dotmarksUrl + filter);
         }
     };
@@ -151,9 +151,10 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
 angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {
       element.bind('keyup', function () {
-        if(element.text().length > 2){
-            log(element.text());
+        if(element.text().length > 2){            
             scope.searchDotMarks(element.text());
+        }else if(element.text().length == 0){
+            scope.refreshEntries();
         }
       });
     };
