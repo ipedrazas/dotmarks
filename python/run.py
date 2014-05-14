@@ -1,11 +1,9 @@
 from eve import Eve
-from eve.auth import BasicAuth
-from werkzeug.security import check_password_hash
+#from eve.auth import BasicAuth
+#from werkzeug.security import check_password_hash
 
-import pdb
-import time
 from worker import populate_dotmark
-from eve.methods.common import payload, parse
+
 
 
 
@@ -19,14 +17,16 @@ from eve.methods.common import payload, parse
 
 
 def after_insert_dotmark(items):
-    print 'postfter insert'
     for item in items:
         populate_dotmark.delay(item)
 
+def before_returning_dotmark(response):
+	print 'fetch'
 
 app = Eve()
 
 app.on_inserted_dotmarks += after_insert_dotmark
+app.on_fetched_item_dotmark += before_returning_dotmark
 
 if __name__ == '__main__':
     app.run( host = '0.0.0.0', port = 5000, debug = True)

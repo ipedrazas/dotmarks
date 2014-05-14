@@ -139,14 +139,25 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
 
         },
         searchDotMarks: function(query){
-            log("searching");
             var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";            
             return $http.get(dotmarksUrl + filter);
+        },
+        visitDotMark: function(id){
+            return $http.put(dotmarksUrl + "/" + id)
+            put(url, data, [config]);
         }
     };
 }]);
 
 
+angular.module('dotApp').directive('targetUrl', ['$http', function () {
+    return function (scope, element, attrs) {
+      element.bind('click', function () {
+        log(element.attr('data-origin'));
+        return false;
+      });
+    };
+  }]);
 
 angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {

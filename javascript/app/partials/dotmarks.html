@@ -43,12 +43,12 @@
     <div class="col-md-10 rightCol">
         <div class="row">
             <form>
-                <h1 class="searchbar" contenteditable="true" onclick="document.execCommand('selectAll',false,null)" typing>...start typing to search</h1>
+                <h1 class="searchbar" contenteditable="true" onclick="document.execCommand('selectAll',false,null)" typing >...start typing to search</h1>
             </form>
         </div>
         <div class="row">            
             <div ng-repeat="dotmark in dotmarks">
-                <h2 class="urlTitle"><a href="{{dotmark.url}}">{{dotmark.title}}</a></h2>
+                <h2 class="urlTitle"><span href="{{dotmark.url}}" data-origin="{{dotmark._id}}" target-url>{{dotmark.title}}</span></h2>
                 <p class="dotMarkData">
                     <a href="{{dotmark.url}}">{{dotmark.url}}</a>
                 </p>

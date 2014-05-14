@@ -1,9 +1,10 @@
 // This callback function is called when the content script has been
 // injected and returned its results
 function onPageInfo(o)  {
+    console.log(o);
     document.getElementById('title').value = o.title;
     document.getElementById('url').value = o.url;
-    // document.getElementById('summary').innerText = o.summary;
+    document.getElementById('tags').value = o.tags;
 }
 
 // Global reference to the status display SPAN

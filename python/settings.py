@@ -42,7 +42,10 @@ dotmarks = {
         },
         'tags': {
             'type': 'list'
-        }
+        },
+        'views': {
+            'type': 'integer'
+        },
     }
 }
 
