@@ -1,3 +1,9 @@
-- hosts: dotmarks-dev
+- hosts: all
   roles:
+    - upgrade
     - common
+    - ohmyzsh
+    - redis
+    - python
+    - mongo
+

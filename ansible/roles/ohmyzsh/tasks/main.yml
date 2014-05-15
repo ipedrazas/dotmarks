@@ -1,0 +1,22 @@
+---
+- name: Checking essentials
+  apt: name={{ item }} state=present
+  with_items:
+  - git
+  - git-core 
+  - zsh 
+
+- name: Clone oh-my-zsh repo
+  git: repo=https://github.com/robbyrussell/oh-my-zsh.git dest=/home/$user/.oh-my-zsh
+
+- name: deploy .alias
+  copy: src=alias.in dest=/home/vagrant/.alias owner=vagrant
+
+- name: deploy .functions
+  copy: src=functions.in dest=/home/vagrant/.functions owner=vagrant
+
+- name: deploy .zshrc
+  copy: src=zshrc.in dest=/home/vagrant/.zshrc owner=vagrant
+
+- name: Set zsh as default shell
+  user: name=$user shell=/bin/zsh

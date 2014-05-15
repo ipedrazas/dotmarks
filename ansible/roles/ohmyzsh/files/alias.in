@@ -1,0 +1,96 @@
+# some more ls aliases
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias ll='ls -atrhlF'
+alias log='tail -f /var/log/nginx/error.log'
+alias p='python'
+alias ut='python -m unittest'
+alias api='cd /home/ivan/workspace/blibb-api'
+alias web=' cd /home/ivan/workspace/blibb-web'
+alias depweb='cd /home/ivan/workspace/deploy-web'
+alias depap='cd /home/ivan/wokspace/deploy-api'
+alias ..='cd ..'
+alias gs='git status'
+alias gc='git commit -m'
+alias gp='git pull'
+alias ga='git add .'
+alias size='du -hs'
+alias i='sudo apt-get install'
+alias u='sudo apt-get update'
+alias upgrade='sudo apt-get dist-upgrade'
+alias search='sudo apt-cache search'
+alias install='sudo dpkg -i'
+alias hosts='sudo vi /etc/hosts'
+alias vmkernel='sudo /etc/init.d/vboxdrv setup'
+alias rs='python manage.py runserver'
+alias vi='vim'
+alias listen='sudo netstat -plunt'
+
+# Vagrant
+alias up='vagrant up'
+alias valt='vagrant halt'
+
+#alias i='sudo pacman -S'
+#alias u='sudo pacman -U'
+#alias m='makepkg -Acs'
+
+alias d="cd ~/Dropbox"
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+alias log='tail -f -n50'
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+        colorflag="--color"
+else # OS X `ls`
+        colorflag="-G"
+fi
+
+# List only directories
+alias lsd='ls -lF ${colorflag} | grep "^d"'
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
+# List all files colorized in long format, including dot files
+alias la="ls -laF ${colorflag}"
+
+alias t='tmux a || tmux new-s'
+
+# ----------------------------------------------------------------------
+# ALIASES / FUNCTIONS
+# ----------------------------------------------------------------------
+
+# disk usage with human sizes and minimal depth
+alias du1='du -h --max-depth=1'
+alias fn='find . -name'
+alias hi='history | tail -20'
+alias s='sudo'
+
+alias java8='sudo update-java-alternatives -s java-8-oracle'
+alias java7='sudo update-java-alternatives -s java-7-oracle'
+
+alias rake="noglob rake"
+
+alias lolcat='adb logcat | coloredlogcat.py'
+
+alias reload!='. ~/.zshrc'
+
+alias untar="tar -xvzf"
+
+alias up='vagrant up'
+alias valt='vagrant halt'
+
+# View HTTP traffic
+alias sniff="sudo ngrep -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+
+#API
+function jsonCurl(){
+	if [ $1 ];then
+		curl $1 | pjson
+	else
+		echo "No url present"
+	fi
+}
+

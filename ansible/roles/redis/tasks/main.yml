@@ -1,0 +1,5 @@
+---
+- name: Installing Redis
+  apt: name={{ item }} state=present
+  with_items:
+  - redis-server

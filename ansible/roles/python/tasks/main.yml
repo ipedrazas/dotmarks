@@ -1,0 +1,8 @@
+---
+- name: install virtualenv
+  pip: name={{ item }} state=present
+  with_items:
+  - virtualenv
+  - virtualenvwrapper
+
+- file: path=/home/vagrant/Envs state=directory owner=vagrant
