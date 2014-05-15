@@ -82,10 +82,6 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
         });
     };
     
-    $scope.editableFocus = function(){
-        log("editable tiene el foco");
-    };
-
     $scope.searchDotMarks = function(query){
         api.searchDotMarks(query).success(function (data) {
             var elems = new Array();
@@ -93,6 +89,16 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
                 elems.push(item);                
              });
              $scope.dotmarks = elems;             
+        });
+    };
+
+    $scope.starDotMark = function(id){
+        log("starDotMark: " + id);
+        _.each($scope.dotmarks, function(item) {
+             if(id==item._id){
+
+                item.star != item.star;
+             }
         });
     };
 
@@ -109,8 +115,24 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
 
 
 var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
+var auditUrl =  "http://dotmarks.dev:5000/logs";
+
 // var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
 // var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
+
+
+angular.module('dotApp').factory('appaudit', ['$http', function($http) {
+    return {
+        clickDotMark: function(id){
+            var o = {};
+            o['user'] = 'ivan';
+            o['source_id'] = id;
+            o['action'] = 'click';
+            return $http.post( auditUrl, JSON.stringify(o));
+        },
+        
+    };
+}]);
 
 angular.module('dotApp').factory('api', ['$http', function($http) {
     return {
@@ -142,22 +164,28 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
             var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";            
             return $http.get(dotmarksUrl + filter);
         },
-        visitDotMark: function(id){
-            return $http.put(dotmarksUrl + "/" + id)
-            put(url, data, [config]);
-        }
+        starDotMark: function(id){
+            var o = {};
+            o['user'] = 'ivan';
+            o['source_id'] = id;
+            o['action'] = 'click';
+            return $http.post( dotmarksUrl + "/" + id, JSON.stringify(o));
+        },
     };
 }]);
 
 
-angular.module('dotApp').directive('targetUrl', ['$http', function () {
+
+
+angular.module('dotApp').directive('targetUrl', ['appaudit', function (appaudit) {
     return function (scope, element, attrs) {
-      element.bind('click', function () {
-        log(element.attr('data-origin'));
-        return false;
+      element.bind('click', function (event) {
+            var source_id = element.attr('data-origin');
+            appaudit.clickDotMark(source_id);
       });
     };
   }]);
+
 
 angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {

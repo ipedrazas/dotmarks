@@ -9,7 +9,7 @@ RESOURCE_METHODS = ['GET', 'POST', 'DELETE']
 
 # Enable reads (GET), edits (PATCH) and deletes of individual items
 # (defaults to read-only item access).
-ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
+ITEM_METHODS = ['GET', 'PATCH', 'PUT', 'DELETE']
 
 # We enable standard client cache directives for all resources exposed by the
 # API. We can always override these global settings later.
@@ -19,8 +19,38 @@ CACHE_EXPIRES = 20
 XML = False
 # Enable CORS for all domains
 X_DOMAINS = "*"
+X_HEADERS = "Content-Type, accept"
 
 MONGO_QUERY_BLACKLIST = ['$where']
+
+
+logs = {
+    'schema': {
+        'user': {
+            'type': 'string'
+        },
+        'source_id': {
+            'type': 'string'
+        },
+        'action': {
+            'type': 'string'
+        }
+    }
+}
+
+users = {
+    'schema': {
+        'username': {
+            'type': 'string',
+            'unique': True,
+            'required': True
+        },
+        'password': {
+            'type': 'string',
+            'required': True
+        }
+    }
+}
 
 dotmarks = {
 
@@ -87,5 +117,7 @@ entries = {
 # be accessible to the API consumer.
 DOMAIN = {
     'dotmarks': dotmarks,
-    'entries': entries
+    'entries': entries,
+    'users': users,
+    'logs': logs
 }

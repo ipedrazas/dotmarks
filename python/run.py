@@ -2,7 +2,7 @@ from eve import Eve
 #from eve.auth import BasicAuth
 #from werkzeug.security import check_password_hash
 
-from worker import populate_dotmark
+from worker import populate_dotmark, parse_log
 
 
 
@@ -20,13 +20,14 @@ def after_insert_dotmark(items):
     for item in items:
         populate_dotmark.delay(item)
 
-def before_returning_dotmark(response):
-	print 'fetch'
+def after_insert_log(items):
+    for item in items:
+        parse_log.delay(item)
 
 app = Eve()
 
 app.on_inserted_dotmarks += after_insert_dotmark
-app.on_fetched_item_dotmark += before_returning_dotmark
+app.on_inserted_logs += after_insert_log
 
 if __name__ == '__main__':
     app.run( host = '0.0.0.0', port = 5000, debug = True)

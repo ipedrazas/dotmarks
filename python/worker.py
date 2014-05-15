@@ -30,6 +30,11 @@ flask_app.config.update(
 celery = make_celery(flask_app)
 
 
+
+@celery.task()
+def parse_log(item):
+    print item['source_id']
+
 @celery.task()
 def populate_dotmark(item):
 	if 'url' and '_id' in item:		
