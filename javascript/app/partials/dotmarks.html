@@ -50,7 +50,7 @@
             <div ng-repeat="dotmark in dotmarks">
                 <h2 class="urlTitle"><span href="{{dotmark.url}}" data-origin="{{dotmark._id}}" target-url>{{dotmark.title}}</span></h2>
                 <p class="dotMarkData">
-                    <a href="{{dotmark.url}}">{{dotmark.url}}</a> - <span class="glyphicon glyphicon-star-empty" ng-click="starDotMark(dotmark._id)"></span>
+                    <a href="{{dotmark.url}}">{{dotmark.url}}</a> - <span class="glyphicon glyphicon-star-empty" ng-click="starDotMark(dotmark._id, true)" ng-hide="dotmark.star"></span><span class="glyphicon glyphicon-star" ng-click="starDotMark(dotmark._id, false)" ng-show="dotmark.star"></span>
                 </p>
                 <ul class="list-inline tags">
                     <li ng-repeat="tag in dotmark.tags" class="tag"><a href=""></a>{{tag}}</li>

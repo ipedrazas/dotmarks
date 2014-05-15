@@ -92,12 +92,10 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
         });
     };
 
-    $scope.starDotMark = function(id){
-        log("starDotMark: " + id);
+    $scope.starDotMark = function(id, star){
         _.each($scope.dotmarks, function(item) {
              if(id==item._id){
-
-                item.star != item.star;
+                item.star = star;
              }
         });
     };
