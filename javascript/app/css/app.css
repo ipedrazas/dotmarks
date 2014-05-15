@@ -30,7 +30,7 @@
 }
 
 .tags{
- margin-left: 20px; 
+ margin-left: 250px; 
 }
 
 .tag{
@@ -81,4 +81,17 @@
 
 .rightCol{
   margin-left: 50px;
+}
+
+.dotMarkData{
+  padding-left: 10px;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.dotAction{
+  font-size: 1.3em;  
+  margin-left: 20px;
+  margin-top: 10px;
 }
