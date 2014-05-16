@@ -5,6 +5,8 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
+
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.eve
@@ -29,11 +31,12 @@ flask_app.config.update(
 )
 celery = make_celery(flask_app)
 
-
-
+  
 @celery.task()
 def parse_log(item):
-    print item['source_id']
+    oid = item['source_id']
+    print oid
+    db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}}, upsert=False)
 
 @celery.task()
 def populate_dotmark(item):
@@ -43,5 +46,5 @@ def populate_dotmark(item):
 			soup = BeautifulSoup(urllib2.urlopen(item['url']))
 			title = soup.title.string
 			updates = {'title': title}
-			db.dotmarks.update({'_id': item['_id']}, {"$set": updates}, upsert=False)
+			db.dotmarks.update({'_id': item['_id']}, {'$set': updates}, upsert=False)
 		return 1

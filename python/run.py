@@ -26,6 +26,11 @@ def after_insert_log(items):
 
 app = Eve()
 
+
+@app.route("/hello")
+def hello():
+    return "Hello World!"
+
 app.on_inserted_dotmarks += after_insert_dotmark
 app.on_inserted_logs += after_insert_log
 
