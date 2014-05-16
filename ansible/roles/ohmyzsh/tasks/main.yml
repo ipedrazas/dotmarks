@@ -19,4 +19,4 @@
   copy: src=zshrc.in dest=/home/vagrant/.zshrc owner=vagrant
 
 - name: Set zsh as default shell
-  user: name=$user shell=/bin/zsh
+  user: name=vagrant shell=/bin/zsh
