@@ -76,6 +76,10 @@ dotmarks = {
         'views': {
             'type': 'integer'
         },
+        # To specify where the link comes from
+        'source': {
+            'type': 'string'
+        }
     }
 }
 

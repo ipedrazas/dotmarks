@@ -70,6 +70,7 @@ function addBookmark() {
     var o = {};
     o['username'] = user;
     o['url'] = url;
+    o['source'] = 'chrome';
     if(tags !== undefined) {
         var aTags = tags.toLowerCase().split(" ");
         if(aTags.length >= 1){
