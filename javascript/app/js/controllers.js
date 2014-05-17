@@ -36,30 +36,27 @@ Date.prototype.yyyymmdd = function() {
   };
 
 
-var offline = false;
-
-if(!offline){
-  var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
-  var auditUrl =  "http://dotmarks.dev:5000/logs";
-}else{
-  var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
-  var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
-}
 
 /* Controllers */
 
-function processDotMarks(data) {
-            var elems = new Array();
-            var etags = new Array();
-             _.each(data._items, function(item){
-                elems.push(item);
-                _.each(item.tags, function(tag) {
-                    etags.push(tag.toLowerCase());
-                });
-             });
-             $scope.dotmarks = elems;
-             $scope.tags = reduce(etags);
-        }
+angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
+    $scope.execute = function(){
+      log($scope.terminal);
+    };
+    $scope.bulkImport = function(){
+        var params = new Array();
+        var data = $scope.terminal;
+        // curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", "lastname": "romney"}]' -H 'Content-Type: application/json' http://eve-demo.herokuapp.com/people
+        var urls = data.split("\n");
+        _.each(urls, function(el) {
+          var o = {};
+          o['username'] = 'ivan';
+          o['url'] = el;
+          params.push(o);
+        });
+        api.saveDotMark(JSON.stringify(params));
+    }
+}]);
 
 angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appaudit', '$routeParams', function ($scope, api, appaudit, $routeParams) {
   	$scope.refreshEntries = function(){
@@ -119,84 +116,4 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appa
     }
 
 
-  }]);
-
-
-angular.module('dotApp').factory('appaudit', ['$http', function($http) {
-    return {
-        clickDotMark: function(id){
-            var o = {};
-            o['user'] = 'ivan';
-            o['source_id'] = id;
-            o['action'] = 'click';
-            return $http.post( auditUrl, JSON.stringify(o));
-        },
-        starDotMark: function(id, star){
-            var o = {};
-            o['user'] = 'ivan';
-            o['source_id'] = id;
-            o['action'] = 'star';
-            o['value'] = '' + star;
-            return $http.post( auditUrl, JSON.stringify(o));
-        },
-
-
-    };
-}]);
-
-angular.module('dotApp').factory('api', ['$http', function($http) {
-    return {
-        getDotMarksEntries: function() {
-            return $http.get(dotmarksUrl);
-        },
-        saveDotMark: function(entry) {
-            var config = {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                responseType: "application/json",
-            };
-            return $http.post(projectUrl, entry, config);
-        },
-
-        getDotMarksByTag: function(tag){
-             var config = {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                responseType: "application/json",
-            };
-            var tagFilter = "?where={\"tags\": \"" + tag + "\"}";
-            return $http.get(dotmarksUrl + tagFilter, config);
-
-        },
-        searchDotMarks: function(query){
-            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";
-            return $http.get(dotmarksUrl + filter);
-        },
-    };
-}]);
-
-
-
-angular.module('dotApp').directive('targetUrl', ['appaudit', function (appaudit) {
-    return function (scope, element, attrs) {
-      element.bind('click', function (event) {
-            var source_id = element.attr('data-origin');
-            appaudit.clickDotMark(source_id);
-      });
-    };
-  }]);
-
-
-angular.module('dotApp').directive('typing', ['$http', function () {
-    return function (scope, element, attrs) {
-      element.bind('keyup', function () {
-        if(element.text().length > 2){
-            scope.searchDotMarks(element.text());
-        }else if(element.text().length == 0){
-            scope.refreshEntries();
-        }
-      });
-    };
   }]);
