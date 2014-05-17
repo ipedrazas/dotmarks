@@ -31,12 +31,19 @@ flask_app.config.update(
 )
 celery = make_celery(flask_app)
 
-  
+
+
 @celery.task()
 def parse_log(item):
+    print str(item)
     oid = item['source_id']
-    print oid
-    db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}}, upsert=False)
+    if(item['action']=='click'):
+        db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}}, upsert=False)
+    if(item['action']=='star'):
+
+        updates = {'star': 'true' in item['value']}
+        db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
+
 
 @celery.task()
 def populate_dotmark(item):

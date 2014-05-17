@@ -21,6 +21,7 @@ def after_insert_dotmark(items):
         populate_dotmark.delay(item)
 
 def after_insert_log(items):
+    print str(items)
     for item in items:
         parse_log.delay(item)
 

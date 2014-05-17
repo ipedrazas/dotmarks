@@ -51,7 +51,7 @@ function processDotMarks(data) {
              $scope.tags = reduce(etags);
         }
 
-angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
+angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appaudit', '$routeParams', function ($scope, api, appaudit, $routeParams) {
   	$scope.refreshEntries = function(){
         api.getDotMarksEntries().success(function processDotMarks(data) {
             var elems = new Array();
@@ -93,9 +93,11 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', '$rou
     };
 
     $scope.starDotMark = function(id, star){
+        log(id);
         _.each($scope.dotmarks, function(item) {
-             if(id==item._id){
+             if(id == item._id){
                 item.star = star;
+                appaudit.starDotMark(id, star);
              }
         });
     };
@@ -128,6 +130,15 @@ angular.module('dotApp').factory('appaudit', ['$http', function($http) {
             o['action'] = 'click';
             return $http.post( auditUrl, JSON.stringify(o));
         },
+        starDotMark: function(id, star){
+            var o = {};
+            o['user'] = 'ivan';
+            o['source_id'] = id;
+            o['action'] = 'star';
+            o['value'] = '' + star;
+            return $http.post( auditUrl, JSON.stringify(o));
+        },
+
         
     };
 }]);
@@ -162,16 +173,8 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
             var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";            
             return $http.get(dotmarksUrl + filter);
         },
-        starDotMark: function(id){
-            var o = {};
-            o['user'] = 'ivan';
-            o['source_id'] = id;
-            o['action'] = 'click';
-            return $http.post( dotmarksUrl + "/" + id, JSON.stringify(o));
-        },
     };
 }]);
-
 
 
 

@@ -24,6 +24,31 @@ The project provides the backend to store and classify all your bookmarks. It co
  - Twitter Favourites: I don't know you, but I fav those tweets with interesting links.
  - bulk load: paste a bunch of URLs or just upload your bookmarks files and let the system do the work for you: as I said before... I'm a bit lazy :)
 
+### First steps
+
+Once you have the system installed you will have to run the 3 elements:
+
+ - Flask API backend
+ - Celery worker
+ - Http Server
+
+ #### Api
+
+ The easiest thing is just to run the flask application from the command line. Make sure the virtualenv is activated:
+   ## the command line should be something like 
+   ## (dotmarks)vagrant@dotmarks [time] [/vagrant][master]
+   cd python
+   python start.py
+
+ To run the celery workers:
+   cd python
+   celery -A worker worker
+
+ To run the http server:
+   cd javascript
+   server 8000
+
+    
 
 >  Ping [me](https://twitter.com/ipedrazas) if you have questions or suggestions, or just to say 'Hi'.
 

@@ -34,6 +34,9 @@ logs = {
         },
         'action': {
             'type': 'string'
+        },
+        'value':{
+            'type': 'string'
         }
     }
 }
