@@ -1,33 +1,3 @@
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#/dotmarks">dotMarks</a>
-    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">       
-        <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul> 
-    </div>
-  </div><!-- /.container-fluid -->
-</nav>
-
 <div class="row">
     <div class="col-md-1">
         <ul class="list-group" id="tagList">
@@ -39,17 +9,17 @@
           </li>
         </ul>
     </div>
-    
+
     <div class="col-md-10 rightCol">
         <div class="row">
             <form>
                 <h1 class="searchbar" contenteditable="true" onclick="document.execCommand('selectAll',false,null)" typing >...start typing to search</h1>
             </form>
         </div>
-        <div class="row">            
+        <div class="row">
             <div ng-repeat="dotmark in dotmarks">
                 <h2 class="urlTitle">
-                    <span href="{{dotmark.url}}" data-origin="{{dotmark._id}}" target-url>{{dotmark.title}}</span>                     
+                    <span href="{{dotmark.url}}" data-origin="{{dotmark._id}}" target-url>{{dotmark.title}}</span>
                 </h2>
                     <a href="{{dotmark.url}}" class="dotAction">{{dotmark.url}}</a>
                 <div class="dotMarkData row">
@@ -59,11 +29,11 @@
 
                         <ul class="list-inline tags right">
                             <li ng-repeat="tag in dotmark.tags" class="tag"><a href=""></a>{{tag}}</li>
-                        </ul>                                
+                        </ul>
                     </div>
-                    
+
                 </div>
-            </div>    
-        </div>        
+            </div>
+        </div>
     </div>
 </div>

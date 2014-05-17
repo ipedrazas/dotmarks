@@ -8,7 +8,7 @@ function log(entry){
 
 function reduce(arr) {
     var tags = [], a = [], b = [], prev;
-    
+
     arr.sort();
     for ( var i = 0; i < arr.length; i++ ) {
         if ( arr[i] !== prev ) {
@@ -19,7 +19,7 @@ function reduce(arr) {
         }
         prev = arr[i];
     }
-    
+
     for ( var i = 0; i < a.length; i++ ) {
         tags.push({label: a[i], count: b[i]});
     }
@@ -35,8 +35,18 @@ Date.prototype.yyyymmdd = function() {
    return yyyy + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + (dd[1]?dd:"0"+dd[0]); // padding
   };
 
-/* Controllers */
 
+var offline = false;
+
+if(!offline){
+  var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
+  var auditUrl =  "http://dotmarks.dev:5000/logs";
+}else{
+  var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
+  var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
+}
+
+/* Controllers */
 
 function processDotMarks(data) {
             var elems = new Array();
@@ -81,14 +91,14 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appa
              $scope.tags = reduce(etags);
         });
     };
-    
+
     $scope.searchDotMarks = function(query){
         api.searchDotMarks(query).success(function (data) {
             var elems = new Array();
              _.each(data._items, function(item){
-                elems.push(item);                
+                elems.push(item);
              });
-             $scope.dotmarks = elems;             
+             $scope.dotmarks = elems;
         });
     };
 
@@ -103,22 +113,13 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appa
     };
 
     if($routeParams.tag !== undefined){
-        $scope.getTags();  
+        $scope.getTags();
     }else{
-        $scope.refreshEntries();          
+        $scope.refreshEntries();
     }
-    
+
 
   }]);
-
-
-
-
-var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
-var auditUrl =  "http://dotmarks.dev:5000/logs";
-
-// var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
-// var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
 
 
 angular.module('dotApp').factory('appaudit', ['$http', function($http) {
@@ -139,7 +140,7 @@ angular.module('dotApp').factory('appaudit', ['$http', function($http) {
             return $http.post( auditUrl, JSON.stringify(o));
         },
 
-        
+
     };
 }]);
 
@@ -157,7 +158,7 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
             };
             return $http.post(projectUrl, entry, config);
         },
-        
+
         getDotMarksByTag: function(tag){
              var config = {
                 headers: {
@@ -170,7 +171,7 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
 
         },
         searchDotMarks: function(query){
-            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";            
+            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";
             return $http.get(dotmarksUrl + filter);
         },
     };
@@ -191,7 +192,7 @@ angular.module('dotApp').directive('targetUrl', ['appaudit', function (appaudit)
 angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {
       element.bind('keyup', function () {
-        if(element.text().length > 2){            
+        if(element.text().length > 2){
             scope.searchDotMarks(element.text());
         }else if(element.text().length == 0){
             scope.refreshEntries();
