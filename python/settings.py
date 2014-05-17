@@ -82,6 +82,10 @@ dotmarks = {
         # To specify where the link comes from
         'source': {
             'type': 'string'
+        },
+        'star':{
+            'type': 'boolean',
+            'default': False
         }
     }
 }
