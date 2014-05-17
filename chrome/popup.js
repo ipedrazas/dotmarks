@@ -23,9 +23,9 @@ function addBookmark() {
     xhr.open('POST', postUrl, true);
 
     // Prepare the data to be POSTed
-    var title = document.getElementById('title').value;
-    var url = document.getElementById('url').value;
-    var tags = document.getElementById('tags').value;
+    var title = document.getElementById('title').value.trim();
+    var url = document.getElementById('url').value.trim();
+    var tags = document.getElementById('tags').value.trim();
     var user = 'ivan';
 
     // Set correct header for form data
