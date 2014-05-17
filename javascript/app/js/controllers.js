@@ -54,8 +54,21 @@ angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', '$routePara
           o['url'] = el;
           params.push(o);
         });
-        api.saveDotMark(JSON.stringify(params));
-    }
+        api.saveDotMark(JSON.stringify(params)).success(function(data){
+            log(data);
+            $scope.terminal = $scope.terminal + "\n\nResults:\n"
+            _.each(data, function(element){
+                log(element);
+                if(element._status == 'OK'){
+                    $scope.terminal = $scope.terminal + "[OK] - " + element._links.self.href + "\n";
+                }
+                if(element._status == 'ERR'){
+                    $scope.terminal = $scope.terminal + "[FAILED] - " + element._issues.url + "\n";
+                }
+            });
+        });
+
+    };
 }]);
 
 angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appaudit', '$routeParams', function ($scope, api, appaudit, $routeParams) {
