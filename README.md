@@ -53,11 +53,19 @@ The easiest thing is just to run the flask application from the command line. Ma
 
 ## Installation
 
+### Dependencies
 The project comes with a vagrant file with ansible provisioning. In principle, to install it you just have to bring the box up
+
+
+The project uses NFS to speed up read/write access. Nfs comes pre-installed in OS X and to install in Linux you only need these 3 packages:
+
+> nfs-common nfs-kernel-server portmap
+
+Make sure you have all these packages installed on your system. If you don't know how to check, just do
 
 > vagrant up
 
-and the ansible provisioning will do the rest.
+and if you do have all the dependencies, the ansible provisioning will do the rest.
 
 Once the vagrant box is started and provisioned you will have to log in and start the different processes.
 
