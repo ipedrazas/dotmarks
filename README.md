@@ -35,8 +35,8 @@ Once you have the system installed you will have to run the 3 elements:
 #### Api
 
 The easiest thing is just to run the flask application from the command line. Make sure the virtualenv is activated:
- 
- > The command line should be something like 
+
+ > The command line should be something like
   **(dotmarks)vagrant@dotmarks [time] [/vagrant][master]**
        cd python
        python start.py
@@ -45,13 +45,30 @@ The easiest thing is just to run the flask application from the command line. Ma
 
 > cd python
   celery -A worker worker
- 
+
 #### HTTP server:
 
 > cd javascript
   server 8000
 
-    
+## Installation
+
+The project comes with a vagrant file with ansible provisioning. In principle, to install it you just have to bring the box up
+
+> vagrant up
+
+and the ansible provisioning will do the rest.
+
+Once the vagrant box is started and provisioned you will have to log in and start the different processes.
+
+The VagrantFile defines the box with a fixed IP and with a hostname:
+
+>   config.vm.hostname = "dotmarks.dev"
+    config.vm.network "private_network", ip: "192.168.33.10"
+
+
+
+
 
 >  Ping [me](https://twitter.com/ipedrazas) if you have questions or suggestions, or just to say 'Hi'.
 
