@@ -90,37 +90,16 @@ dotmarks = {
     }
 }
 
-entries = {
-    'item_title': 'entry',
-    'additional_lookup': {
-        'url': 'regex("[\w]+")',
-        'field': 'username'
-    },
-    'schema':{
-        'title': {
+atags = {
+    'schema': {
+        'tag': {
             'type': 'string',
-            'required': True
-        },
-        'start': {
-            'type': 'datetime',
-            'required': True
-        },
-        'end': {
-            'type': 'datetime'
-        },
-        'image': {
-            'type': 'string'
-        },
-        'group': {
-            'type': 'string'
-        },
-        'tags': {
-            'type': 'list'
-        },
-        'username':{
-            'type': 'string',
+            'unique':  True,
             'required': True,
         },
+        'entries':{
+            'type': 'list'
+        }
     }
 }
 
@@ -128,7 +107,6 @@ entries = {
 # be accessible to the API consumer.
 DOMAIN = {
     'dotmarks': dotmarks,
-    'entries': entries,
     'users': users,
     'logs': logs
 }

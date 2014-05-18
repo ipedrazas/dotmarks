@@ -33,17 +33,37 @@ flask_app.config.update(
 celery = make_celery(flask_app)
 
 
+def do_update(oid, updates):
+    updates[LAST_UPDATED] = datetime.utcnow().replace(microsecond=0)
+    db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
+
+def tokenize(text):
+    return text.split(" ")
+
+def auto_tag(item):
+    atags = []
+    at_url = tokenize(item['url'])
+    at_title = tokenize(item['title'])
+    if at_url:
+        atags.extend(at_url)
+        update = True
+    if at_title:
+        atags.extend(at_title)
+        update = True
+    if update:
+        do_update(item['_id'], {'atags': atags})
+
 
 @celery.task()
 def parse_log(item):
     print "processing %s" % item['source_id']
     oid = item['source_id']
     if(item['action']=='click'):
-        db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}}, upsert=False)
+        db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}, \
+            LAST_UPDATED: datetime.utcnow().replace(microsecond=0)}, upsert=False)
     if(item['action']=='star'):
         updates = {'star': 'true' in item['value']}
-        updates[LAST_UPDATED] = datetime.utcnow().replace(microsecond=0)
-        db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
+        do_update(oid, updates)
 
 
 @celery.task()
@@ -52,8 +72,12 @@ def populate_dotmark(item):
         if 'title' not in item or not item['title']:
             print "processing %s" % item['url']
             soup = BeautifulSoup(urllib2.urlopen(item['url']))
-            title = soup.title.string
-            updates = {'title': title}
-            updates[LAST_UPDATED] = datetime.utcnow().replace(microsecond=0)
-            db.dotmarks.update({'_id': item['_id']}, {'$set': updates}, upsert=False)
-        return 1
+            if soup.title is not None:
+                title = soup.title.string
+                update = True
+            elif soup.h1 is not None:
+                title = soup.h1.string.strip()
+                update = True
+            if update:
+                updates = {'title': title}
+                do_update(item['_id'], updates)
