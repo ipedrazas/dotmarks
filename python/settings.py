@@ -76,6 +76,9 @@ dotmarks = {
         'tags': {
             'type': 'list'
         },
+        'atags': {              # Automatic Tags
+            'type': 'list'
+        },
         'views': {
             'type': 'integer'
         },
@@ -108,5 +111,6 @@ atags = {
 DOMAIN = {
     'dotmarks': dotmarks,
     'users': users,
-    'logs': logs
+    'logs': logs,
+    'atags': atags,
 }

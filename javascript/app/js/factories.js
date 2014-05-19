@@ -53,8 +53,8 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
                 },
                 responseType: "application/json",
             };
-            var tagFilter = "?where={\"tags\": \"" + tag + "\"}";
-            return $http.get(dotmarksUrl + tagFilter, config);
+            var filter = "?where={\"$or\":[{\"tags\":\"" + tag + "\"},{\"atags\":\"" +  tag + "\"}]}";
+            return $http.get(dotmarksUrl + filter, config);
 
         },
         searchDotMarks: function(query){

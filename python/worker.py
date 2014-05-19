@@ -5,6 +5,7 @@ import urllib2
 from BeautifulSoup import BeautifulSoup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from urlparse import urlparse
 
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -32,26 +33,37 @@ flask_app.config.update(
 )
 celery = make_celery(flask_app)
 
+def get_date():
+    return datetime.utcnow().replace(microsecond=0)
 
 def do_update(oid, updates):
-    updates[LAST_UPDATED] = datetime.utcnow().replace(microsecond=0)
+    updates[LAST_UPDATED] = get_date()
     db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
 
-def tokenize(text):
-    return text.split(" ")
+def get_domain(url):
+    parsed_uri = urlparse(url)
+    # ignore the uri.scheme (http|s)
+    domain = parsed_uri.netloc
+    posWWW = domain.find('www')
+    if posWWW != -1:
+        domain = domain[4:]
+    return domain
+
+def tags_by_url(url):
+    results = db.atags.find({'entries': get_domain(url) })
+    tags = []
+    for result in results:
+        print result
+        tags.append(result['tag'])
+    return tags
+
 
 def auto_tag(item):
     atags = []
-    at_url = tokenize(item['url'])
-    at_title = tokenize(item['title'])
+    at_url = tags_by_url(item['url'])
     if at_url:
         atags.extend(at_url)
-        update = True
-    if at_title:
-        atags.extend(at_title)
-        update = True
-    if update:
-        do_update(item['_id'], {'atags': atags})
+    return atags
 
 
 @celery.task()
@@ -60,7 +72,7 @@ def parse_log(item):
     oid = item['source_id']
     if(item['action']=='click'):
         db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}, \
-            LAST_UPDATED: datetime.utcnow().replace(microsecond=0)}, upsert=False)
+            LAST_UPDATED: get_date()}, upsert=False)
     if(item['action']=='star'):
         updates = {'star': 'true' in item['value']}
         do_update(oid, updates)
@@ -68,16 +80,20 @@ def parse_log(item):
 
 @celery.task()
 def populate_dotmark(item):
+    print "processing %s" % item['url']
+    updates = {}
     if 'url' and '_id' in item:
+        atags = auto_tag(item)
+        if atags:
+            updates['atags'] = auto_tag(item)
+
         if 'title' not in item or not item['title']:
             print "processing %s" % item['url']
             soup = BeautifulSoup(urllib2.urlopen(item['url']))
             if soup.title is not None:
-                title = soup.title.string
-                update = True
+                updates['title'] = soup.title.string
             elif soup.h1 is not None:
-                title = soup.h1.string.strip()
-                update = True
-            if update:
-                updates = {'title': title}
-                do_update(item['_id'], updates)
+                updates['title'] = soup.h1.string.strip()
+
+        if updates:
+            do_update(item['_id'], updates)

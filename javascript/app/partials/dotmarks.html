@@ -3,10 +3,21 @@
 
         <a type="button" class="btn btn-primary" href="#/terminal">Terminal</a>
 
+        <h2 class="sideSubTitle">Tags</h2>
         <ul class="list-group" id="tagList">
           <li ng-repeat="elem in tags">
             <a href='#/dotmarks?tag={{elem.label}}' class="btn btn-info tag">
-                <span class="badge tagCount">{{elem.count}}</span>
+                <span class="badge tagCount-info">{{elem.count}}</span>
+                {{elem.label}}
+            </a>
+          </li>
+        </ul>
+
+        <h2 class="sideSubTitle">Categories</h2>
+        <ul class="list-group" id="tagList">
+          <li ng-repeat="elem in atags">
+            <a href='#/dotmarks?tag={{elem.label}}' class="btn btn-warning tag">
+                <span class="badge tagCount-warning">{{elem.count}}</span>
                 {{elem.label}}
             </a>
           </li>
@@ -26,12 +37,13 @@
                 </h2>
                     <a href="{{dotmark.url}}" class="dotAction">{{dotmark.url}}</a>
                 <div class="dotMarkData row">
-                    <div class="dotActions left">
+                    <div class="dotActions left ">
                         <span class="glyphicon glyphicon-star-empty " ng-click="starDotMark(dotmark._id, true)" ng-hide="dotmark.star"></span>
                         <span class="glyphicon glyphicon-star " ng-click="starDotMark(dotmark._id, false)" ng-show="dotmark.star"></span>
 
-                        <ul class="list-inline tags right">
-                            <li ng-repeat="tag in dotmark.tags" class="tag"><a href=""></a>{{tag}}</li>
+                        <ul class="list-inline tags right ">
+                            <li ng-repeat="tag in dotmark.tags" ><a href="#" class="tag">{{tag}}</a></li>
+                            <li ng-repeat="atag in dotmark.atags"><a href="#" class="atag">{{atag}}</a></li>
                         </ul>
                     </div>
 

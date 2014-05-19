@@ -76,29 +76,33 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appa
         api.getDotMarksEntries().success(function processDotMarks(data) {
             var elems = new Array();
             var etags = new Array();
+            var atags = new Array();
              _.each(data._items, function(item){
                 elems.push(item);
+                atags.push.apply(atags, item.atags);
                 _.each(item.tags, function(tag) {
                     etags.push(tag.toLowerCase());
                 });
              });
+             log(elems);
              $scope.dotmarks = elems;
              $scope.tags = reduce(etags);
+             $scope.atags = reduce(atags);
         });
     };
 
     $scope.getTags = function(){
         api.getDotMarksByTag($routeParams.tag).success(function (data) {
             var elems = new Array();
-            var etags = new Array();
+            // var etags = new Array();
              _.each(data._items, function(item){
                 elems.push(item);
-                _.each(item.tags, function(tag) {
-                    etags.push(tag.toLowerCase());
-                });
+                // _.each(item.tags, function(tag) {
+                //     etags.push(tag.toLowerCase());
+                // });
              });
              $scope.dotmarks = elems;
-             $scope.tags = reduce(etags);
+             // $scope.tags = reduce(etags);
         });
     };
 
