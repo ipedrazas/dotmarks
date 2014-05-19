@@ -1,6 +1,6 @@
 
 
-DEBUG=True
+DEBUG = True
 
 # Enable reads (GET), inserts (POST) and DELETE for resources/collections
 # (if you omit this line, the API will default to ['GET'] and provide
@@ -10,6 +10,9 @@ RESOURCE_METHODS = ['GET', 'POST', 'DELETE']
 # Enable reads (GET), edits (PATCH) and deletes of individual items
 # (defaults to read-only item access).
 ITEM_METHODS = ['GET', 'PATCH', 'PUT', 'DELETE']
+
+PUBLIC_METHODS = ['GET']
+PUBLIC_ITEM_METHODS = ['GET']
 
 # We enable standard client cache directives for all resources exposed by the
 # API. We can always override these global settings later.
@@ -35,13 +38,21 @@ logs = {
         'action': {
             'type': 'string'
         },
-        'value':{
+        'value': {
             'type': 'string'
         }
     }
 }
 
 users = {
+    # 'additional_lookup': {
+    #     'url': '[\w]+',
+    #     'field': 'username',
+    # },
+
+    'cache_control': '',
+    'cache_expires': 0,
+
     'schema': {
         'username': {
             'type': 'string',
@@ -65,11 +76,11 @@ dotmarks = {
             'minlength': 7,
             'required': True,
             'unique': True,
-            },
-        'title':{
+        },
+        'title': {
             'type': 'string'
         },
-        'username':{
+        'username': {
             'type': 'string',
             'required': True,
         },
@@ -86,7 +97,7 @@ dotmarks = {
         'source': {
             'type': 'string'
         },
-        'star':{
+        'star': {
             'type': 'boolean',
             'default': False
         }
@@ -97,10 +108,10 @@ atags = {
     'schema': {
         'tag': {
             'type': 'string',
-            'unique':  True,
+            'unique': True,
             'required': True,
         },
-        'entries':{
+        'entries': {
             'type': 'list'
         }
     }

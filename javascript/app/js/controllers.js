@@ -134,3 +134,26 @@ angular.module('dotApp').controller('dotMarkController', ['$scope', 'api', 'appa
 
 
   }]);
+
+angular.module('dotApp').controller('AuthController', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
+  $scope.credentials = {
+    username: 'john',
+    password: 'foo'
+  };
+  $scope.login = function () {
+    AuthService.login($scope.credentials,function(data){
+      if(data){
+        console.log("carallo");
+        return $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+      }else{
+        return $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+      }
+    });
+  };
+});
+
+angular.module('dotApp').controller('LogoutController',['$scope','$rootScope','AUTH_EVENTS','Session',
+  function($scope, $rootScope, AUTH_EVENTS,Session){
+    Session.destroy()
+    return $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+}]);

@@ -63,3 +63,44 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
         },
     };
 }]);
+
+
+angular.module('dotApp').factory('AuthService', function ($http, Session) {
+  return {
+    login: function (credentials) {
+      return $http
+        .post('/login', credentials)
+        .then(function (res) {
+          Session.create(res.id, res.userid, res.role);
+        });
+    },
+    isAuthenticated: function () {
+      return !!Session.userId;
+    },
+    isAuthorized: function (authorizedRoles) {
+      if (!angular.isArray(authorizedRoles)) {
+        authorizedRoles = [authorizedRoles];
+      }
+      return (this.isAuthenticated() &&
+        authorizedRoles.indexOf(Session.userRole) !== -1);
+    }
+  };
+});
+
+angular.module('dotApp').service('Session', ['$cookies',
+  function ($cookies) {
+    this.create = function (id, name){
+      $cookies['id'] = id;
+      $cookies['name'] = name;
+    };
+
+    this.destroy = function () {
+      $cookies['id'] = null;
+      $cookies['name'] = null;
+    };
+
+    this.get = function(key){
+      return $cookies[key];
+    }
+    return this;
+}]);

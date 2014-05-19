@@ -1,8 +1,14 @@
 ---
+- name: Checking essentials
+  apt: name={{ item }} state=present
+  with_items:
+  - libffi-dev
+
 - name: install virtualenv
   pip: name={{ item }} state=present
   with_items:
   - virtualenv
   - virtualenvwrapper
+  - bcrypt
 
 - file: path=/home/vagrant/Envs state=directory owner=vagrant
