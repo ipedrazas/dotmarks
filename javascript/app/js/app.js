@@ -7,6 +7,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap'])
 	  $routeProvider
 		  .when('/dotmarks', {templateUrl: 'partials/dotmarks.html', controller: 'dotMarkController'})
 		  .when('/terminal', {templateUrl: 'partials/terminal.html', controller: 'terminalCtl'})
+          .when('/login', {templateUrl: 'partials/login.html', controller: 'authCtl'})
 		  .otherwise({redirectTo: '/home'});
 });
 

@@ -4,10 +4,27 @@ var offline = false;
 if(!offline){
   var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
   var auditUrl =  "http://dotmarks.dev:5000/logs";
+  var authUrl = "http://dotmarks.dev:5000/auth";
 }else{
   var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
   var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
 }
+
+
+
+angular.module('dotApp').factory('appauth', ['$http', function($http) {
+    return {
+
+        login: function(token){
+            $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
+            $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
+            return $http.post( authUrl);
+        },
+
+
+    };
+}]);
 
 angular.module('dotApp').factory('appaudit', ['$http', 'Base64', function($http, Base64) {
     return {
@@ -27,7 +44,6 @@ angular.module('dotApp').factory('appaudit', ['$http', 'Base64', function($http,
             $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};  //you probably don't need this line.  This lets me connect to my server on a different domain
             $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};  //you probably don't need this line.  This lets me connect to my server on a different domain
             $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'secret');
-            log( Base64.encode('test2' + ':' + 'ivan'));
             return $http.post( auditUrl, JSON.stringify(o));
         },
 

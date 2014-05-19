@@ -28,16 +28,21 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-              </ul>
-            </li>
+            <div ng-if="!user">
+              <a href="#/login" class="btn btn-warning" >Sign In</a>
+            </div>
+              <div ng-if="user">
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as {{user.name}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </li>
+            </div>
           </ul>
         </div>
       </div><!-- /.container-fluid -->
