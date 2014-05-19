@@ -21,6 +21,12 @@ class BCryptAuth(BasicAuth):
             bcrypt.hashpw(password, account['password']) == account['password']
 
 
+class MyBasicAuth(BasicAuth):
+    def check_auth(self, username, password, allowed_roles, resource,
+                   method):
+        return username == 'admin' and password == 'secret'
+
+
 def after_insert_dotmark(items):
     for item in items:
         populate_dotmark.delay(item)
@@ -31,7 +37,8 @@ def after_insert_log(items):
     for item in items:
         parse_log.delay(item)
 
-app = Eve(auth=Sha1Auth)
+
+app = Eve(auth=MyBasicAuth)
 
 
 @app.route("/hello")

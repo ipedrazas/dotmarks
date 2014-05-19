@@ -22,7 +22,8 @@ CACHE_EXPIRES = 20
 XML = False
 # Enable CORS for all domains
 X_DOMAINS = "*"
-X_HEADERS = "Content-Type, accept"
+X_HEADERS = "Content-Type, accept, Authorization," \
+    " Access-Control-Request-Headers, Access-Control-Allow-Origin"
 
 MONGO_QUERY_BLACKLIST = ['$where']
 
