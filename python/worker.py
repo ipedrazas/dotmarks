@@ -72,7 +72,7 @@ def parse_log(item):
     oid = item['source_id']
     if(item['action']=='click'):
         db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}, \
-            LAST_UPDATED: get_date()}, upsert=False)
+            "$set": {LAST_UPDATED: get_date()}}, upsert=False)
     if(item['action']=='star'):
         updates = {'star': 'true' in item['value']}
         do_update(oid, updates)
