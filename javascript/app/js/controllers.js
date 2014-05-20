@@ -147,14 +147,15 @@ angular.module('dotApp').controller('dotMarkController',
 angular.module('dotApp').controller('authCtl', ['$scope', 'appauth', 'Base64', function ($scope, appauth, Base64){
 
   $scope.login = function (){
-    appauth.login().success(function(){
         log($scope.username);
         log($scope.password);
         var token = Base64.encode($scope.username + ':' + $scope.password);
         log(token);
-    }).error(function(){
-        $scope.errors = "Login not valid";
-    });
+        appauth.login(token).success(function(){
+            log("logged In");
+        }).error(function(){
+            $scope.errors = "Login not valid";
+        });
   };
 }]);
 

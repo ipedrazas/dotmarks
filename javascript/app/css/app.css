@@ -123,3 +123,8 @@
   margin-bottom: 10px;
   margin-left: 10px;
 }
+
+.loginBox{
+  width: 650px;
+  margin: 0, auto;
+}

@@ -4,7 +4,7 @@ var offline = false;
 if(!offline){
   var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
   var auditUrl =  "http://dotmarks.dev:5000/logs";
-  var authUrl = "http://dotmarks.dev:5000/auth";
+  var authUrl = "http://dotmarks.dev:5000/users";
 }else{
   var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
   var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
@@ -16,10 +16,13 @@ angular.module('dotApp').factory('appauth', ['$http', function($http) {
     return {
 
         login: function(token){
+            var o = {};
+            o['user'] = token;
+            o['action'] = 'login';
             $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
             $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
-            return $http.post( authUrl);
+            return $http.post( auditUrl, JSON.stringify(o));
         },
 
 
