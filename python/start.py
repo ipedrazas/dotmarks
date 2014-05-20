@@ -11,9 +11,7 @@ class BCryptAuth(BasicAuth):
         else:
             accounts = app.data.driver.db['users']
             account = accounts.find_one({'username': username})
-            print username
-            print password
-            print account
+            self.set_request_auth_value(account['_id'])
             return account and \
                 bcrypt.hashpw(
                     password.encode('utf-8'),

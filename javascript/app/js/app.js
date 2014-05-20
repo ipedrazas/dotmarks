@@ -12,8 +12,3 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap'])
 		  .otherwise({redirectTo: '/home'});
 });
 
-angular.module('dotApp').config(['$httpProvider', function($httpProvider) {
-	$httpProvider.defaults.headers.patch = {
-	    'Content-Type': 'application/json;charset=utf-8'
-	}
-}]);

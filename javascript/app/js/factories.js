@@ -18,16 +18,17 @@ angular.module('dotApp').factory('appauth', ['$http', 'Base64', function($http, 
 
         login: function(username, password){
             var token = Base64.encode(username + ':' + password);
+            $http.defaults.headers.common = {"Access-Control-Request-Headers": "Accept, Origin, Authorization, Access-Control-Allow-Origin"};
+            $http.defaults.headers.common = {"Access-Control-Allow-Origin": "http://dotmarks.dev:8000"};
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
             var config = {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Request-Headers": "accept, origin, authorization",
-                    "Access-Control-Allow-Origin": "*"
+                    "Authorization": "Basic " + token,
+                    "Access-Control-Allow-Origin": "http://dotmarks.dev:8000",
                 },
                 responseType: "application/json",
             };
-            return $http.get( authUrl + username);
+            return $http.get( authUrl + username, config);
         },
 
 
