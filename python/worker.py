@@ -13,12 +13,15 @@ db = client.eve
 
 LAST_UPDATED = '_updated'
 
+
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     TaskBase = celery.Task
+
     class ContextTask(TaskBase):
         abstract = True
+
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return TaskBase.__call__(self, *args, **kwargs)
@@ -33,12 +36,15 @@ flask_app.config.update(
 )
 celery = make_celery(flask_app)
 
+
 def get_date():
     return datetime.utcnow().replace(microsecond=0)
+
 
 def do_update(oid, updates):
     updates[LAST_UPDATED] = get_date()
     db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
+
 
 def get_domain(url):
     parsed_uri = urlparse(url)
@@ -49,8 +55,9 @@ def get_domain(url):
         domain = domain[4:]
     return domain
 
+
 def tags_by_url(url):
-    results = db.atags.find({'entries': get_domain(url) })
+    results = db.atags.find({'entries': get_domain(url)})
     tags = []
     for result in results:
         print result
@@ -68,14 +75,17 @@ def auto_tag(item):
 
 @celery.task()
 def parse_log(item):
-    print "processing %s" % item['source_id']
-    oid = item['source_id']
-    if(item['action']=='click'):
-        db.dotmarks.update({"_id": ObjectId(oid)}, {"$inc": {"views": 1}, \
-            "$set": {LAST_UPDATED: get_date()}}, upsert=False)
-    if(item['action']=='star'):
-        updates = {'star': 'true' in item['value']}
-        do_update(oid, updates)
+    if 'source_id' in item:
+        oid = item['source_id']
+        if(item['action'] == 'click'):
+            db.dotmarks.update(
+                {"_id": ObjectId(oid)},
+                {"$inc": {"views": 1}, "$set": {LAST_UPDATED: get_date()}},
+                upsert=False)
+
+        if(item['action'] == 'star'):
+            updates = {'star': 'true' in item['value']}
+            do_update(oid, updates)
 
 
 @celery.task()

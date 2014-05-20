@@ -147,10 +147,7 @@ angular.module('dotApp').controller('dotMarkController',
 angular.module('dotApp').controller('authCtl', ['$scope', 'appauth', 'Base64', function ($scope, appauth, Base64){
 
   $scope.login = function (){
-        log($scope.username);
-        log($scope.password);
         var token = Base64.encode($scope.username + ':' + $scope.password);
-        log(token);
         appauth.login(token).success(function(){
             log("logged In");
         }).error(function(){
