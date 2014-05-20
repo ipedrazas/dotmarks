@@ -46,10 +46,17 @@ logs = {
 }
 
 users = {
-    # 'additional_lookup': {
-    #     'url': '[\w]+',
-    #     'field': 'username',
-    # },
+
+    'datasource': {
+        'projection': {'password': 0, 'salt': 0}
+    },
+
+    'additional_lookup': {
+        'url': 'string',
+        'field': 'username',
+    },
+    'public_methods': [],
+    'public_item_methods': [],
 
     'cache_control': '',
     'cache_expires': 0,

@@ -4,32 +4,37 @@ var offline = false;
 if(!offline){
   var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
   var auditUrl =  "http://dotmarks.dev:5000/logs";
-  var authUrl = "http://dotmarks.dev:5000/users";
+  var authUrl = "http://dotmarks.dev:5000/users/";
 }else{
   var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
-  var dotmarksUrl = "http://localhost:8000/app/offline-dotmarks.json";
+  var auditUrl = "http://localhost:8000/app/offline-dotmarks.json";
+  var authUrl = "http://dotmarks.dev:5000/users/";
 }
 
 
 
-angular.module('dotApp').factory('appauth', ['$http', function($http) {
+angular.module('dotApp').factory('appauth', ['$http', 'Base64', function($http, Base64) {
     return {
 
-        login: function(token){
-            var o = {};
-            o['user'] = token;
-            o['action'] = 'login';
-            $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
-            $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+        login: function(username, password){
+            var token = Base64.encode(username + ':' + password);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
-            return $http.post( auditUrl, JSON.stringify(o));
+            var config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Request-Headers": "accept, origin, authorization",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                responseType: "application/json",
+            };
+            return $http.get( authUrl + username);
         },
 
 
     };
 }]);
 
-angular.module('dotApp').factory('appaudit', ['$http', 'Base64', function($http, Base64) {
+angular.module('dotApp').factory('appaudit', ['$http', function($http) {
     return {
         clickDotMark: function(id){
             var o = {};
@@ -44,9 +49,6 @@ angular.module('dotApp').factory('appaudit', ['$http', 'Base64', function($http,
             o['source_id'] = id;
             o['action'] = 'star';
             o['value'] = '' + star;
-            $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};  //you probably don't need this line.  This lets me connect to my server on a different domain
-            $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};  //you probably don't need this line.  This lets me connect to my server on a different domain
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'secret');
             return $http.post( auditUrl, JSON.stringify(o));
         },
 

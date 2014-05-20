@@ -38,7 +38,6 @@ def find_user(username):
 
 
 def before_adding_user(items):
-    print 'adding users,'
     for item in items:
         item['salt'] = bcrypt.gensalt()
         item['password'] = \

@@ -144,12 +144,14 @@ angular.module('dotApp').controller('dotMarkController',
 
   }]);
 
-angular.module('dotApp').controller('authCtl', ['$scope', 'appauth', 'Base64', function ($scope, appauth, Base64){
+angular.module('dotApp').controller('authCtl', ['$scope', '$rootScope','$location','appauth', function ($scope, $rootScope, $location, appauth){
 
   $scope.login = function (){
-        var token = Base64.encode($scope.username + ':' + $scope.password);
-        appauth.login(token).success(function(){
-            log("logged In");
+        var user = $scope.username;
+        appauth.login($scope.username, $scope.password).success(function(data){
+            log(data);
+            // $location.path('/dotmarks');
+            $rootScope.user = $scope.username;
         }).error(function(){
             $scope.errors = "Login not valid";
         });
@@ -157,47 +159,8 @@ angular.module('dotApp').controller('authCtl', ['$scope', 'appauth', 'Base64', f
 }]);
 
 
-angular.module('dotApp').controller('AuthController', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
-  $scope.credentials = {
-    username: 'john',
-    password: 'foo'
-  };
-  $scope.login = function () {
-    AuthService.login($scope.credentials,function(data){
-      if(data){
-        console.log("carallo");
-        return $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      }else{
-        return $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-      }
-    });
-  };
-});
-
 angular.module('dotApp').controller('LogoutController',['$scope','$rootScope','AUTH_EVENTS','Session',
   function($scope, $rootScope, AUTH_EVENTS,Session){
     Session.destroy()
     return $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 }]);
-
-
-
-
-//here's where YOUR code is finally accessed
-function TodoCtrl($scope, $http, Base64) {
-
-    $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};  //you probably don't need this line.  This lets me connect to my server on a different domain
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('admin' + ':' + 'abc12345');
-    $http({method: 'GET', url: 'http://localhost:8888/app/api/v1/pets'}).
-            success(function(data, status, headers, config) {
-                $scope.pets = data;
-                // this callback will be called asynchronously
-                // when the response is available
-            }).
-            error(function(data, status, headers, config) {
-                alert(data);
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
-
-}
