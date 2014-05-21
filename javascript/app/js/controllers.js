@@ -74,7 +74,8 @@ angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', 'Base64', '
 
 
 angular.module('dotApp').controller('dotMarkController',
-    ['$scope', 'api', 'appaudit', 'Base64', '$routeParams', function ($scope, api, appaudit, Base64, $routeParams) {
+    ['$scope', '$rootScope', '$location', 'api', 'appaudit', 'Base64', '$routeParams',
+     function ($scope, $rootScope, $location, api, appaudit, Base64, $routeParams) {
 
     $scope.user = false;
 
@@ -123,6 +124,9 @@ angular.module('dotApp').controller('dotMarkController',
              }
         });
     };
+    if($rootScope.currentuser == undefined){
+        $location.path("/signin");
+    }
 
     if($routeParams.tag !== undefined){
         $scope.getTags();
