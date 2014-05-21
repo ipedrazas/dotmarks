@@ -95,7 +95,7 @@ def populate_dotmark(item):
     if 'url' and '_id' in item:
         atags = auto_tag(item)
         if atags:
-            updates['atags'] = auto_tag(item)
+            updates['atags'] = atags
 
         if 'title' not in item or not item['title']:
             print "processing %s" % item['url']
