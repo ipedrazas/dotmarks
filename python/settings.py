@@ -57,7 +57,7 @@ users = {
         'url': 'string',
         'field': 'username',
     },
-    'public_methods': [],
+    'public_methods': ['POST'],
     'public_item_methods': [],
 
     'cache_control': '',

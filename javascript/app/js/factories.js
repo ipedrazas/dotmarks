@@ -11,26 +11,27 @@ if(!offline){
   var authUrl = "http://dotmarks.dev:5000/users/";
 }
 
-
+var config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                responseType: "application/json",
+            };
 
 angular.module('dotApp').factory('appauth', ['$http', 'Base64', function($http, Base64) {
     return {
 
         login: function(username, password){
             var token = Base64.encode(username + ':' + password);
-            $http.defaults.headers.common = {"Access-Control-Request-Headers": "Accept, Origin, Authorization, Access-Control-Allow-Origin"};
-            $http.defaults.headers.common = {"Access-Control-Allow-Origin": "http://dotmarks.dev:8000"};
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
-            var config = {
-                headers: {
-                    "Authorization": "Basic " + token,
-                    "Access-Control-Allow-Origin": "http://dotmarks.dev:8000",
-                },
-                responseType: "application/json",
-            };
-            return $http.get( authUrl + username, config);
+            return $http.get( authUrl + username);
         },
-
+        signup: function(username, password){
+            var o = {};
+            o['username'] = username;
+            o['password'] = password;
+            return $http.post(authUrl, JSON.stringify(o));
+        },
 
     };
 }]);

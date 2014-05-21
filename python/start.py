@@ -2,21 +2,34 @@ from eve import Eve
 from eve.auth import BasicAuth
 import bcrypt
 from worker import populate_dotmark, parse_log
+from flask import Response
 
 
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
-        if resource == 'users':
-            return username == 'superuser' and password == 'password'
-        else:
-            accounts = app.data.driver.db['users']
-            account = accounts.find_one({'username': username})
-            self.set_request_auth_value(account['_id'])
-            return account and \
-                bcrypt.hashpw(
+        print 'check_auth'
+        # if resource == 'users' and method == 'POST':
+        #     return username == 'superuser' and password == 'password'
+        if resource != 'users':
+            users = app.data.driver.db['users']
+            print "username: " + username
+            print "pwd: " + password
+            print users
+            user = users.find_one({"username": username})
+            # self.set_request_auth_value(account['_id'])
+            if user:
+                print user
+                is_valid_password = bcrypt.hashpw(
                     password.encode('utf-8'),
-                    account['salt'].encode('utf-8')
-                ) == account['password']
+                    user['salt'].encode('utf-8')
+                ) == user['password']
+                print "password valid? " + str(is_valid_password)
+                return user and is_valid_password
+
+    def authenticate(self):
+        return Response(
+            'Please provide proper credentials', 402,
+            {'WWW-Authenticate': 'Basic realm:"%s"' % __package__})
 
 
 def after_insert_dotmark(items):

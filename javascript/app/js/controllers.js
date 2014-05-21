@@ -150,8 +150,21 @@ angular.module('dotApp').controller('authCtl', ['$scope', '$rootScope','$locatio
         var user = $scope.username;
         appauth.login($scope.username, $scope.password).success(function(data){
             log(data);
-            // $location.path('/dotmarks');
+            $location.path('/dotmarks');
             $rootScope.user = $scope.username;
+        }).error(function(){
+            $scope.errors = "Login not valid";
+        });
+  };
+
+  $scope.signup = function (){
+        var user = $scope.username;
+        appauth.signup($scope.username, $scope.password).success(function(data){
+            if(data._status === 'OK'){
+                // $location.path('/dotmarks');
+            $rootScope.user = $scope.username;
+            }
+            log(data);
         }).error(function(){
             $scope.errors = "Login not valid";
         });
@@ -164,3 +177,90 @@ angular.module('dotApp').controller('LogoutController',['$scope','$rootScope','A
     Session.destroy()
     return $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 }]);
+
+angular.module('dotApp').constant('AUTH_EVENTS', {
+  loginSuccess: 'auth-login-success',
+  loginFailed: 'auth-login-failed',
+  logoutSuccess: 'auth-logout-success',
+  sessionTimeout: 'auth-session-timeout',
+  notAuthenticated: 'auth-not-authenticated',
+  notAuthorized: 'auth-not-authorized'
+});
+
+angular.module('dotApp').service('Session', ['$cookies',
+  function ($cookies) {
+    this.create = function (id, name){
+      $cookies['id'] = id;
+      $cookies['name'] = name;
+    };
+
+    this.destroy = function () {
+      $cookies['id'] = null;
+      $cookies['name'] = null;
+    };
+
+    this.get = function(key){
+      return $cookies[key];
+    }
+    return this;
+}]);
+
+angular.module('dotApp').factory('AuthService', function ($http, Session) {
+  return {
+    login: function (credentials, callback) {
+      $http
+        .post('/api/accounts/login/',credentials)
+        .success(function(data, status){
+          Session.create(data.id,data.name);
+          callback(data);
+        })
+        .error(function(data,status){
+          callback(null);
+        });
+    },
+    isAuthenticated: function () {
+      if(Session.get('id') == 'null'){
+        return null;
+      }
+      return Session.get('id');
+    }
+  };
+});
+
+angular.module('dotApp').run(function ($rootScope, AUTH_EVENTS, AuthService, Session, $location) {
+  $rootScope.$on('$stateChangeStart', function (event, next, current) {
+    var auth = AuthService.isAuthenticated();
+    if(!auth){
+      if (next.name == 'login'){
+        return true;
+      }
+      $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+      event.preventDefault();
+    }
+  });
+
+  $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event){
+    $location.path("/");
+  });
+
+  $rootScope.$on(AUTH_EVENTS.loginFailed, function(event){
+    $location.path("/login/");
+  });
+
+  $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event){
+    $location.path("/login/");
+  });
+
+  $rootScope.$on(AUTH_EVENTS.sessionTimeout, function(event){
+    $location.path("/login/");
+  });
+
+  $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
+    $location.path("/login/");
+  });
+
+  $rootScope.$on(AUTH_EVENTS.notAuthorized, function(event){
+    $location.path("/login/");
+  });
+
+});
