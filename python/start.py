@@ -8,9 +8,9 @@ from flask import Response
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
         print 'check_auth'
-        # if resource == 'users' and method == 'POST':
-        #     return username == 'superuser' and password == 'password'
-        if resource != 'users':
+        filter = resource != 'users' and method != 'POST'
+        print filter
+        if not filter:
             users = app.data.driver.db['users']
             print "username: " + username
             print "pwd: " + password
@@ -18,17 +18,15 @@ class BCryptAuth(BasicAuth):
             user = users.find_one({"username": username})
             # self.set_request_auth_value(account['_id'])
             if user:
-                print user
                 is_valid_password = bcrypt.hashpw(
                     password.encode('utf-8'),
                     user['salt'].encode('utf-8')
                 ) == user['password']
-                print "password valid? " + str(is_valid_password)
                 return user and is_valid_password
 
     def authenticate(self):
         return Response(
-            'Please provide proper credentials', 402,
+            'Please provide proper credentials', 403,
             {'WWW-Authenticate': 'Basic realm:"%s"' % __package__})
 
 

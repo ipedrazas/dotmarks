@@ -18,7 +18,9 @@ var config = {
                 responseType: "application/json",
             };
 
-angular.module('dotApp').factory('appauth', ['$http', 'Base64', function($http, Base64) {
+
+
+angular.module('dotApp').factory('appauth',  ['$http', 'Base64', function($http, Base64) {
     return {
 
         login: function(username, password){
@@ -32,18 +34,23 @@ angular.module('dotApp').factory('appauth', ['$http', 'Base64', function($http, 
             o['password'] = password;
             return $http.post(authUrl, JSON.stringify(o));
         },
+        logout: function(username){
+            var token = Base64.encode(' : ');
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
+            return $http.get( authUrl + username);
+        },
 
     };
 }]);
 
-angular.module('dotApp').factory('appaudit', ['$http', function($http) {
+angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', function($http, localStorageService){
     return {
         clickDotMark: function(id){
             var o = {};
             o['user'] = 'ivan';
             o['source_id'] = id;
             o['action'] = 'click';
-            return $http.post( auditUrl, JSON.stringify(o));
+            return $http.post( auditUrl, JSON.stringify(o), config);
         },
         starDotMark: function(id, star){
             var o = {};
@@ -58,7 +65,7 @@ angular.module('dotApp').factory('appaudit', ['$http', function($http) {
     };
 }]);
 
-angular.module('dotApp').factory('api', ['$http', function($http) {
+angular.module('dotApp').factory('api', ['$http', 'localStorageService', function($http, localStorageService) {
     return {
         getDotMarksEntries: function() {
             return $http.get(dotmarksUrl);
@@ -70,8 +77,7 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
                 },
                 responseType: "application/json",
             };
-            $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};  //you probably don't need this line.  This lets me connect to my server on a different domain
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('ivan' + ':' + 'ivan');
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('dotmarks.token');
             return $http.post(dotmarksUrl, entry, config);
         },
 
@@ -93,46 +99,6 @@ angular.module('dotApp').factory('api', ['$http', function($http) {
     };
 }]);
 
-
-angular.module('dotApp').factory('AuthService', function ($http, Session) {
-  return {
-    login: function (credentials) {
-      return $http
-        .post('/login', credentials)
-        .then(function (res) {
-          Session.create(res.id, res.userid, res.role);
-        });
-    },
-    isAuthenticated: function () {
-      return !!Session.userId;
-    },
-    isAuthorized: function (authorizedRoles) {
-      if (!angular.isArray(authorizedRoles)) {
-        authorizedRoles = [authorizedRoles];
-      }
-      return (this.isAuthenticated() &&
-        authorizedRoles.indexOf(Session.userRole) !== -1);
-    }
-  };
-});
-
-angular.module('dotApp').service('Session', ['$cookies',
-  function ($cookies) {
-    this.create = function (id, name){
-      $cookies['id'] = id;
-      $cookies['name'] = name;
-    };
-
-    this.destroy = function () {
-      $cookies['id'] = null;
-      $cookies['name'] = null;
-    };
-
-    this.get = function(key){
-      return $cookies[key];
-    }
-    return this;
-}]);
 
 angular.module('dotApp').factory('Base64', function() {
     var keyStr = 'ABCDEFGHIJKLMNOP' +

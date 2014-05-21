@@ -26,21 +26,21 @@
           <a class="navbar-brand" href="#/dotmarks">dotMarks</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="authCtl">
             <ul class="nav navbar-nav navbar-right">
-            <div ng-if="!$root.user">
+            <div ng-if="!$root.currentuser">
               <a href="#/signup" class="btn btn-danger" >Sign up</a>
               <a href="#/signin" class="btn btn-warning" >Sign In</a>
             </div>
-              <div ng-if="$root.user">
+              <div ng-if="$root.currentuser">
                 <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as {{user.name}}<b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as {{$root.currentuser}}<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="#">Action</a></li>
                   <li><a href="#">Another action</a></li>
                   <li><a href="#">Something else here</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
+                  <li> <a class="btn btn-danger" href="#/signin" ng-click="logout()">Log Out</a></li>
                 </ul>
               </li>
             </div>
@@ -55,15 +55,16 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
   <script src="assets/js/lib/angular/angular.js"></script>
-  <script src="assets/js/lib//angular-route/angular-route.js"></script>
-  <script src="assets/js/lib//underscore/underscore.js"></script>
-  <script src="assets/js/lib//angular-bootstrap/ui-bootstrap.js"></script>
+  <script src="assets/js/lib/angular/angular-route.js"></script>
+  <script src="assets/js/lib/angular-localstorage/angular-local-storage.js"></script>
+  <script src="assets/js/lib/underscore/underscore.js"></script>
+  <script src="assets/js/lib/angular-bootstrap/ui-bootstrap.js"></script>
   <script src="js/app.js"></script>
   <script src="js/factories.js"></script>
   <script src="js/directives.js"></script>
   <script src="js/controllers.js"></script>
   <script type="text/javascript" src="assets/js/lib/jquery/jquery-1.9.1.js"></script>
-  <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/lib/bootstrap/bootstrap.js"></script>
 
 </body>
 </html>
