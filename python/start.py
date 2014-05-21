@@ -7,22 +7,22 @@ from flask import Response
 
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
-        print 'check_auth'
-        filter = resource != 'users' and method != 'POST'
-        print filter
-        if not filter:
-            users = app.data.driver.db['users']
-            print "username: " + username
-            print "pwd: " + password
-            print users
-            user = users.find_one({"username": username})
-            # self.set_request_auth_value(account['_id'])
-            if user:
-                is_valid_password = bcrypt.hashpw(
-                    password.encode('utf-8'),
-                    user['salt'].encode('utf-8')
-                ) == user['password']
-                return user and is_valid_password
+        # print 'check_auth'
+        # filter = resource != 'users' and method != 'POST'
+        # print filter
+        # if not filter:
+        users = app.data.driver.db['users']
+        print "username: " + username
+        print "pwd: " + password
+        print users
+        user = users.find_one({"username": username})
+        # self.set_request_auth_value(account['_id'])
+        if user:
+            is_valid_password = bcrypt.hashpw(
+                password.encode('utf-8'),
+                user['salt'].encode('utf-8')
+            ) == user['password']
+            return user and is_valid_password
 
     def authenticate(self):
         return Response(
