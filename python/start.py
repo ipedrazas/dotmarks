@@ -26,7 +26,7 @@ class BCryptAuth(BasicAuth):
 
     def authenticate(self):
         return Response(
-            'Please provide proper credentials', 403,
+            'Please provide valid credentials', 401,
             {'WWW-Authenticate': 'Basic realm:"%s"' % __package__})
 
 
