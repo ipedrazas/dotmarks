@@ -15,10 +15,20 @@ function addBookmark() {
     // Cancel the form submit
     event.preventDefault();
 
-    var username = "ivan";
-    var password = "ivan";
+    var user = "";
+    var password = "";
+    var token = "";
 
-    var token = encode64(username + ":" + password);
+    chrome.storage.sync.get({
+        username: '',
+        token: ''
+      }, function(items) {
+        user = items.username;
+        token = items.token;
+      });
+
+    console.log(decode64(token));
+
     // The URL to POST our data to
     var postUrl = 'http://dotmarks.dev:5000/dotmarks';
 
@@ -30,7 +40,7 @@ function addBookmark() {
     var title = document.getElementById('title').value.trim();
     var url = document.getElementById('url').value.trim();
     var tags = document.getElementById('tags').value.trim();
-    var user = username;
+
 
     // Set correct header for form data
     xhr.setRequestHeader('Content-type', 'application/json');

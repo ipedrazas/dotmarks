@@ -1,48 +1,46 @@
 // Saves options to chrome.storage
 function save_details(){
-  var user = document.getElementById('username').value;
-  var pwd = document.getElementById('password').value;
-  var token = encode64(username + ":" + pwd);
-  chrome.storage.sync.set({
-    username: user,
-    password: pwd,
-    token: token
-  }, function() {
-    // Update status to let user know options were saved.
+    var user = document.getElementById('username').value;
+    var pwd = document.getElementById('password').value;
+    var token = encode64(user + ":" + pwd);
+    chrome.storage.sync.set({
+            username: user,
+            password: pwd,
+            token: token
+        },
+            display_status('Details saved.')
+        );
+}
+
+function display_status(message){
     var status = document.getElementById('status');
-    status.textContent = 'Details saved.';
+    status.textContent = message;
     setTimeout(function() {
-      status.textContent = '';
-    }, 750);
-  });
+        status.textContent = '';
+    }, 1550);
 }
 
 function do_login(){
-  console.log('do_login');
-  var authUrl = "http://dotmarks.dev:5000/users/";
-  var xhr = new XMLHttpRequest();
-  var user = document.getElementById('username').value;
-  var pwd = document.getElementById('password').value;
-  var token = encode64(user + ":" + pwd);
-  console.log(token);
-  xhr.open("GET", authUrl + user, false);
-  xhr.setRequestHeader('Content-type', 'application/json');
-  xhr.setRequestHeader('Authorization', 'Basic ' + token);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      var status=req.status;
-      if(status == 201){
-        save_details();
-      console.log(xhr.responseText);
-      }else{
-        if(status == 401){
-          var status = document.getElementById('status');
-          status.textContent = 'Login failure :(';
+    var authUrl = "http://dotmarks.dev:5000/users/";
+    var user = document.getElementById('username').value;
+    var pwd = document.getElementById('password').value;
+    var token = encode64(user + ":" + pwd);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", authUrl + user, false);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Basic ' + token);
+    xhr.onreadystatechange = function() {
+        var response_status = xhr.status;
+        if (xhr.readyState === 4) {
+            if(response_status === 401){
+                display_status('Login failure :(');
+            }else if(response_status === 200 || response_status === 201){
+                save_details();
+            }
         }
-      }
     }
-  }
-  xhr.send();
+    xhr.send();
 }
 
 // Restores select box and checkbox state using the preferences
