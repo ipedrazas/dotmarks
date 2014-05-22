@@ -75,6 +75,10 @@ The VagrantFile defines the box with a fixed IP and with a hostname:
     config.vm.network "private_network", ip: "192.168.33.10"
 
 
+## Setup
+
+Once you have the environment installed you will have to set it up. The first thing you have to do is to create a user
+
 
 
 
