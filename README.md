@@ -54,25 +54,34 @@ The easiest thing is just to run the flask application from the command line. Ma
 ## Installation
 
 ### Dependencies
-The project comes with a vagrant file with ansible provisioning. In principle, to install it you just have to bring the box up
+The project comes with a vagrant file with ansible provisioning.
 
+The VagrantFile defines the box with a fixed IP and with a hostname:
+
+>   config.vm.hostname = "dotmarks.dev"
+    config.vm.network "private_network", ip: "192.168.33.10"
+
+I use a vagrant plugin to manage the DNS resolution between boxes. The plugin is called vagrant-hostsupdater and it adds an entry in your hosts file with the name defined by **config.vm.hostname** and the ip associated to it by the parameter **config.vm.network**. If you don't want to use the plugin, you can remove these two parameters and use port forwarding insetad but I've found easier to use it this way.
+
+To install the vagrant plugin just execute this command:
+
+> vagrant plugin install vagrant-hostupdater
 
 The project uses NFS to speed up read/write access. Nfs comes pre-installed in OS X and to install in Linux you only need these 3 packages:
 
 > nfs-common nfs-kernel-server portmap
 
-Make sure you have all these packages installed on your system. If you don't know how to check, just do
+In case you want to disable nfs, you can comment out the following line:
+
+> config.vm.synced_folder '.', '/vagrant', nfs: true
+
+Once you have double checked that you have all the dependencies installed or you have configured the environment accordingly, just type the following command:
 
 > vagrant up
 
 and if you do have all the dependencies, the ansible provisioning will do the rest.
 
 Once the vagrant box is started and provisioned you will have to log in and start the different processes.
-
-The VagrantFile defines the box with a fixed IP and with a hostname:
-
->   config.vm.hostname = "dotmarks.dev"
-    config.vm.network "private_network", ip: "192.168.33.10"
 
 
 ## Setup
