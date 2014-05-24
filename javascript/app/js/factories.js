@@ -12,11 +12,11 @@ if(!offline){
 }
 
 var config = {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                responseType: "application/json",
-            };
+    headers: {
+        "Content-Type": "application/json",
+    },
+    responseType: "application/json",
+};
 
 
 
@@ -102,11 +102,8 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
 
 
 angular.module('dotApp').factory('Base64', function() {
-    var keyStr = 'ABCDEFGHIJKLMNOP' +
-            'QRSTUVWXYZabcdef' +
-            'ghijklmnopqrstuv' +
-            'wxyz0123456789+/' +
-            '=';
+    var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
     return {
         encode: function (input) {
             var output = "";

@@ -39,7 +39,7 @@ Date.prototype.yyyymmdd = function() {
 
 /* Controllers */
 
-angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', 'Base64', '$routeParams', function ($scope, api, Base64, $routeParams) {
+angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
     $scope.execute = function(){
       log($scope.terminal);
     };
@@ -74,8 +74,8 @@ angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', 'Base64', '
 
 
 angular.module('dotApp').controller('dotMarkController',
-    ['$scope', '$rootScope', '$location', 'api', 'appaudit', 'Base64', '$routeParams',
-     function ($scope, $rootScope, $location, api, appaudit, Base64, $routeParams) {
+    ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams',
+     function ($scope, $rootScope, $location, api, appaudit, $routeParams) {
 
     $scope.user = false;
 
@@ -146,6 +146,10 @@ angular.module('dotApp').controller('authCtl',
             if(data._status === 'OK' || data.username == $scope.username){
                 $location.path('/dotmarks');
                 $rootScope.currentuser = $scope.username;
+                log($scope.password);
+                var token = Base64.encode($scope.username + ":" + $scope.password );
+                localStorageService.clearAll();
+                localStorageService.set('token', token);
             }else{
                 $scope.errors = "Login not valid";
             }
