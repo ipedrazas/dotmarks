@@ -67,8 +67,14 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
 
 angular.module('dotApp').factory('api', ['$http', 'localStorageService', function($http, localStorageService) {
     return {
-        getDotMarksEntries: function() {
-            return $http.get(dotmarksUrl);
+        getDotMarksEntries: function(params) {
+            log(params);
+            if(params.page !== undefined){
+                return $http.get(dotmarksUrl + "?page=" + params.page);
+            }else{
+                return $http.get(dotmarksUrl);
+            }
+
         },
         saveDotMark: function(entry) {
             var config = {

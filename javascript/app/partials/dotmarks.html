@@ -50,5 +50,13 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <ul class="pagination pagination-centered">
+                <li ng-if="pagination.prev" class="previous"><a href="#{{pagination.prev.href}}">Prev</a></li>
+                <li ng-if="pagination.next" class="next"><a href="#{{pagination.next.href}}">Next</a></li>
+                <li ng-if="pagination.last" class="last pull-right"><a href="#{{pagination.last.href}}">Last</a></li>
+            </ul>
+
+        </div>
     </div>
 </div>

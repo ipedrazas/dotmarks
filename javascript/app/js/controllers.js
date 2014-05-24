@@ -95,10 +95,45 @@ angular.module('dotApp').controller('dotMarkController',
         $scope.tags = reduce(etags);
         $scope.atags = reduce(atags);
 
+
+
+/**
+
+    // Thank God HATEOAS
+    // pagination
+
+ "_links": {
+        "self": {
+            "href": "/dotmarks",
+            "title": "dotmarks"
+        },
+        "last": {
+            "href": "/dotmarks?page=3",
+            "title": "last page"
+        },
+        "parent": {
+            "href": "",
+            "title": "home"
+        },
+        "next": {
+            "href": "/dotmarks?page=2",
+            "title": "next page"
+        }
+    }
+
+**/
+        log(data._links);
+
+        var pagination = {};
+        pagination.last = data._links.last;
+        pagination.next = data._links.next;
+        pagination.prev = data._links.prev;
+
+        $scope.pagination = pagination;
     };
 
     $scope.refreshEntries = function(){
-        api.getDotMarksEntries().success(callbackHandler);
+        api.getDotMarksEntries($routeParams).success(callbackHandler);
     };
 
     $scope.getTags = function(){
@@ -106,13 +141,7 @@ angular.module('dotApp').controller('dotMarkController',
     };
 
     $scope.searchDotMarks = function(query){
-        api.searchDotMarks(query).success(function (data) {
-            var elems = new Array();
-             _.each(data._items, function(item){
-                elems.push(item);
-             });
-             $scope.dotmarks = elems;
-        });
+        api.searchDotMarks(query).success(callbackHandler);
     };
 
     $scope.starDotMark = function(id, star){

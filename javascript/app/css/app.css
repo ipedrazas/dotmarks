@@ -125,6 +125,11 @@
 }
 
 .loginBox{
+  padding: 35px;
   width: 30%;
   margin: 0 auto;
+  border: 1px solid black;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
 }
