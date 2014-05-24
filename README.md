@@ -67,13 +67,13 @@ To install the vagrant plugin just execute this command:
 
 > vagrant plugin install vagrant-hostupdater
 
-The project uses NFS to speed up read/write access. Nfs comes pre-installed in OS X and to install in Linux you only need these 3 packages:
-
-> nfs-common nfs-kernel-server portmap
-
-In case you want to disable nfs, you can comment out the following line:
+In case you want to enable nfs, you can uncomment out the following line:
 
 > config.vm.synced_folder '.', '/vagrant', nfs: true
+
+NFS speeds up read/write access. Nfs comes pre-installed in OS X and to install in Linux you only need these 3 packages:
+
+> nfs-common nfs-kernel-server portmap
 
 Once you have double checked that you have all the dependencies installed or you have configured the environment accordingly, just type the following command:
 
