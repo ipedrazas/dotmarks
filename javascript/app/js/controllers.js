@@ -179,8 +179,9 @@ angular.module('dotApp').controller('authCtl',
             log('logout ' + $rootScope.currentuser);
             appauth.logout($rootScope.currentuser).success(function(data){
                 log(data);
-                $location.path('/login');
+                localStorageService.clearAll();
                 $rootScope.currentuser = null;
+                $location.path('/signin');
             });
       }
 }]);
