@@ -39,35 +39,48 @@ Date.prototype.yyyymmdd = function() {
 
 /* Controllers */
 
-angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', '$routeParams', function ($scope, api, $routeParams) {
+angular.module('dotApp').controller('terminalCtl', [
+    '$scope', 'api', '$routeParams', 'localStorageService',
+    function ($scope, api, $routeParams, localStorageService){
+
+    var parseResponse = function(element){
+        log(element._status);
+        if(element._status === 'OK'){
+            $scope.terminal = $scope.terminal + "[OK] - " + element._links.self.href + "\n";
+        }
+        if(element._status === 'ERR'){
+            $scope.terminal = $scope.terminal + "[FAILED] - " + element._issues.url + "\n";
+        }
+    };
+
     $scope.execute = function(){
       log($scope.terminal);
     };
+
     $scope.bulkImport = function(){
         var params = new Array();
         var data = $scope.terminal;
         var urls = data.split("\n");
         _.each(urls, function(el) {
           var o = {};
-          o['username'] = 'ivan';
+          o['username'] = localStorageService.get('username');
           o['url'] = el;
           params.push(o);
         });
         api.saveDotMark(JSON.stringify(params)).success(function(data){
             log(data);
             $scope.terminal = $scope.terminal + "\n\nResults:\n"
-            _.each(data, function(element){
-                log(element);
-                if(element._status == 'OK'){
-                    $scope.terminal = $scope.terminal + "[OK] - " + element._links.self.href + "\n";
-                }
-                if(element._status == 'ERR'){
-                    $scope.terminal = $scope.terminal + "[FAILED] - " + element._issues.url + "\n";
-                }
-            });
+            if(data instanceof Array){
+                _.each(data, function(element){
+                    parseResponse(element);
+                });
+            }else{
+                parseResponse(data);
+            }
         });
 
     };
+
 }]);
 
 

@@ -66,6 +66,8 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
 }]);
 
 angular.module('dotApp').factory('api', ['$http', 'localStorageService', function($http, localStorageService) {
+
+
     return {
         getDotMarksEntries: function(params) {
             log(params);
@@ -83,7 +85,8 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
                 },
                 responseType: "application/json",
             };
-            // $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('dotmarks.token');
+            log(localStorageService.get('token'));
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('token');
             return $http.post(dotmarksUrl, entry, config);
         },
 

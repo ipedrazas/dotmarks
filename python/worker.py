@@ -1,7 +1,7 @@
 from flask import Flask
 from celery import Celery
 from datetime import datetime
-from urllib2 import urlopen, URLError
+from urllib2 import Request, urlopen, URLError
 from BeautifulSoup import BeautifulSoup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -98,17 +98,23 @@ def populate_dotmark(item):
             updates['atags'] = atags
 
         if 'title' not in item or not item['title']:
-            print "processing %s" % item['url']
+            print "Processing %s" % item['url']
             try:
-                soup = BeautifulSoup(urlopen(item['url']))
+                hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu '
+                       'Chromium/34.0.1847.116 Chrome/34.0.1847.116 '
+                       'Safari/537.36'}
+
+                req = Request(item['url'], headers=hdr)
+                soup = BeautifulSoup(urlopen(req))
                 if soup.title is not None:
                     updates['title'] = soup.title.string
                 elif soup.h1 is not None:
                     updates['title'] = soup.h1.string.strip()
             except IOError as e:
-                print "I/O error({0}): {1}".format(e.errno, e.strerror)
+                print "    I/O error({0}): {1}".format(e.errno, e.strerror)
             except URLError, err:
-                print "Some other error happened:", err.reason
+                print "    Some other error happened:", err.reason
 
         if updates:
             do_update(item['_id'], updates)
