@@ -12,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = "dotmarks.dev"
   config.vm.network "private_network", ip: "192.168.33.10"
 
-  config.vm.synced_folder '.', '/vagrant', nfs: true
+  # config.vm.synced_folder '.', '/vagrant', nfs: true
 
   config.vm.provider "virtualbox" do |vb|
      vb.customize ["modifyvm", :id, "--memory", "512"]

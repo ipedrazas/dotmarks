@@ -61,7 +61,7 @@ The VagrantFile defines the box with a fixed IP and with a hostname:
 >   config.vm.hostname = "dotmarks.dev"
     config.vm.network "private_network", ip: "192.168.33.10"
 
-I use a vagrant plugin to manage the DNS resolution between boxes. The plugin is called vagrant-hostsupdater and it adds an entry in your hosts file with the name defined by **config.vm.hostname** and the ip associated to it by the parameter **config.vm.network**. If you don't want to use the plugin, you can remove these two parameters and use port forwarding insetad but I've found easier to use it this way.
+I use a vagrant plugin to manage the DNS resolution between boxes. The plugin is called [vagrant-hostsupdater][3] and it adds an entry in your hosts file with the name defined by **config.vm.hostname** and the ip associated to it by the parameter **config.vm.network**. If you don't want to use the plugin, you can remove these two parameters and use port forwarding insetad but I've found easier to use it this way.
 
 To install the vagrant plugin just execute this command:
 
@@ -96,3 +96,4 @@ Once you have the environment installed you will have to set it up. The first th
 
   [1]: http://python-eve.org/
   [2]: https://twitter.com/nicolaiarocci
+  [3]: https://github.com/cogitatio/vagrant-hostsupdater
