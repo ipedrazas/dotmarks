@@ -74,8 +74,8 @@ angular.module('dotApp').controller('terminalCtl', ['$scope', 'api', '$routePara
 
 
 angular.module('dotApp').controller('dotMarkController',
-    ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams',
-     function ($scope, $rootScope, $location, api, appaudit, $routeParams) {
+    ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams', 'localStorageService',
+     function ($scope, $rootScope, $location, api, appaudit, $routeParams, localStorageService) {
 
     $scope.user = false;
 
@@ -124,8 +124,14 @@ angular.module('dotApp').controller('dotMarkController',
              }
         });
     };
-    if($rootScope.currentuser == undefined){
+
+    var token = localStorageService.get('token');
+    var username = localStorageService.get('username');
+
+    if(token == undefined){
         $location.path("/signin");
+    }else{
+        $rootScope.currentuser = username;
     }
 
     if($routeParams.tag !== undefined){
@@ -150,6 +156,7 @@ angular.module('dotApp').controller('authCtl',
                 var token = Base64.encode($scope.username + ":" + $scope.password );
                 localStorageService.clearAll();
                 localStorageService.set('token', token);
+                localStorageService.set('username', $scope.username);
             }else{
                 $scope.errors = "Login not valid";
             }

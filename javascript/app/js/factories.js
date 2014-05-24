@@ -26,7 +26,6 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64', f
         login: function(username, password){
             var token = Base64.encode(username + ':' + password);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
-            $rootScope.token = token;
             return $http.get( authUrl + username);
         },
         signup: function(username, password){
