@@ -33,13 +33,14 @@
         <div class="row">
             <div ng-repeat="dotmark in dotmarks">
                 <h2 class="urlTitle">
-                    <span href="{{dotmark.url}}" data-origin="{{dotmark._id}}" target-url>{{dotmark.title}}</span>
+                    <a href="{{dotmark.url}}" origin="{{dotmark._id}}" >{{dotmark.title}}</a>
                 </h2>
-                    <a href="{{dotmark.url}}" class="dotAction">{{dotmark.url}}</a>
+                    <a href="{{dotmark.url}}" class="dotAction" target-url>{{dotmark.url}}</a>  <span class="num_views" ng-if="dotmark.views">{{dotmark.views}}</span>
                 <div class="dotMarkData row">
                     <div class="dotActions left ">
                         <span class="glyphicon glyphicon-star-empty " ng-click="starDotMark(dotmark._id, true)" ng-hide="dotmark.star"></span>
                         <span class="glyphicon glyphicon-star " ng-click="starDotMark(dotmark._id, false)" ng-show="dotmark.star"></span>
+                        <span class="glyphicon glyphicon-pencil " ng-click="editDotMark(dotmark._id)" ></span>
 
                         <ul class="list-inline tags right ">
                             <li ng-repeat="tag in dotmark.tags" ><a href="#" class="tag">{{tag}}</a></li>

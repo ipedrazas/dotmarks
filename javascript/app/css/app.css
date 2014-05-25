@@ -133,3 +133,14 @@
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
+
+.num_views{
+  padding-left: 10px;
+  padding-right: 10px;
+ -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
+  color: rgb(49, 107, 180);
+  border: 1px solid rgb(49, 107, 180);
+  margin-left: 150px;
+}

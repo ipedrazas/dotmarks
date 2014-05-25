@@ -53,13 +53,18 @@ def before_adding_user(items):
             bcrypt.hashpw(item['password'].encode('utf-8'), item['salt'])
 
 
+def before_fetching_dotmarks(request, lookup):
+    print lookup
+    lookup["sort"] = [("views", -1)]
+
+
 app = Eve(auth=BCryptAuth)
 
 
 app.on_inserted_dotmarks += after_insert_dotmark
 app.on_inserted_logs += after_insert_log
 app.on_insert_users += before_adding_user
-
+app.on_pre_GET_dotmarks += before_fetching_dotmarks
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

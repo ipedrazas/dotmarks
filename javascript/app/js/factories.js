@@ -50,6 +50,7 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
             o['user'] = 'ivan';
             o['source_id'] = id;
             o['action'] = 'click';
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('token');
             return $http.post( auditUrl, JSON.stringify(o), config);
         },
         starDotMark: function(id, star){
@@ -58,6 +59,7 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
             o['source_id'] = id;
             o['action'] = 'star';
             o['value'] = '' + star;
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('token');
             return $http.post( auditUrl, JSON.stringify(o));
         },
 

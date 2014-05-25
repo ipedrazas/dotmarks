@@ -112,8 +112,10 @@ def populate_dotmark(item):
                 elif soup.h1 is not None:
                     updates['title'] = soup.h1.string.strip()
             except IOError as e:
+                print e
                 print "    I/O error({0}): {1}".format(e.errno, e.strerror)
             except URLError, err:
+                print
                 print "    Some other error happened:", err.reason
 
         if updates:

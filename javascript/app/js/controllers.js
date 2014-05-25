@@ -43,13 +43,13 @@ angular.module('dotApp').controller('terminalCtl', [
     '$scope', 'api', '$routeParams', 'localStorageService',
     function ($scope, api, $routeParams, localStorageService){
 
-    var parseResponse = function(element){
+    var parseResponse = function(element, count){
         log(element._status);
         if(element._status === 'OK'){
-            $scope.terminal = $scope.terminal + "[OK] - " + element._links.self.href + "\n";
+            $scope.terminal = $scope.terminal + count + " [OK] - " + element._links.self.href + "\n";
         }
         if(element._status === 'ERR'){
-            $scope.terminal = $scope.terminal + "[FAILED] - " + element._issues.url + "\n";
+            $scope.terminal = $scope.terminal + count + " [FAILED] - " + element._issues.url + "\n";
         }
     };
 
@@ -70,12 +70,13 @@ angular.module('dotApp').controller('terminalCtl', [
         api.saveDotMark(JSON.stringify(params)).success(function(data){
             log(data);
             $scope.terminal = $scope.terminal + "\n\nResults:\n"
+            var count = 0;
             if(data instanceof Array){
                 _.each(data, function(element){
-                    parseResponse(element);
+                    parseResponse(element, count++);
                 });
             }else{
-                parseResponse(data);
+                parseResponse(data, count++);
             }
         });
 
@@ -107,35 +108,6 @@ angular.module('dotApp').controller('dotMarkController',
         $scope.dotmarks = elems;
         $scope.tags = reduce(etags);
         $scope.atags = reduce(atags);
-
-
-
-/**
-
-    // Thank God HATEOAS
-    // pagination
-
- "_links": {
-        "self": {
-            "href": "/dotmarks",
-            "title": "dotmarks"
-        },
-        "last": {
-            "href": "/dotmarks?page=3",
-            "title": "last page"
-        },
-        "parent": {
-            "href": "",
-            "title": "home"
-        },
-        "next": {
-            "href": "/dotmarks?page=2",
-            "title": "next page"
-        }
-    }
-
-**/
-        log(data._links);
 
         var pagination = {};
         pagination.last = data._links.last;
