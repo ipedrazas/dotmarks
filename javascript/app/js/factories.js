@@ -74,7 +74,7 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
         getDotMarksEntries: function(params) {
             log(params);
             var username = localStorageService.get('username');
-            dotmarksUrl += '?where={"username":"' + username + '"}&sort=[("views",-1)]';
+            var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]';
             if(params.page !== undefined){
                 return $http.get(dotmarksUrl + "&page=" + params.page);
             }else{
@@ -106,7 +106,9 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
 
         },
         searchDotMarks: function(query){
-            var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";
+            var username = localStorageService.get('username');
+            // var filter = "?where={\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}}, {\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}";
+            var filter = "?where={\"$and\":[{\"username\": \"" + username +"\"}, {\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}},{\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}]}";
             return $http.get(dotmarksUrl + filter);
         },
     };
