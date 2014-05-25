@@ -27,7 +27,7 @@ X_HEADERS = "Content-Type, Accept, Authorization, X-Requested-With, " \
     " Access-Control-Allow-Credentials " \
 
 
-MONGO_QUERY_BLACKLIST = ['$where']
+MONGO_QUERY_BLACKLIST = []
 
 
 logs = {

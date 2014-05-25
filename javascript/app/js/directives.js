@@ -15,7 +15,6 @@ angular.module('dotApp').directive('a', ['appaudit', function (appaudit) {
                 elem.on('click', function(e){
                     log(attrs);
                     appaudit.clickDotMark(attrs.origin);
-                    alert('clickDotMark');
                 });
             }
         }

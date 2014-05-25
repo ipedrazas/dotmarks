@@ -33,7 +33,7 @@
         <div class="row">
             <div ng-repeat="dotmark in dotmarks">
                 <h2 class="urlTitle">
-                    <a href="{{dotmark.url}}" origin="{{dotmark._id}}" >{{dotmark.title}}</a>
+                    <a href="{{dotmark.url}}" origin="{{dotmark._id}}" target="_blank">{{dotmark.title}}</a>
                 </h2>
                     <a href="{{dotmark.url}}" class="dotAction" target-url>{{dotmark.url}}</a>  <span class="num_views" ng-if="dotmark.views">{{dotmark.views}}</span>
                 <div class="dotMarkData row">

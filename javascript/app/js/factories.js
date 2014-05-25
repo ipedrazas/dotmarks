@@ -3,7 +3,7 @@ var offline = false;
 
 if(!offline){
   var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
-  var auditUrl =  "http://dotmarks.dev:5000/logs";
+  var auditUrl =  "http://dotmarks.dev:5000/logs/";
   var authUrl = "http://dotmarks.dev:5000/users/";
 }else{
   var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
@@ -73,8 +73,10 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
     return {
         getDotMarksEntries: function(params) {
             log(params);
+            var username = localStorageService.get('username');
+            dotmarksUrl += '?where={"username":"' + username + '"}&sort=[("views",-1)]';
             if(params.page !== undefined){
-                return $http.get(dotmarksUrl + "?page=" + params.page);
+                return $http.get(dotmarksUrl + "&page=" + params.page);
             }else{
                 return $http.get(dotmarksUrl);
             }
