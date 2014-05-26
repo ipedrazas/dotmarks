@@ -13,3 +13,5 @@
     - python
     - mongo
 
+
+openssl req -nodes -newkey rsa:2048 -nodes -keyout dotmarks.dev.key -out server.csr -subj "/C=GB/ST=London/L=London/O=dotmarks/OU=IT/CN=dotmarks.net"
