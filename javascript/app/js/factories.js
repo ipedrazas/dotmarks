@@ -76,9 +76,9 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
             var username = localStorageService.get('username');
             var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]';
             if(params.page !== undefined){
-                return $http.get(dotmarksUrl + "&page=" + params.page);
+                return $http.get(dest + "&page=" + params.page);
             }else{
-                return $http.get(dotmarksUrl);
+                return $http.get(dest);
             }
 
         },
@@ -111,6 +111,9 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
             var filter = "?where={\"$and\":[{\"username\": \"" + username +"\"}, {\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}},{\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}]}";
             return $http.get(dotmarksUrl + filter);
         },
+        getDotMark: function(id){
+            return $http.get(dotmarksUrl + "/" + id);
+        }
     };
 }]);
 

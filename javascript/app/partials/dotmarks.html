@@ -40,7 +40,7 @@
                     <div class="dotActions left ">
                         <span class="glyphicon glyphicon-star-empty " ng-click="starDotMark(dotmark._id, true)" ng-hide="dotmark.star"></span>
                         <span class="glyphicon glyphicon-star " ng-click="starDotMark(dotmark._id, false)" ng-show="dotmark.star"></span>
-                        <span class="glyphicon glyphicon-pencil " ng-click="editDotMark(dotmark._id)" ></span>
+                        <a href="#/dotmarks?id={{dotmark._id}}"><span class="glyphicon glyphicon-pencil "  ></span></a>
 
                         <ul class="list-inline tags right ">
                             <li ng-repeat="tag in dotmark.tags" ><a href="#" class="tag">{{tag}}</a></li>

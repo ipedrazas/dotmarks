@@ -86,7 +86,6 @@ angular.module('dotApp').controller('terminalCtl', [
 
 
 
-
 angular.module('dotApp').controller('dotMarkController',
     ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams', 'localStorageService',
      function ($scope, $rootScope, $location, api, appaudit, $routeParams, localStorageService) {
@@ -139,6 +138,15 @@ angular.module('dotApp').controller('dotMarkController',
         });
     };
 
+    $scope.editDotMark = function(oid){
+        api.getDotMark(oid).success(function(data){
+            $scope.dotmark = data;
+            log(data);
+            $location.path("/edit");
+        });
+    }
+
+
     var token = localStorageService.get('token');
     var username = localStorageService.get('username');
 
@@ -150,6 +158,8 @@ angular.module('dotApp').controller('dotMarkController',
 
     if($routeParams.tag !== undefined){
         $scope.getTags();
+    }else if($routeParams.id !== undefined){
+        $scope.editDotMark($routeParams.id);
     }else{
         $scope.refreshEntries();
     }
