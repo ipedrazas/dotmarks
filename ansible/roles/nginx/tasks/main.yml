@@ -1,0 +1,25 @@
+#  Install Nginx latest version
+## ===============================================
+
+- name: add nginx latest version ppa
+  action: apt_repository repo=ppa:nginx/stable
+
+- name: update apt
+  command: sudo apt-get update
+
+- name: install nginx
+  action: apt name=nginx
+
+- name: add nginx "$name" vhost
+  action: template src=templates/$server_name.conf dest=/etc/nginx/sites-available/$server_name
+
+- name: add nginx "$name" vhost
+  action: template src=templates/api.$server_name.conf dest=/etc/nginx/sites-available/api.$server_name
+
+- name: link nginx "$name" vhost in sites-enabled
+  action: file src=/etc/nginx/sites-available/$server_name dest=/etc/nginx/sites-enabled/$server_name state=link
+
+- name: link nginx "$name" vhost in sites-enabled
+  action: file src=/etc/nginx/sites-available/api.$server_name dest=/etc/nginx/sites-enabled/api.$server_name state=link
+  notify:
+    - restart nginx

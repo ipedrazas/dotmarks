@@ -3,12 +3,13 @@
   apt: name={{ item }} state=present
   with_items:
   - libffi-dev
+  - supervisor
 
 - name: install virtualenv
   pip: name={{ item }} state=present
   with_items:
   - virtualenv
-  - virtualenvwrapper
   - bcrypt
+  - gunicorn
 
 - file: path=/home/vagrant/Envs state=directory owner=vagrant

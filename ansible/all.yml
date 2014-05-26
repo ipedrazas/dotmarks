@@ -1,4 +1,10 @@
 - hosts: all
+
+  vars:
+      server_name: dotmarks.dev
+      user: www-data
+      ssl_cert: dotmarks.dev
+
   roles:
     - upgrade
     - common

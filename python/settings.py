@@ -123,6 +123,9 @@ atags = {
         },
         'entries': {
             'type': 'list'
+        },
+        'keywords': {
+            'type': 'list'
         }
     }
 }
