@@ -35,7 +35,7 @@
                 <h2 class="urlTitle">
                     <a href="{{dotmark.url}}"  target="_blank">{{dotmark.title}}</a>
                 </h2>
-                    <a href="{{dotmark.url}}" class="dotAction" target="_blank">{{dotmark.url}}</a>  <span class="num_views" ng-if="dotmark.views">{{dotmark.views}}</span>
+                    <span class="num_views" ng-if="dotmark.views">{{dotmark.views}}</span>  <a href="{{dotmark.url}}" class="dotAction" target="_blank">{{dotmark.url}}</a>
                 <div class="dotMarkData row">
                     <div class="dotActions left ">
                         <span class="glyphicon glyphicon-star-empty " ng-click="starDotMark(dotmark._id, true)" ng-hide="dotmark.star"></span>
