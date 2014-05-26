@@ -44,7 +44,6 @@ angular.module('dotApp').controller('terminalCtl', [
     function ($scope, api, $routeParams, localStorageService){
 
     var parseResponse = function(element, count){
-        log(element._status);
         if(element._status === 'OK'){
             $scope.terminal = $scope.terminal + count + " [OK] - " + element._links.self.href + "\n";
         }
@@ -68,7 +67,6 @@ angular.module('dotApp').controller('terminalCtl', [
           params.push(o);
         });
         api.saveDotMark(JSON.stringify(params)).success(function(data){
-            log(data);
             $scope.terminal = $scope.terminal + "\n\nResults:\n"
             var count = 0;
             if(data instanceof Array){
@@ -103,7 +101,6 @@ angular.module('dotApp').controller('dotMarkController',
                 etags.push(tag.toLowerCase());
             });
         });
-        log(elems);
         $scope.dotmarks = elems;
         $scope.tags = reduce(etags);
         $scope.atags = reduce(atags);
@@ -117,6 +114,7 @@ angular.module('dotApp').controller('dotMarkController',
     };
 
     $scope.refreshEntries = function(){
+        log("refreshEntries");
         api.getDotMarksEntries($routeParams).success(callbackHandler);
     };
 
@@ -129,7 +127,6 @@ angular.module('dotApp').controller('dotMarkController',
     };
 
     $scope.starDotMark = function(id, star){
-        log(id);
         _.each($scope.dotmarks, function(item) {
              if(id == item._id){
                 item.star = star;
@@ -141,7 +138,6 @@ angular.module('dotApp').controller('dotMarkController',
     $scope.editDotMark = function(oid){
         api.getDotMark(oid).success(function(data){
             $scope.dotmark = data;
-            log(data);
             $location.path("/edit");
         });
     }
@@ -172,11 +168,9 @@ angular.module('dotApp').controller('authCtl',
     function ($scope, $rootScope, $location, appauth, localStorageService, Base64){
 
         var authCallback = function(data){
-            log(data);
             if(data._status === 'OK' || data.username == $scope.username){
                 $location.path('/dotmarks');
                 $rootScope.currentuser = $scope.username;
-                log($scope.password);
                 var token = Base64.encode($scope.username + ":" + $scope.password );
                 localStorageService.clearAll();
                 localStorageService.set('token', token);
@@ -200,9 +194,7 @@ angular.module('dotApp').controller('authCtl',
       };
 
       $scope.logout = function(){
-            log('logout ' + $rootScope.currentuser);
             appauth.logout($rootScope.currentuser).success(function(data){
-                log(data);
                 localStorageService.clearAll();
                 $rootScope.currentuser = null;
                 $location.path('/signin');

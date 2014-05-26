@@ -5,9 +5,9 @@ angular.module('dotApp').directive('a', ['appaudit', function (appaudit) {
         link: function(scope, elem, attrs) {
             if(scope.dotmark !== undefined){
                 elem.on('click', function(e){
-                    log(scope.dotmarks);
                     scope.dotmark.views++;
                     appaudit.clickDotMark(scope.dotmark._id);
+                    scope.refreshEntries();
                 });
             }
         }
