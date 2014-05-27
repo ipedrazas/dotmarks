@@ -24,7 +24,7 @@ XML = False
 X_DOMAINS = "http://dotmarks.dev:8000"
 X_HEADERS = "Content-Type, Accept, Authorization, X-Requested-With, " \
     " Access-Control-Request-Headers, Access-Control-Allow-Origin, " \
-    " Access-Control-Allow-Credentials " \
+    " Access-Control-Allow-Credentials X-HTTP-Method-Override " \
 
 
 MONGO_QUERY_BLACKLIST = []

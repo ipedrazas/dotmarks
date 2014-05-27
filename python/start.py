@@ -60,5 +60,11 @@ app.on_inserted_dotmarks += after_insert_dotmark
 app.on_inserted_logs += after_insert_log
 app.on_insert_users += before_adding_user
 
+
+@app.route("/version")
+def hello():
+    return '.dotMarks v0.0.1a'
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -112,6 +112,8 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
             return $http.get(dotmarksUrl + "/" + id);
         },
         updateDotMark: function(dotmark) {
+            log("updating " + dotmark._id);
+            log(dotmark);
             var config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -120,7 +122,7 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
                 responseType: "application/json",
             };
             $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('token');
-            return $http.post(dotmarksUrl, dotmark, config);
+            return $http.post(dotmarksUrl + "/" + dotmark._id, dotmark, config);
         }
     };
 }]);
