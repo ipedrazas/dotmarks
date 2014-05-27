@@ -18,6 +18,6 @@ export LANG=en_GB.UTF-8
 export WORKON_HOME=~/Envs
 source /usr/local/bin/virtualenvwrapper.sh
 
-cd /vagrant
-mkvirtualenv dotmarks
-workon dotmarks
+#cd /vagrant
+#mkvirtualenv dotmarks
+#workon dotmarks

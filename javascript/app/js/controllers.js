@@ -142,6 +142,13 @@ angular.module('dotApp').controller('dotMarkController',
         });
     }
 
+    $scope.updateDotMark = function(){
+        log("updateDotMark");
+        api.updateDotMark($scope.dotmark).success(function(data){
+            log(data);
+        });
+    }
+
 
     var token = localStorageService.get('token');
     var username = localStorageService.get('username');

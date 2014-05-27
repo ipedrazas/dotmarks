@@ -2,6 +2,10 @@
 - name: Checking essentials
   apt: name={{ item }} state=present
   with_items:
+  - python-software-properties
+  - python-pycurl
+  - python-pip
+  - python-dev
   - libffi-dev
   - supervisor
 
@@ -12,4 +16,14 @@
   - bcrypt
   - gunicorn
 
-- file: path=/home/vagrant/Envs state=directory owner=vagrant
+- name: check if virtualenv already exists
+  stat: path={{virtualenv_dir}}
+  register: venv_dir
+
+- name: create virtualenv for Python web application
+  shell: virtualenv {{virtualenv_dir}}
+  when: venv_dir.stat.isdir is not defined
+
+- name: install web application dependencies listed in requirements.txt
+  pip: requirements={{app_code_dir}}/requirements.txt
+       virtualenv={{virtualenv_dir}}

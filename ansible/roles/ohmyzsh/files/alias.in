@@ -6,10 +6,6 @@ alias ll='ls -atrhlF'
 alias log='tail -f /var/log/nginx/error.log'
 alias p='python'
 alias ut='python -m unittest'
-alias api='cd /home/ivan/workspace/blibb-api'
-alias web=' cd /home/ivan/workspace/blibb-web'
-alias depweb='cd /home/ivan/workspace/deploy-web'
-alias depap='cd /home/ivan/wokspace/deploy-api'
 alias ..='cd ..'
 alias gs='git status'
 alias gc='git commit -m'
@@ -27,17 +23,6 @@ alias rs='python manage.py runserver'
 alias vi='vim'
 alias listen='sudo netstat -plunt'
 
-# Vagrant
-alias up='vagrant up'
-alias valt='vagrant halt'
-
-#alias i='sudo pacman -S'
-#alias u='sudo pacman -U'
-#alias m='makepkg -Acs'
-
-alias d="cd ~/Dropbox"
-alias dl="cd ~/Downloads"
-alias dt="cd ~/Desktop"
 alias log='tail -f -n50'
 
 # Detect which `ls` flavor is in use
@@ -71,14 +56,9 @@ alias java7='sudo update-java-alternatives -s java-7-oracle'
 
 alias rake="noglob rake"
 
-alias lolcat='adb logcat | coloredlogcat.py'
-
 alias reload!='. ~/.zshrc'
 
 alias untar="tar -xvzf"
-
-alias up='vagrant up'
-alias valt='vagrant halt'
 
 # View HTTP traffic
 alias sniff="sudo ngrep -t '^(GET|POST) ' 'tcp and port 80'"
