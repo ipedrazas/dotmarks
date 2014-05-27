@@ -11,6 +11,8 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule'])
           .when('/signup', {templateUrl: 'partials/signup.html', controller: 'authCtl'})
           .when('/home', {templateUrl: 'partials/dotmarks.html', controller: 'dotMarkController'})
           .when('/edit', {templateUrl: 'partials/editDotMark.html', controller: 'dotMarkController'})
+          .when('/applications', {templateUrl: 'partials/applications.html', controller: 'appsCtl'})
+          .when('/settings', {templateUrl: 'partials/settings.html', controller: 'settingsCtl'})
 		  .otherwise({redirectTo: '/home'});
 });
 

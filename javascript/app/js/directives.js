@@ -17,7 +17,7 @@ angular.module('dotApp').directive('a', ['appaudit', function (appaudit) {
 angular.module('dotApp').directive('typing', ['$http', function () {
     return function (scope, element, attrs) {
       element.bind('keyup', function () {
-        if(element.text().length > 2){
+        if(element.text().length > 3){
             scope.searchDotMarks(element.text());
         }else if(element.text().length == 0){
             scope.refreshEntries();

@@ -22,5 +22,7 @@ simplejson==3.3.0
 urllib3==1.8.2
 wsgiref==0.1.2
 bcrypt
-
+python-oauth2
+simplejson
+pocket
 
