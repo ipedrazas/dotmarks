@@ -5,10 +5,12 @@ if(!offline){
   var dotmarksUrl = "http://dotmarks.dev:5000/dotmarks";
   var auditUrl =  "http://dotmarks.dev:5000/logs/";
   var authUrl = "http://dotmarks.dev:5000/users/";
+  var mediaUrl = "http://dotmarks.dev:5000/attachments/";
 }else{
   var dotmarksUrl = "http://dotmarks.dev:8000/app/offline-dotmarks.json";
   var auditUrl = "http://localhost:8000/app/offline-dotmarks.json";
   var authUrl = "http://dotmarks.dev:5000/users/";
+  var mediaUrl = "http://dotmarks.dev:5000/attachments/";
 }
 
 var config = {
