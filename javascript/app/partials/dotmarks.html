@@ -31,6 +31,15 @@
             </form>
         </div>
         <div class="row">
+            <ul class="pagination pagination-centered">
+                <li ng-if="pagination.prev" class="pagination previous"><a href="#{{pagination.prev.href}}">Prev</a></li>
+                <li ng-if="pagination.next" class="pagination next"><a href="#{{pagination.next.href}}">Next</a></li>
+                <li ng-if="pagination.last" class="pagination last"><a href="#{{pagination.last.href}}">Last</a></li>
+            </ul>
+
+        </div>
+
+        <div class="row">
             <div ng-repeat="dotmark in dotmarks">
                 <h2 class="urlTitle">
                     <a href="{{dotmark.url}}"  target="_blank">{{dotmark.title}}</a>

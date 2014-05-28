@@ -82,13 +82,28 @@ angular.module('dotApp').controller('terminalCtl', [
 
 }]);
 
+angular.module('dotApp').controller('settingsCtl',
+    ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams', 'localStorageService',
+     function ($scope, $rootScope, $location, api, appaudit, $routeParams, localStorageService) {
 
+        $scope.updateSettings = function(){
+            log($scope.password);
+            log($scope.repassword);
+            if($scope.password == $scope.repassword){
+                log('passwords match');
+            }else{
+                $scope.errors = "Ugh! Passwords are different!";
+            }
+        };
+
+}]);
 
 angular.module('dotApp').controller('dotMarkController',
     ['$scope', '$rootScope', '$location', 'api', 'appaudit', '$routeParams', 'localStorageService',
      function ($scope, $rootScope, $location, api, appaudit, $routeParams, localStorageService) {
 
-    $scope.user = false;
+    var token = localStorageService.get('token');
+    var username = localStorageService.get('username');
 
     var callbackHandler = function(data){
         var elems = new Array();
@@ -101,6 +116,7 @@ angular.module('dotApp').controller('dotMarkController',
                 etags.push(tag.toLowerCase());
             });
         });
+
         $scope.dotmarks = elems;
         $scope.tags = reduce(etags);
         $scope.atags = reduce(atags);
@@ -114,7 +130,6 @@ angular.module('dotApp').controller('dotMarkController',
     };
 
     $scope.refreshEntries = function(){
-        log("refreshEntries");
         api.getDotMarksEntries($routeParams).success(callbackHandler);
     };
 
@@ -150,8 +165,6 @@ angular.module('dotApp').controller('dotMarkController',
     }
 
 
-    var token = localStorageService.get('token');
-    var username = localStorageService.get('username');
 
     if(token == undefined){
         $location.path("/signin");

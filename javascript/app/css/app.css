@@ -145,3 +145,8 @@
   margin-left: 10px;
   font-size: 0.7em;
 }
+
+.pagination{
+  padding-right: 25px;
+  padding-left: 25px;
+}

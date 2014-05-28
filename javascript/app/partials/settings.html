@@ -1,0 +1,29 @@
+<h1>Settings</h1>
+
+
+<div class="loginBox center">
+    <form class="form-horizontal" role="form">
+      <h2 class="center">Change your password</h2>
+      <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">Username</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control"  placeholder="Password" ng-model="password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="repassword" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="rep_password" placeholder="Repeat Password" ng-model="repassword">
+        </div>
+      </div>
+      <br><br>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success" ng-click="updateSettings()">Save</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="errors ">{{errors}}</p>
+      </div>
+    </form>
+</div>
