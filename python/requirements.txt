@@ -14,7 +14,7 @@ billiard==3.3.0.17
 celery==3.1.11
 itsdangerous==0.22
 kombu==3.0.15
-pymongo==2.7
+pymongo
 pytz==2014.2
 redis==2.9.1
 requests==2.2.1
@@ -23,6 +23,5 @@ urllib3==1.8.2
 wsgiref==0.1.2
 bcrypt
 python-oauth2
-simplejson
 pocket
 

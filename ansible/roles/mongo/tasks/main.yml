@@ -11,12 +11,20 @@
   command: apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 
 - name: MongoDB | Add 10Gen repository
-  shell: 
+  shell:
     echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/10gen.list
     creates=/etc/apt/sources.list.d/10gen.list
 
-- name: MongoDB | Install latest MongoDB release 
-  apt: pkg=mongodb-10gen state=present update_cache=yes
+
+- name: MongoDB | Install latest MongoDB release
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+  - mongodb-org=2.6.1
+  - mongodb-org-server=2.6.1
+  - mongodb-org-shell=2.6.1
+  - mongodb-org-mongos=2.6.1
+  - mongodb-org-tools=2.6.1
+
 
 # Check service is running.
 - name: MongoDB | Insure deamon is running correctly

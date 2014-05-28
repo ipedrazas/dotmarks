@@ -5,7 +5,22 @@
 
 ## User Administrator Creation
   use admin
-  db.addUser('mongoUser', 'ZOPa676KL5K5AALlfakjhdf7adfh47r3897gl')
+
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "ZOPa676KL5K5AALlfakjhdf7adfh47r3897gl",
+    roles:
+    [
+      {
+        role: "userAdminAnyDatabase",
+        db: "admin"
+      }
+    ]
+  }
+)
+
 
 
 ##  Enable Authentication /etc/mongodb.conf
@@ -14,5 +29,4 @@
 
 Restart mongodb
   sudo service mongodb restart
-
 
