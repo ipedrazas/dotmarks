@@ -9,12 +9,16 @@
 
 db.createUser(
   {
-    user: "admin",
+    user: "dmUser",
     pwd: "ZOPa676KL5K5AALlfakjhdf7adfh47r3897gl",
     roles:
     [
       {
-        role: "userAdminAnyDatabase",
+        role: "readWrite",
+        db: "eve"
+      },
+      {
+        role: "readWrite",
         db: "admin"
       }
     ]

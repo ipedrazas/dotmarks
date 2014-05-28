@@ -31,10 +31,10 @@ MONGO_QUERY_BLACKLIST = []
 
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
-# MONGO_USERNAME = 'dotmarks'
+# MONGO_USERNAME = 'dmUser'
 # MONGO_PASSWORD = 'ZOPa676KL5K5AALlfakjhdf7adfh47r3897gl'
-MONGO_USERNAME = 'admin'
-MONGO_PASSWORD = 'admin'
+# MONGO_USERNAME = 'ivan'
+# MONGO_PASSWORD = 'ivan'
 
 
 logs = {
