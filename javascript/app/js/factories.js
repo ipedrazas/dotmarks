@@ -69,10 +69,11 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
 
 angular.module('dotApp').factory('api', ['$http', 'localStorageService', function($http, localStorageService) {
 
+    var username = localStorageService.get('username');
 
     return {
         getDotMarksEntries: function(params) {
-            var username = localStorageService.get('username');
+
             var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]';
             if(params.page !== undefined){
                 return $http.get(dest + "&page=" + params.page);
@@ -104,7 +105,7 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
 
         },
         searchDotMarks: function(query){
-            var username = localStorageService.get('username');
+            // var username = localStorageService.get('username');
             var filter = "?where={\"$and\":[{\"username\": \"" + username +"\"}, {\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}},{\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}]}";
             return $http.get(dotmarksUrl + filter);
         },
