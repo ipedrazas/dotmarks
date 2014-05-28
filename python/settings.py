@@ -37,6 +37,20 @@ MONGO_PORT = 27017
 # MONGO_PASSWORD = 'ivan'
 
 
+attachments = {
+    'schema': {
+        'file': {
+            'type': 'media'
+        },
+        'name': {
+            'type': 'string'
+        },
+        'user': {
+            'type': 'string'
+        }
+    }
+}
+
 logs = {
     'schema': {
         'user': {
@@ -144,4 +158,5 @@ DOMAIN = {
     'users': users,
     'logs': logs,
     'atags': atags,
+    'attachments': attachments,
 }
