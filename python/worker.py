@@ -6,6 +6,7 @@ from BeautifulSoup import BeautifulSoup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from urlparse import urlparse
+from dot_delicious import parse_html
 
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -71,6 +72,12 @@ def auto_tag(item):
     if at_url:
         atags.extend(at_url)
     return atags
+
+
+@celery.task()
+def process_attachment(item):
+    if '_id' in item:
+        parse_html(item['_id'])
 
 
 @celery.task()

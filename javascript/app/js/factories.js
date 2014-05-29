@@ -76,12 +76,13 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
     return {
         getDotMarksEntries: function(params) {
 
-            var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]';
+            var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]&d=' + Date.now();
             if(params.page !== undefined){
                 return $http.get(dest + "&page=" + params.page);
             }else{
                 return $http.get(dest);
             }
+
 
         },
         saveDotMark: function(entry) {

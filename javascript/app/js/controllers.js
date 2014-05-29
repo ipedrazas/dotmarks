@@ -40,8 +40,8 @@ Date.prototype.yyyymmdd = function() {
 /* Controllers */
 
 angular.module('dotApp').controller('terminalCtl', [
-    '$scope', 'api', '$routeParams', 'localStorageService', ' $upload',
-    function ($scope, api, $routeParams, localStorageService,  $upload){
+    '$scope', 'api', '$routeParams', 'localStorageService', '$upload', '$http',
+    function ($scope, api, $routeParams, localStorageService,  $upload, $http){
 
     var parseResponse = function(element, count){
         if(element._status === 'OK'){
@@ -81,6 +81,7 @@ angular.module('dotApp').controller('terminalCtl', [
 
     $scope.onFileSelect = function($files) {
         //$files: an array of files selected, each file has name, size, and type.
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + localStorageService.get('token');
         for (var i = 0; i < $files.length; i++) {
             var file = $files[i];
             $scope.upload = $upload.upload({

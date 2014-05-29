@@ -1,7 +1,7 @@
 from eve import Eve
 from eve.auth import BasicAuth
 import bcrypt
-from worker import populate_dotmark, parse_log
+from worker import populate_dotmark, parse_log, process_attachment
 from flask import Response
 
 
@@ -53,9 +53,15 @@ def before_adding_user(items):
             bcrypt.hashpw(item['password'].encode('utf-8'), item['salt'])
 
 
+def after_inserting_atachment(items):
+    for item in items:
+        process_attachment.delay(item)
+
+
 app = Eve(auth=BCryptAuth)
 
 
+app.on_inserted_attachments += after_inserting_atachment
 app.on_inserted_dotmarks += after_insert_dotmark
 app.on_inserted_logs += after_insert_log
 app.on_insert_users += before_adding_user
