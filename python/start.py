@@ -16,8 +16,8 @@ class BCryptAuth(BasicAuth):
         print "pwd: " + password
         print users
         user = users.find_one({"username": username})
-        # self.set_request_auth_value(account['_id'])
         if user:
+            self.set_request_auth_value(user['username'])
             is_valid_password = bcrypt.hashpw(
                 password.encode('utf-8'),
                 user['salt'].encode('utf-8')

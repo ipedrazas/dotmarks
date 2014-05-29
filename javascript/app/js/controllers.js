@@ -62,7 +62,7 @@ angular.module('dotApp').controller('terminalCtl', [
         var urls = data.split("\n");
         _.each(urls, function(el) {
           var o = {};
-          o['username'] = localStorageService.get('username');
+          // o['username'] = localStorageService.get('username');
           o['url'] = el;
           params.push(o);
         });

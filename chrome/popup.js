@@ -44,6 +44,7 @@ function addBookmark() {
 
     // Set correct header for form data
     xhr.setRequestHeader('Content-type', 'application/json');
+    console.log(token);
     xhr.setRequestHeader('Authorization', 'Basic ' + token);
 
     // Handle request state change events
@@ -77,13 +78,13 @@ function addBookmark() {
         }
     };
 
-    xhr.send(serializeObject(user, title, url, tags));
+    xhr.send(serializeObject(title, url, tags));
     statusDisplay.innerHTML = 'Saving...';
 }
 
- function serializeObject(user, title, url, tags){
+ function serializeObject(title, url, tags){
     var o = {};
-    o['username'] = user;
+    // o['username'] = user;
     o['url'] = url;
     o['source'] = 'chrome';
     if(tags !== undefined) {

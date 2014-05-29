@@ -26,11 +26,13 @@ X_HEADERS = "Content-Type, Accept, Authorization, X-Requested-With, " \
     " Access-Control-Request-Headers, Access-Control-Allow-Origin, " \
     " Access-Control-Allow-Credentials X-HTTP-Method-Override " \
 
+AUTH_FIELD = 'username'
 
 MONGO_QUERY_BLACKLIST = []
 
 MONGO_HOST = 'localhost'
 MONGO_PORT = 27017
+
 # MONGO_USERNAME = 'dmUser'
 # MONGO_PASSWORD = 'ZOPa676KL5K5AALlfakjhdf7adfh47r3897gl'
 # MONGO_USERNAME = 'ivan'
