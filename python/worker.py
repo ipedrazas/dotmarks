@@ -1,18 +1,16 @@
 from flask import Flask
 from celery import Celery
-from datetime import datetime
-from urllib2 import Request, urlopen, URLError
-from BeautifulSoup import BeautifulSoup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from urlparse import urlparse
 from dot_delicious import parse_html
+from dot_utils import get_date
+from net_utils import get_title_from_url
+from constants import LAST_UPDATED
 
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.eve
-
-LAST_UPDATED = '_updated'
 
 
 def make_celery(app):
@@ -36,10 +34,6 @@ flask_app.config.update(
     CELERY_RESULT_BACKEND='redis://localhost:6379'
 )
 celery = make_celery(flask_app)
-
-
-def get_date():
-    return datetime.utcnow().replace(microsecond=0)
 
 
 def do_update(oid, updates):
@@ -105,25 +99,7 @@ def populate_dotmark(item):
             updates['atags'] = atags
 
         if 'title' not in item or not item['title']:
-            print "Processing %s" % item['url']
-            try:
-                hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
-                       'AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu '
-                       'Chromium/34.0.1847.116 Chrome/34.0.1847.116 '
-                       'Safari/537.36'}
-
-                req = Request(item['url'], headers=hdr)
-                soup = BeautifulSoup(urlopen(req))
-                if soup.title is not None:
-                    updates['title'] = soup.title.string
-                elif soup.h1 is not None:
-                    updates['title'] = soup.h1.string.strip()
-            except IOError as e:
-                print e
-                print "    I/O error({0}): {1}".format(e.errno, e.strerror)
-            except URLError, err:
-                print
-                print "    Some other error happened:", err.reason
+            updates['title'] = get_title_from_url(item['url'])
 
         if updates:
             do_update(item['_id'], updates)

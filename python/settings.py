@@ -93,7 +93,10 @@ users = {
         'password': {
             'type': 'string',
             'required': True
-        }
+        },
+        'dots': {
+            'type': 'integer'
+        },
     }
 }
 
