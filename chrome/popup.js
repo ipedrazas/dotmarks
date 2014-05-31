@@ -36,6 +36,10 @@ function addBookmark() {
         // postUrl = items.url;
       });
 
+    // Set up an asynchronous AJAX POST request
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', postUrl, true);
+
     console.log(decode64(token));
     console.log(token);
 
@@ -47,10 +51,6 @@ function addBookmark() {
             navigate(location)
         );
     }
-
-    // Set up an asynchronous AJAX POST request
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', postUrl, true);
 
     // Prepare the data to be POSTed
     var title = document.getElementById('title').value.trim();
@@ -68,6 +68,7 @@ function addBookmark() {
         var timeOut = 0;
         if (xhr.readyState == 4) {
             statusDisplay.innerHTML = '';
+            console.log(xhr.status);
             if (xhr.status === 201) {
                 // If it was a success, close the popup after a short delay
                 statusDisplay.innerHTML = 'Saved!';
@@ -75,6 +76,12 @@ function addBookmark() {
             } else if(xhr.status === 0){
               statusDisplay.innerHTML = 'Error: dotMarks is unreachable!';
               timeOut = 2500;
+            }else if(xhr.status === 401){
+                chrome.storage.local.set({
+                    location: 'popup.html'
+                },
+                    navigate('login.html')
+                );
             }else {// Show what went wrong
                 var res = JSON.parse(xhr.response);
                 var errorMsg = res._issues.url;

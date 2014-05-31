@@ -118,7 +118,7 @@ dotmarks = {
         },
         'username': {
             'type': 'string',
-            'required': True,
+            # 'required': True,
         },
         'tags': {
             'type': 'list'

@@ -18,9 +18,15 @@ function display_status(message){
     setTimeout(function() {
         status.textContent = '';
         chrome.storage.local.get({
-            origin: ''
+            origin: '',
+            token: ''
           }, function(items) {
-                if(origin !== ''){
+                console.log(origin);
+                // This is if we do login
+                if(origin === '' ){
+                    window.close();
+
+                }else{
                     location.href = origin;
                 }
           });
