@@ -10,6 +10,11 @@ function onPageInfo(o)  {
 // Global reference to the status display SPAN
 var statusDisplay = null;
 
+function navigate(url){
+    console.log('navigate to ' + url);
+    location.href = "login.html";
+}
+
 // POST the data to the server using XMLHttpRequest
 function addBookmark() {
     // Cancel the form submit
@@ -18,19 +23,30 @@ function addBookmark() {
     var user = "";
     var password = "";
     var token = "";
+     // The URL to POST our data to
+    var postUrl = 'http://dotmarks.dev:5000/dotmarks';
 
-    chrome.storage.sync.get({
+
+    chrome.storage.local.get({
         username: '',
         token: ''
       }, function(items) {
         user = items.username;
         token = items.token;
+        // postUrl = items.url;
       });
 
     console.log(decode64(token));
+    console.log(token);
 
-    // The URL to POST our data to
-    var postUrl = 'http://dotmarks.dev:5000/dotmarks';
+    if(token === ''){
+        console.log("empty")
+        chrome.storage.local.set({
+            location: 'popup.html'
+        },
+            navigate(location)
+        );
+    }
 
     // Set up an asynchronous AJAX POST request
     var xhr = new XMLHttpRequest();
@@ -44,7 +60,6 @@ function addBookmark() {
 
     // Set correct header for form data
     xhr.setRequestHeader('Content-type', 'application/json');
-    console.log(token);
     xhr.setRequestHeader('Authorization', 'Basic ' + token);
 
     // Handle request state change events

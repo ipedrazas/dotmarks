@@ -3,7 +3,7 @@ function save_details(){
     var user = document.getElementById('username').value;
     var pwd = document.getElementById('password').value;
     var token = encode64(user + ":" + pwd);
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
             username: user,
             password: pwd,
             token: token
@@ -17,6 +17,13 @@ function display_status(message){
     status.textContent = message;
     setTimeout(function() {
         status.textContent = '';
+        chrome.storage.local.get({
+            origin: ''
+          }, function(items) {
+                if(origin !== ''){
+                    location.href = origin;
+                }
+          });
     }, 1550);
 }
 
