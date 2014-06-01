@@ -1,0 +1,40 @@
+---
+- name: ssl-certs group
+  group: name=ssl-cert state=present
+  sudo: yes
+  tags: ssl
+
+- name: Make sure nginx user is in ssl-cert
+  user: name=nginx groups=www-data,ssl-cert
+  sudo: yes
+  tags: nginx
+
+- name: ssl certs dir
+  file: path=/etc/ssl/certs mode=755 state=directory owner=root
+  sudo: yes
+  tags: ssl
+
+- name: ssl private dir
+  file: path=/etc/ssl/private mode=700 state=directory owner=root
+  sudo: yes
+  tags: ssl
+
+- name: copy the certificate
+  copy: src={{item.certificate_src}} dest={{item.certificate_dest}} mode=644 group=ssl-cert
+  with_items: ssl_certificates
+  sudo: yes
+  tags: ssl
+  notify: restart nginx
+
+- name: copy the key
+  copy: src={{item.key_src}} dest={{item.key_dest}} mode=640 group=ssl-cert
+  with_items: ssl_certificates
+  sudo: yes
+  tags: ssl
+
+- name: strip ssl keys
+  command: openssl rsa -in {{item.key_dest}} -out {{item.key_stripped}} -passin pass:{{item.key_password}} creates={{item.key_stripped}}
+  sudo: yes
+  with_items: ssl_certificates
+  tags: ssl
+  notify: restart nginx

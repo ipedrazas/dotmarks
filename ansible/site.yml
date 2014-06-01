@@ -1,0 +1,11 @@
+- hosts: staging
+  user: dotmarks
+  sudo: yes
+
+  roles:
+    - upgrade
+    - common
+    - redis
+    - python
+    - mongo
+    - nginx

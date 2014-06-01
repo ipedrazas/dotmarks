@@ -1,0 +1,19 @@
+
+
+server_name: dotmarks.net
+api_name: api.dotmarks.net
+
+code_base: /home/dotmarks/releases
+
+www-user: www-data
+ssl_cert: dotmarks.net
+
+hostname: secure.example.com
+port: 3000
+certificate: /etc/nginx/ssl/secure.example.com.pem
+key: /etc/ssl/private/secure.example.com.key
+
+
+virtualenv_dir: /home/dotmarks/venv
+
+app_code_dir: ../../python

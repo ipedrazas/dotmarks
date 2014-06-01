@@ -1,0 +1,25 @@
+---
+- name: Checking essentials
+  apt: name={{ item }} state=present
+  with_items:
+  - python-software-properties
+  - python-pycurl
+  - python-pip
+  - python-dev
+  - libffi-dev
+  - supervisor
+
+- name: install virtualenv
+  pip: name={{ item }} state=present
+  with_items:
+  - virtualenv
+  - bcrypt
+  - gunicorn
+
+- name: check if virtualenv already exists
+  stat: path={{virtualenv_dir}}
+  register: venv_dir
+
+- name: create virtualenv for Python web application
+  shell: virtualenv {{virtualenv_dir}}
+  when: venv_dir.stat.isdir is not defined

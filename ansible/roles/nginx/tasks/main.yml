@@ -10,16 +10,22 @@
 - name: install nginx
   action: apt name=nginx
 
-- name: add nginx "$name" vhost
-  action: template src=templates/$server_name.conf dest=/etc/nginx/sites-available/$server_name
+- name: Remove the app's config, if exists
+  command: rm -rf /etc/nginx/sites-enabled/default
+
+- name: Remove the app's config, if exists
+  command: rm -rf /etc/nginx/sites-available/default
 
 - name: add nginx "$name" vhost
-  action: template src=templates/api.$server_name.conf dest=/etc/nginx/sites-available/api.$server_name
+  action: template src={{server_name}}.conf dest=/etc/nginx/sites-available/{{server_name}}
 
-- name: link nginx "$name" vhost in sites-enabled
-  action: file src=/etc/nginx/sites-available/$server_name dest=/etc/nginx/sites-enabled/$server_name state=link
+- name: add nginx "$api_name" vhost
+  action: template src={{api_name}}.conf dest=/etc/nginx/sites-available/{{api_name}}
 
-- name: link nginx "$name" vhost in sites-enabled
-  action: file src=/etc/nginx/sites-available/api.$server_name dest=/etc/nginx/sites-enabled/api.$server_name state=link
-  notify:
-    - restart nginx
+- name: add symlink in nginx sites-enabled
+  file: src=/etc/nginx/sites-available/{{ server_name }}
+        dest=/etc/nginx/sites-enabled/{{ server_name }} state=link
+
+- name: add symlink in nginx sites-enabled
+  file: src=/etc/nginx/sites-available/{{ api_name }}
+        dest=/etc/nginx/sites-enabled/{{ api_name }} state=link

@@ -6,3 +6,6 @@
   - curl
   - git
   - vim
+
+- name: roll out new code
+  action: git repo=git@github.com:ipedrazas/dotmarks.git dest=/home/{{user}}/releases version=HEAD branch=release

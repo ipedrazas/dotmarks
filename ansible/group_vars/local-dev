@@ -1,0 +1,7 @@
+
+
+virtualenv_dir:~/Envs
+
+server_name: dotmarks.dev
+user: www-data
+ssl_cert: dotmarks.dev

@@ -1,0 +1,14 @@
+description "Gunicorn server for {{ api_name }}"
+
+start on net-device-up
+stop on shutdown
+
+respawn
+
+chdir {{code_base}}/python
+
+exec ../virtualenv/bin/gunicorn \
+    --bind unix:/tmp/{{ api_name }}.socket \
+    --access-logfile ../access.log \
+    --error-logfile ../error.log \
+    superlists.wsgi:application

@@ -1,0 +1,7 @@
+
+
+- name: restart nginx
+  service:  name=nginx state=restarted
+
+- name: restart gunicorn
+  service:  name=gunicorn-{{ api_name }} state=restarted

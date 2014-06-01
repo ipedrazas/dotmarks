@@ -1,0 +1,10 @@
+- name: write gunicorn init script
+  template: src=gunicorn-upstart.conf.j2
+            dest=/etc/init/gunicorn-{{ api_name }}.conf
+  notify:
+      - restart gunicorn
+
+- name: make sure nginx is running
+  service: name=nginx state=running
+- name: make sure gunicorn is running
+  service: name=gunicorn-{{ api_name }} state=running
