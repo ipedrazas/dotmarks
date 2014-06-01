@@ -1,0 +1,6 @@
+
+- hosts: staging
+  user: root
+
+  roles:
+    - bootstrap
