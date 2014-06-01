@@ -30,5 +30,5 @@
 - name: install python dependencies
   pip: requirements=/home/{{user}}/base/python/requirements.txt virtualenv=/home/{{user}}/venv
 
-- name: install eve from git
-  pip: name='git+git://github.com/nicolaiarocci/eve.git#egg=eve' virtualenv=/home/{{user}}/venv
+# - name: install eve from git
+#   pip: name='git+git://github.com/nicolaiarocci/eve.git#egg=eve' virtualenv=/home/{{user}}/venv
