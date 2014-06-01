@@ -1,6 +1,7 @@
 - hosts: staging
   user: dotmarks
   sudo: yes
+  sudo_user: dotmarks
 
   roles:
     # - upgrade
