@@ -5,7 +5,6 @@
   - build-essential
   - curl
   - git
-  - vim
 
 - name: roll out new code
-  action: git repo=git@github.com:ipedrazas/dotmarks.git dest=/home/{{user}}/releases version=HEAD branch=release
+  action: git repo=https://github.com/ipedrazas/dotmarks.git dest=/home/{{user}}/releases version=HEAD
