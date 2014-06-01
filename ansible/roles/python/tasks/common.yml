@@ -15,7 +15,6 @@
   with_items:
   - virtualenv
   - bcrypt
-  - gunicorn
 
 - name: check if virtualenv already exists
   stat: path={{virtualenv_dir}}
@@ -32,4 +31,4 @@
   pip: requirements=/home/{{user}}/base/python/requirements.txt virtualenv=/home/{{user}}/venv
 
 - name: install eve from git
-  pip: name=pip install git+git://github.com/nicolaiarocci/eve.git virtualenv=/home/{{user}}/venv
+  pip: name='git+git://github.com/nicolaiarocci/eve.git#egg=eve' virtualenv=/home/{{user}}/venv

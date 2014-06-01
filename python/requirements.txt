@@ -24,4 +24,5 @@ wsgiref==0.1.2
 bcrypt
 python-oauth2
 pocket
+gunicorn
 
