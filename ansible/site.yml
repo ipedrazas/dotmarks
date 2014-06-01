@@ -3,9 +3,9 @@
   sudo: yes
 
   roles:
-    - upgrade
-    - common
-    - redis
+    # - upgrade
+    # - common
+    # - redis
     - python
-    - mongo
-    - nginx
+    # - mongo
+    # - nginx

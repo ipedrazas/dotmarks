@@ -1,4 +1,5 @@
 ---
+
 - name: Checking essentials
   apt: name={{ item }} state=present
   with_items:
@@ -23,3 +24,9 @@
 - name: create virtualenv for Python web application
   shell: virtualenv {{virtualenv_dir}}
   when: venv_dir.stat.isdir is not defined
+
+- name: roll out new code
+  action: git repo=https://github.com/ipedrazas/dotmarks.git dest=/home/{{user}}/base
+
+- name: install python dependencies
+  pip: requirements=/home/{{user}}/base/python/requirements.txt virtualenv=/home/{{user}}/venv

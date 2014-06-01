@@ -7,7 +7,7 @@ respawn
 
 chdir {{code_base}}/python
 
-exec ../virtualenv/bin/gunicorn \
+exec ../venv/bin/gunicorn \
     --bind unix:/tmp/{{ api_name }}.socket \
     --access-logfile ../access.log \
     --error-logfile ../error.log \
