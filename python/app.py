@@ -3,6 +3,7 @@ from eve.auth import BasicAuth
 import bcrypt
 from worker import populate_dotmark, parse_log, process_attachment
 from flask import Response
+import os
 
 
 class BCryptAuth(BasicAuth):
@@ -58,7 +59,13 @@ def after_inserting_atachment(items):
         process_attachment.delay(item)
 
 
-app = Eve(auth=BCryptAuth)
+#
+# Hack to read settings when using gunicorn
+#
+SETTINGS_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'settings.py')
+
+app = Eve(auth=BCryptAuth, settings=SETTINGS_PATH)
 
 
 app.on_inserted_attachments += after_inserting_atachment
