@@ -3,29 +3,42 @@
 
 - name: add nginx latest version ppa
   action: apt_repository repo=ppa:nginx/stable
-
-- name: update apt
-  command: sudo apt-get update
+  sudo: yes
+  sudo_user: root
 
 - name: install nginx
   action: apt name=nginx
+  sudo: yes
+  sudo_user: root
 
 - name: Remove the app's config, if exists
   command: rm -rf /etc/nginx/sites-enabled/default
+  sudo: yes
+  sudo_user: root
 
 - name: Remove the app's config, if exists
   command: rm -rf /etc/nginx/sites-available/default
+  sudo: yes
+  sudo_user: root
 
 - name: add nginx "$name" vhost
   action: template src={{server_name}}.conf dest=/etc/nginx/sites-available/{{server_name}}
+  sudo: yes
+  sudo_user: root
 
 - name: add nginx "$api_name" vhost
   action: template src={{api_name}}.conf dest=/etc/nginx/sites-available/{{api_name}}
+  sudo: yes
+  sudo_user: root
 
 - name: add symlink in nginx sites-enabled
   file: src=/etc/nginx/sites-available/{{ server_name }}
         dest=/etc/nginx/sites-enabled/{{ server_name }} state=link
+  sudo: yes
+  sudo_user: root
 
 - name: add symlink in nginx sites-enabled
   file: src=/etc/nginx/sites-available/{{ api_name }}
         dest=/etc/nginx/sites-enabled/{{ api_name }} state=link
+  sudo: yes
+  sudo_user: root

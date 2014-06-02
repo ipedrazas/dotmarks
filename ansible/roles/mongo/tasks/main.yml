@@ -7,14 +7,18 @@
 #
 
 
+
 - name: MongoDB | Fetch 10Gen signing key
   command: apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+  sudo: yes
+  sudo_user: root
 
 - name: MongoDB | Add 10Gen repository
   shell:
     echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/10gen.list
     creates=/etc/apt/sources.list.d/10gen.list
-
+  sudo: yes
+  sudo_user: root
 
 - name: MongoDB | Install latest MongoDB release
   apt: name={{ item }} state=present update_cache=yes
@@ -24,7 +28,8 @@
   - mongodb-org-shell=2.6.1
   - mongodb-org-mongos=2.6.1
   - mongodb-org-tools=2.6.1
-
+  sudo: yes
+  sudo_user: root
 
 # Check service is running.
 - name: MongoDB | Insure deamon is running correctly

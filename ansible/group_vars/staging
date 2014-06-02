@@ -22,3 +22,5 @@ key: /etc/ssl/private/secure.example.com.key
 virtualenv_dir: /home/dotmarks/venv
 
 app_code_dir: ../../python
+
+current_code: /home/dotmarks/current

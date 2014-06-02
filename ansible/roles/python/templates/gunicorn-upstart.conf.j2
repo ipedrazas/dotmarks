@@ -8,7 +8,7 @@ respawn
 chdir {{code_base}}/python
 
 exec ../venv/bin/gunicorn \
-    --bind unix:/tmp/{{ api_name }}.socket \
+    --bind unix:/tmp/gunicorn-{{ api_name }}.socket \
     --access-logfile ../access.log \
     --error-logfile ../error.log \
     superlists.wsgi:application
