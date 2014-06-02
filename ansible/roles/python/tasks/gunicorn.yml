@@ -1,6 +1,4 @@
 - name: write gunicorn init script
   template: src=gunicorn-upstart.conf.j2
             dest=/etc/supervisor/conf.d/gunicorn-{{ api_name }}.conf
-  sudo: yes
-  sudo_user: root
 

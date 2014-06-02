@@ -1,15 +1,11 @@
 ---
 
 
-- name: Change root password
-  user:
-    name=root
-    password={{ root_password }}
-
 - name: Add user dotmarks
   user:
     name=dotmarks
     password={{ remote_password }}
+    shell=/bin/bash
 
 - name: Add SSH public key to user dotmarks
   authorized_key:

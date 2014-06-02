@@ -1,11 +1,9 @@
 ---
 - name: Running apt-get update
   apt: update_cache=yes
-  sudo: yes
-  sudo_user: root
+
 
 - name: Running apt-get upgrade
   apt: upgrade=full
   when: upgrade_packages
-  sudo: yes
-  sudo_user: root
+

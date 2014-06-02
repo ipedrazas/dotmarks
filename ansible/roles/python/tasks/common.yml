@@ -10,25 +10,31 @@
   - libffi-dev
   - supervisor
 
+
 - name: install virtualenv
   pip: name={{ item }} state=present
   with_items:
   - virtualenv
   - bcrypt
 
+
 - name: check if virtualenv already exists
   stat: path={{virtualenv_dir}}
   register: venv_dir
+  sudo_user: dotmarks
 
 - name: create virtualenv for Python web application
   shell: virtualenv {{virtualenv_dir}}
   when: venv_dir.stat.isdir is not defined
+  sudo_user: dotmarks
 
 - name: roll out new code
   action: git repo=https://github.com/ipedrazas/dotmarks.git dest=/home/{{user}}/base
+  sudo_user: dotmarks
 
 - name: install python dependencies
   pip: requirements=/home/{{user}}/base/python/requirements.txt virtualenv=/home/{{user}}/venv
+  sudo_user: dotmarks
 
 # - name: install eve from git
 #   pip: name='git+git://github.com/nicolaiarocci/eve.git#egg=eve' virtualenv=/home/{{user}}/venv

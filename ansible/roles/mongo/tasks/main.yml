@@ -28,8 +28,7 @@
   - mongodb-org-shell=2.6.1
   - mongodb-org-mongos=2.6.1
   - mongodb-org-tools=2.6.1
-  sudo: yes
-  sudo_user: root
+
 
 # Check service is running.
 - name: MongoDB | Insure deamon is running correctly

@@ -8,3 +8,4 @@
 
 - name: roll out new code
   action: git repo=https://github.com/ipedrazas/dotmarks.git dest=/home/{{user}}/releases/{{ CURRENT_DATE.stdout }} version=HEAD
+  sudo_user: dotmarks
