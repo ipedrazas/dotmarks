@@ -7,13 +7,6 @@
 - name: install nginx
   action: apt name=nginx
 
-- name: Enable server_names_hash_bucket_size
-  lineinfile:
-    dest=/etc/nginx/nginx.conf
-    regexp="^#server_names_hash_bucket_size"
-    line="server_names_hash_bucket_size 64;"
-    state=present
-
 - name: Remove the app's config, if exists
   command: rm -rf /etc/nginx/sites-enabled/default
 
@@ -35,6 +28,6 @@
         dest=/etc/nginx/sites-enabled/{{ api_name }} state=link
 
 - name: Enforce permissions on /var/log/nginx
-  action: file path=/var/log/nginx mode=0660 owner=root group=www-data
+  action: file path=/var/log/nginx mode=0664 owner=root group=www-data
   notify:
       - restart nginx

@@ -4,8 +4,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from urlparse import urlparse
 from dot_delicious import parse_html
-from dot_utils import get_date
-from net_utils import get_title_from_url
+from dot_utils import get_date, get_title_from_url
 from constants import LAST_UPDATED
 
 

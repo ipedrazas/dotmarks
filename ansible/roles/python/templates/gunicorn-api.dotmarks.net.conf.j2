@@ -1,8 +1,8 @@
 [program:gunicorn]
-command={{virtualenv_dir}}/bin/gunicorn
-    --config {{virtualenv_dir}}/etc/gunicorn.conf.py
+command={{ virtualenv_dir }}/bin/gunicorn
+    --config {{ virtualenv_dir }}/etc/gunicorn.conf.py
     app:app
-directory=/home/oi_api/current
+directory={{ current_code }}/python
 user={{user}}
 stdout_logfile=/var/log/gunicorn.log
 stderr_logfile=/var/log/gunicorn.log
