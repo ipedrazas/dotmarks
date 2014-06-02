@@ -1,4 +1,16 @@
+---
+
+- name: Assures {{virtualenv_dir}}/etc dir exists
+  file: path={{virtualenv_dir}}/etc state=directory
+  sudo_user: dotmarks
+
+- name: create folder for gunicorn.conf.py
+  template: src=gunicorn.conf.py.j2
+            dest={{virtualenv_dir}}/etc/gunicorn.conf.py
+  sudo_user: dotmarks
+
+
 - name: write gunicorn init script
-  template: src=gunicorn-upstart.conf.j2
+  template: src=gunicorn-{{ api_name }}.conf.j2
             dest=/etc/supervisor/conf.d/gunicorn-{{ api_name }}.conf
 

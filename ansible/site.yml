@@ -4,6 +4,7 @@
   # sudo_user: dotmarks
 
   roles:
+    - bootstrap
     - upgrade
     - common
     - redis

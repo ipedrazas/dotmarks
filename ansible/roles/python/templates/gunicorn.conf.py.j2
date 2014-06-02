@@ -1,0 +1,6 @@
+import multiprocessing
+
+server for api.dotmarks.net"
+bind = 'unix:/tmp/gunicorn-{{api_name}}.socket'
+workers = multiprocessing.cpu_count() * 2 + 1
+timeout = 60

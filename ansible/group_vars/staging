@@ -22,4 +22,4 @@ virtualenv_dir: /home/dotmarks/venv
 
 app_code_dir: ../../python
 
-current_code: /home/dotmarks/current
+current_code: /home/dotmarks/base
