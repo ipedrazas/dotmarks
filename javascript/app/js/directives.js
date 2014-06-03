@@ -7,7 +7,7 @@ angular.module('dotApp').directive('a', ['appaudit', function (appaudit) {
                 elem.on('click', function(e){
                     scope.dotmark.views++;
                     appaudit.clickDotMark(scope.dotmark._id);
-                    scope.refreshEntries();
+                    // scope.refreshEntries();
                 });
             }
         }
