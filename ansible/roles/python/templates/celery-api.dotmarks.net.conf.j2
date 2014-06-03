@@ -1,0 +1,7 @@
+[program:celery]
+command={{ virtualenv_dir }}/bin/celery -A worker worker
+directory={{ current_code }}/python
+user={{user}}
+stdout_logfile=/var/log/celery.log
+stderr_logfile=/var/log/celery.log
+priority=300
