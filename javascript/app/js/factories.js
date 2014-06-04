@@ -1,9 +1,9 @@
 
 
-var dotmarksUrl = "http://api.dotmarks.dev/dotmarks";
-var auditUrl =  "http://api.dotmarks.dev/logs/";
-var authUrl = "http://api.dotmarks.dev/users/";
-var mediaUrl = "http://api.dotmarks.dev/attachments/";
+var dotmarksUrl = "https://api.dotmarks.dev/dotmarks";
+var auditUrl =  "https://api.dotmarks.dev/logs/";
+var authUrl = "https://api.dotmarks.dev/users/";
+var mediaUrl = "https://api.dotmarks.dev/attachments/";
 
 var config = {
     headers: {
@@ -14,7 +14,8 @@ var config = {
 
 
 
-angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64', function($http, $rootScope, Base64) {
+angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
+    function($http, $rootScope, Base64) {
     return {
 
         login: function(username, password){
@@ -35,15 +36,16 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64', f
             return $http.post(authUrl, JSON.stringify(o));
         },
         logout: function(username){
+
             var token = Base64.encode(' : ');
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
             var config = {
                 headers: {
                     "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
                 },
                 responseType: "application/json",
             };
-            localStorageService.clearAll();
             return $http.get( authUrl + username, config);
         },
 
@@ -76,11 +78,11 @@ angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', fu
 
 angular.module('dotApp').factory('api', ['$http', 'localStorageService', function($http, localStorageService) {
 
-    var username = localStorageService.get('username');
+
 
     return {
         getDotMarksEntries: function(params) {
-
+            var username = localStorageService.get('username');
             var dest = dotmarksUrl + '?where={"username":"' + username + '"}&sort=[("views",-1)]&d=' + Date.now();
             if(params.page !== undefined){
                 return $http.get(dest + "&page=" + params.page);
@@ -113,6 +115,7 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
 
         },
         searchDotMarks: function(query){
+            var username = localStorageService.get('username');
             var filter = "?where={\"$and\":[{\"username\": \"" + username +"\"}, {\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}},{\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}]}";
             return $http.get(dotmarksUrl + filter);
         },

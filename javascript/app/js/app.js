@@ -14,5 +14,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
           .when('/applications', {templateUrl: 'partials/applications.html', controller: 'appsCtl'})
           .when('/settings', {templateUrl: 'partials/settings.html', controller: 'settingsCtl'})
 		.otherwise({redirectTo: '/home'});
-});
+}).config(function($httpProvider){
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+});;
 

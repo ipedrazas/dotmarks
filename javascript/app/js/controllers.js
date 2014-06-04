@@ -245,6 +245,7 @@ angular.module('dotApp').controller('authCtl',
       };
 
       $scope.logout = function(){
+            localStorageService.clearAll();
             appauth.logout($rootScope.currentuser).success(function(data){
                 $rootScope.currentuser = null;
                 $location.path('/signin');
