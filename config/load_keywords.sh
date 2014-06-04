@@ -1,0 +1,3 @@
+curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "devops", "keywords": ["nginx", "openstack", "ansible", "puppet", "chef", "apache" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
+
+curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "programming", "keywords": ["java", "node.js", "scala", "go", "javascript", "python", "ruby" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
