@@ -18,6 +18,12 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64', f
     return {
 
         login: function(username, password){
+            var config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                responseType: "application/json",
+            };
             var token = Base64.encode(username + ':' + password);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
             return $http.get( authUrl + username);
@@ -31,7 +37,14 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64', f
         logout: function(username){
             var token = Base64.encode(' : ');
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
-            return $http.get( authUrl + username);
+            var config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                responseType: "application/json",
+            };
+            localStorageService.clearAll();
+            return $http.get( authUrl + username, config);
         },
 
     };
@@ -100,7 +113,6 @@ angular.module('dotApp').factory('api', ['$http', 'localStorageService', functio
 
         },
         searchDotMarks: function(query){
-            // var username = localStorageService.get('username');
             var filter = "?where={\"$and\":[{\"username\": \"" + username +"\"}, {\"$or\": [{\"url\":{\"$regex\":\".*" + query + ".*\"}},{\"title\":{\"$regex\":\".*" + query + ".*\",\"$options\":\"i\"}}]}]}";
             return $http.get(dotmarksUrl + filter);
         },
