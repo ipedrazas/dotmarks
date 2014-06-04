@@ -27,6 +27,7 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             };
             var token = Base64.encode(username + ':' + password);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
+            $http.defaults.headers.common['mozSystem'] = true;
             return $http.get( authUrl + username);
         },
         signup: function(username, password){
@@ -41,15 +42,16 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
             var config = {
                 headers: {
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                 },
-                responseType: "application/json",
+                // responseType: "application/json",
             };
             return $http.get( authUrl + username, config);
         },
 
     };
+
 }]);
 
 angular.module('dotApp').factory('appaudit', ['$http', 'localStorageService', function($http, localStorageService){

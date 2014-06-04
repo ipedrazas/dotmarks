@@ -26,9 +26,11 @@ class BCryptAuth(BasicAuth):
             return user and is_valid_password
 
     def authenticate(self):
-        return Response(
+        response = Response(
             'Please provide valid credentials', 401,
             {'WWW-Authenticate': 'Basic realm:"%s"' % __package__})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 
 def after_insert_dotmark(items):

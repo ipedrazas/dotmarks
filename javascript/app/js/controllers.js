@@ -96,7 +96,6 @@ angular.module('dotApp').controller('terminalCtl', [
             /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
             //formDataAppender: function(formData, key, val){}
             }).progress(function(evt) {
-            console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
             }).success(function(data, status, headers, config) {
             // file is uploaded successfully
             console.log(data);

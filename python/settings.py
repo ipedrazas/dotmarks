@@ -24,7 +24,7 @@ XML = False
 X_DOMAINS = "*"
 X_HEADERS = "Content-Type, Accept, Authorization, X-Requested-With, " \
     " Access-Control-Request-Headers, Access-Control-Allow-Origin, " \
-    " Access-Control-Allow-Credentials, X-HTTP-Method-Override " \
+    " Access-Control-Allow-Credentials, X-HTTP-Method-Override, mozSystem " \
 
 AUTH_FIELD = 'username'
 
