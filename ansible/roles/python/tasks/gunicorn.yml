@@ -14,8 +14,6 @@
   template: src=gunicorn-{{ api_name }}.conf.j2
             dest=/etc/supervisor/conf.d/gunicorn-{{ api_name }}.conf
 
-- name: starting gunicorn
-  supervisorctl: name=gunicorn state=restarted
 
 - name: write gunicorn init script
   template: src=celery-{{ api_name }}.conf.j2
