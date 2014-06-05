@@ -102,6 +102,12 @@ users = {
         'email': {
             'type': 'string',
             'unique': True
+        },
+        '_reseth': {
+            'type': 'string'
+        },
+        '_resetd': {
+            'type': 'string'
         }
     }
 }

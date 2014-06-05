@@ -2,8 +2,10 @@ from eve import Eve
 from eve.auth import BasicAuth
 import bcrypt
 from worker import populate_dotmark, parse_log, process_attachment
-from flask import Response
+from flask import Response, request
 import os
+from workers.mailsgrid import send_mail_password_reset
+import json
 
 
 class BCryptAuth(BasicAuth):
@@ -81,9 +83,14 @@ def version():
     return '.dotMarks v0.0.1a'
 
 
-@app.route('/reset')
+@app.route('/reset', methods=['POST'])
 def reset_password():
-    return ''
+    data = json.loads(request.data)
+    email = data['email']
+    if email:
+        send_mail_password_reset.delay(email)
+        return 'ok'
+    return 'not ok'
 
 
 if __name__ == '__main__':

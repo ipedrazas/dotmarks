@@ -27,4 +27,5 @@ bcrypt
 python-oauth2
 pocket
 gunicorn
+sendgrid
 
