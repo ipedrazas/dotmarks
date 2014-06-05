@@ -243,12 +243,20 @@ angular.module('dotApp').controller('authCtl',
             });
       };
 
-      $scope.logout = function(){
-            localStorageService.clearAll();
-            appauth.logout($rootScope.currentuser).success(function(data){
-                $rootScope.currentuser = null;
-                $location.path('/signin');
-            });
-      }
+    $scope.logout = function(){
+        localStorageService.clearAll();
+        appauth.logout($rootScope.currentuser).success(function(data){
+            $rootScope.currentuser = null;
+            $location.path('/signin');
+        });
+    };
+
+    $scope.reset = function(){
+        localStorageService.clearAll();
+        appauth.reset($scope.email).success(function(data){
+            $location.path('/signin');
+        });
+    };
+
 }]);
 

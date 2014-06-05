@@ -30,12 +30,14 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             $http.defaults.headers.common['mozSystem'] = true;
             return $http.get( authUrl + username);
         },
+
         signup: function(username, password){
             var o = {};
             o['username'] = username;
             o['password'] = password;
             return $http.post(authUrl, JSON.stringify(o));
         },
+
         logout: function(username){
 
             var token = Base64.encode(' : ');
@@ -50,6 +52,11 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             return $http.get( authUrl + username, config);
         },
 
+        reset: function(email){
+            var o = {};
+            o['email'] = email;
+            return $http.post( authUrl + 'reset', JSON.stringify(o));
+        }
     };
 
 }]);

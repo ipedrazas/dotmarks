@@ -77,8 +77,13 @@ app.on_insert_users += before_adding_user
 
 
 @app.route("/version")
-def hello():
+def version():
     return '.dotMarks v0.0.1a'
+
+
+@app.route('/reset')
+def reset_password():
+    return ''
 
 
 if __name__ == '__main__':
