@@ -99,6 +99,10 @@ users = {
         'dots': {
             'type': 'integer'
         },
+        'email': {
+            'type': 'string',
+            'unique': True
+        }
     }
 }
 
@@ -111,7 +115,7 @@ dotmarks = {
             'type': 'string',
             'minlength': 7,
             'required': True,
-            'unique': True,
+            # 'unique': True,
         },
         'title': {
             'type': 'string'
