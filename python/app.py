@@ -89,8 +89,8 @@ def reset_password():
     email = data['email']
     if email:
         send_mail_password_reset.delay(email)
-        return 'ok'
-    return 'not ok'
+        return {'result': 'ok'}
+    return {'result': 'error'}
 
 
 if __name__ == '__main__':
