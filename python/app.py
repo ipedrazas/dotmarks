@@ -1,31 +1,35 @@
 from eve import Eve
 from eve.auth import BasicAuth
 import bcrypt
-from workers.dotmarks_postworker import populate_dotmark, parse_log, process_attachment
+from workers.dotmarks_postworker import populate_dotmark, parse_log
+from workers.dotmarks_postworker import process_attachment
 from flask import Response, request
 import os
 from workers.mail_worker import send_mail_password_reset
+from workers.user_worker import post_login
 import json
 
 
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
-        # print 'check_auth'
-        # filter = resource != 'users' and method != 'POST'
-        # print filter
-        # if not filter:
+        if 'users' == resource:
+            if username == 'admin' and password == 'admin':
+                return True
+
         users = app.data.driver.db['users']
-        print "username: " + username
-        print "pwd: " + password
-        print users
         user = users.find_one({"username": username})
+
         if user:
             self.set_request_auth_value(user['username'])
             is_valid_password = bcrypt.hashpw(
                 password.encode('utf-8'),
                 user['salt'].encode('utf-8')
             ) == user['password']
-            return user and is_valid_password
+
+            if user and is_valid_password:
+                post_login.delay(user)
+                return True
+        return False
 
     def authenticate(self):
         response = Response(

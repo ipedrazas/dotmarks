@@ -6,8 +6,10 @@ from urlparse import urlparse
 from dot_delicious import parse_html
 from dot_utils import get_date, get_title_from_url
 from constants import LAST_UPDATED
+from celery.utils.log import get_task_logger
 
 
+logger = get_task_logger(__name__)
 client = MongoClient('mongodb://localhost:27017/')
 db = client.eve
 
@@ -54,7 +56,7 @@ def tags_by_url(url):
     results = db.atags.find({'entries': get_domain(url)})
     tags = []
     for result in results:
-        print result
+        logger.info(result)
         tags.append(result['tag'])
     return tags
 
@@ -90,7 +92,7 @@ def parse_log(item):
 
 @celery.task()
 def populate_dotmark(item):
-    print "processing %s" % item['url']
+    logger.inf("processing %s" % item['url'])
     updates = {}
     if 'url' and '_id' in item:
         atags = auto_tag(item)

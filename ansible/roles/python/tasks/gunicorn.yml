@@ -20,6 +20,10 @@
             dest=/etc/supervisor/conf.d/celery-{{ api_name }}.conf
 
 - name: write celery mail_worker
+  template: src=user-worker.conf.j2
+            dest=/etc/supervisor/conf.d/user-worker.conf
+
+- name: write celery mail_worker
   template: src=mail-worker.conf.j2
             dest=/etc/supervisor/conf.d/mail-worker.conf
   notify: reload supervisor
