@@ -8,8 +8,10 @@ from os.path import join, abspath, dirname
 import os
 import sendgrid
 from bson.objectid import ObjectId
+from celery.utils.log import get_task_logger
 
 
+logger = get_task_logger(__name__)
 client = MongoClient('mongodb://localhost:27017/')
 db = client.eve
 
@@ -52,18 +54,21 @@ def read_file(filename):
 
 
 def send_invitation_mail(mail):
-    print 'Mail sent to ' + mail['to_address']
     sendgrid_user = os.getenv("SENDGRID_USER")
     sendgrid_password = os.getenv("SENDGRID_PASSWORD")
 
-    sg = sendgrid.SendGridClient(sendgrid_user, sendgrid_password)
-    message = sendgrid.Mail()
-    message.add_to(mail['to_address'])
-    message.set_subject(mail['subject'])
-    message.set_html(mail['html_body'])
-    message.set_text('Body')
-    message.set_from(mail['from'])
-    status, msg = sg.send(message)
+    if sendgrid_user and sendgrid_password:
+        sg = sendgrid.SendGridClient(sendgrid_user, sendgrid_password)
+        message = sendgrid.Mail()
+        message.add_to(mail['to_address'])
+        message.set_subject(mail['subject'])
+        message.set_html(mail['html_body'])
+        message.set_text('Body')
+        message.set_from(mail['from'])
+        status, msg = sg.send(message)
+        logger.info('Mail sent to ' + mail['to_address'])
+    else:
+        logger.error('SendGridClient credentials not valid')
 
 
 def create_reset_mail_object(email, hashlink):
@@ -96,4 +101,4 @@ def send_mail_password_reset(email):
                                         RESET_PASSWORD_HASH: hashlink}},
             upsert=False)
     else:
-        print "no user found with email: " + email
+        logger.error("no user found with email: " + email)
