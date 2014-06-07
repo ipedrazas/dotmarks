@@ -10,7 +10,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
           .when('/signin', {templateUrl: 'partials/signin.html', controller: 'authCtl'})
           .when('/signup', {templateUrl: 'partials/signup.html', controller: 'authCtl'})
           .when('/reset', {templateUrl: 'partials/reset.html', controller: 'authCtl'})
-          .when('/resetlink', {templateUrl: 'partials/reset.html', controller: 'authCtl'})
+          .when('/resetlink', {templateUrl: 'partials/password_validation.html', controller: 'authCtl'})
           .when('/home', {templateUrl: 'partials/dotmarks.html', controller: 'dotMarkController'})
           .when('/edit', {templateUrl: 'partials/editDotMark.html', controller: 'dotMarkController'})
           .when('/applications', {templateUrl: 'partials/applications.html', controller: 'appsCtl'})

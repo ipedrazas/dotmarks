@@ -52,7 +52,7 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             return $http.get( authUrl + username, config);
         },
 
-        reset: function(email){
+        sendMailReset: function(email){
             var o = {};
             o['email'] = email;
             var config = {
@@ -60,7 +60,19 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
                     // "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                 },
-                // responseType: "application/json",
+                responseType: "application/json",
+            };
+            return $http.post( BASE_URL + 'sendMailReset', JSON.stringify(o));
+        },
+        resetPassword: function(password, token){
+            var o = {};
+            o['password'] = password;
+            o['token'] = token;
+            var config = {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+                responseType: "application/json",
             };
             return $http.post( BASE_URL + 'reset', JSON.stringify(o));
         }

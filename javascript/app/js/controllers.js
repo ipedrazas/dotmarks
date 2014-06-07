@@ -214,8 +214,8 @@ angular.module('dotApp').controller('dotMarkController',
   }]);
 
 angular.module('dotApp').controller('authCtl',
-    ['$scope', '$rootScope','$location','appauth', 'localStorageService', 'Base64',
-    function ($scope, $rootScope, $location, appauth, localStorageService, Base64){
+    ['$scope', '$rootScope','$location','appauth', 'localStorageService', 'Base64', '$routeParams',
+    function ($scope, $rootScope, $location, appauth, localStorageService, Base64, $routeParams){
 
         var authCallback = function(data){
             if(data._status === 'OK' || data.username == $scope.username){
@@ -251,12 +251,25 @@ angular.module('dotApp').controller('authCtl',
         });
     };
 
-    $scope.resetPassword = function(){
+    $scope.sendEmailResetPassword = function(){
         localStorageService.clearAll();
-        appauth.reset($scope.email).success(function(data){
+        appauth.sendMailReset($scope.email).success(function(data){
             $location.path('/signin');
         });
     };
+    $scope.resetPassword = function(){
+        localStorageService.clearAll();
+        var token = $routeParams.link;
+        if($scope.password === $scope.rpassword){
+            log(token);
+            appauth.resetPassword($scope.password, token).success(function(data){
+                // $location.path('/signin');
+                log(data);
+            });
+        }else{
+            $scope.errors = "Passwords don't match! Make sure you enter the same password in both boxes";
+        }
 
+    };
 }]);
 

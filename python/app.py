@@ -7,7 +7,10 @@ from flask import Response, request
 import os
 from workers.mail_worker import send_mail_password_reset
 from workers.user_worker import post_login
+from workers.constants import LAST_UPDATED
+from workers.constants import RESET_PASSWORD_DATE, RESET_PASSWORD_HASH
 import json
+from dot_utils import get_date
 
 
 class BCryptAuth(BasicAuth):
@@ -87,8 +90,8 @@ def version():
     return '.dotMarks v0.0.1a'
 
 
-@app.route('/reset', methods=['POST'])
-def reset_password():
+@app.route('/sendMailReset', methods=['POST'])
+def send_mail_password():
     data = json.loads(request.data)
     email = data['email']
 
@@ -103,6 +106,31 @@ def reset_password():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
+
+@app.route('/sendMailReset', methods=['POST'])
+def reset_password():
+    data = json.loads(request.data)
+    password = data['password']
+    token = data['token']
+    if password and token:
+        users = app.data.driver.db['users']
+        user = users.find_one({"_reseth": token})
+        if user:
+            pwd = bcrypt.hashpw(user['password'].encode('utf-8'), user['salt'])
+            updates = {
+                RESET_PASSWORD_DATE: None,
+                RESET_PASSWORD_HASH: None,
+                LAST_UPDATED: get_date(),
+                "password": pwd
+            }
+            users.update({"_reseth": token}, {"$set": updates})
+            response = Response('password updated', 200)
+    else:
+        response = Response(
+            'email not found', 406)
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
