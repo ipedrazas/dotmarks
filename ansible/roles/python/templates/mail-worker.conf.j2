@@ -1,0 +1,7 @@
+[program:mail_worker]
+command={{ virtualenv_dir }}/bin/celery -A workers.mail_worker worker
+directory={{ current_code }}/python
+user={{user}}
+stdout_logfile=/var/log/mail_worker.log
+stderr_logfile=/var/log/mail_worker.error.log
+priority=300

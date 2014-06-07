@@ -15,6 +15,12 @@
             dest=/etc/supervisor/conf.d/gunicorn-{{ api_name }}.conf
 
 
-- name: write gunicorn init script
+- name: write celery dotmarks post processing
   template: src=celery-{{ api_name }}.conf.j2
             dest=/etc/supervisor/conf.d/celery-{{ api_name }}.conf
+
+- name: write celery mail_worker
+  template: src=mail-worker.conf.j2
+            dest=/etc/supervisor/conf.d/mail-worker.conf
+  notify: reload supervisor
+

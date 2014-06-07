@@ -3,3 +3,7 @@
 - name: restart gunicorn
   service:  name=gunicorn-{{ api_name }} state=restarted
 
+- name: reload supervisor
+  shell: supervisorctl reload
+  notify: ensure supervisor service
+
