@@ -1,10 +1,10 @@
 from eve import Eve
 from eve.auth import BasicAuth
 import bcrypt
-from worker import populate_dotmark, parse_log, process_attachment
+from workers.dotmarks_postworker import populate_dotmark, parse_log, process_attachment
 from flask import Response, request
 import os
-from workers.mailsgrid import send_mail_password_reset
+from workers.mail_worker import send_mail_password_reset
 import json
 
 
@@ -91,10 +91,10 @@ def reset_password():
     if email:
         send_mail_password_reset.delay(email)
         response = Response(
-            'confirmation mail sent', 200, 'confirmation mail sent')
+            'confirmation mail sent', 200)
     else:
         response = Response(
-            'email not found', 406, 'email not found')
+            'email not found', 406)
 
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response

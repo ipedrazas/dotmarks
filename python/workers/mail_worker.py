@@ -7,6 +7,7 @@ import hashlib
 from os.path import join, abspath, dirname
 import os
 import sendgrid
+from bson.objectid import ObjectId
 
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -39,7 +40,7 @@ celery = make_celery(flask_app)
 def get_hash(email):
 
     m = hashlib.sha1()
-    m.update(email + get_date())
+    m.update(email + str(get_date()))
     m.hexdigest()
 
 
@@ -54,12 +55,15 @@ def send_invitation_mail(mail):
     print 'Mail sent to ' + mail['to_address']
     sendgrid_user = os.getenv("SENDGRID_USER")
     sendgrid_password = os.getenv("SENDGRID_PASSWORD")
-    s = sendgrid.Sendgrid(sendgrid_user, sendgrid_password, secure=True)
-    message = sendgrid.Message((
-        mail['from'], mail['from_name']),
-        mail['subject'], mail['txt_body'], mail['html_body'])
-    message.add_to(mail['to_address'], mail['to_name'])
-    s.web.send(message)
+
+    sg = sendgrid.SendGridClient(sendgrid_user, sendgrid_password)
+    message = sendgrid.Mail()
+    message.add_to(mail['to_address'])
+    message.set_subject(mail['subject'])
+    message.set_html(mail['html_body'])
+    message.set_text('Body')
+    message.set_from(mail['from'])
+    status, msg = sg.send(message)
 
 
 def create_reset_mail_object(email, hashlink):
@@ -80,14 +84,17 @@ def create_reset_mail_object(email, hashlink):
 
 @celery.task()
 def send_mail_password_reset(email):
-    user = db.users.find({'email': email})
+    user = db.users.find_one({'email': email})
     if user:
         hashlink = get_hash(email)
-        create_reset_mail_object(user['email'], hashlink)
+        print 'Hash: %' % hashlink
+        create_reset_mail_object(email, str(hashlink))
         #update user
-        db.dotmarks.update(
-            {"email": email},
+        db.users.update(
+            {'_id': ObjectId(user['_id'])},
             {"$inc": {"r": 1}, "$set": {LAST_UPDATED: get_date(),
                                         RESET_PASSWORD_DATE: get_date(),
                                         RESET_PASSWORD_HASH: hashlink}},
             upsert=False)
+    else:
+        print "no user found with email: " + email
