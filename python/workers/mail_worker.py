@@ -41,7 +41,7 @@ def get_hash(email):
 
     m = hashlib.sha1()
     m.update(email + str(get_date()))
-    m.hexdigest()
+    return m.hexdigest()
 
 
 def read_file(filename):
@@ -87,7 +87,6 @@ def send_mail_password_reset(email):
     user = db.users.find_one({'email': email})
     if user:
         hashlink = get_hash(email)
-        print 'Hash: %' % hashlink
         create_reset_mail_object(email, str(hashlink))
         #update user
         db.users.update(
