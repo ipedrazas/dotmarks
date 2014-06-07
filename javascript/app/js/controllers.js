@@ -251,7 +251,7 @@ angular.module('dotApp').controller('authCtl',
         });
     };
 
-    $scope.reset = function(){
+    $scope.resetPassword = function(){
         localStorageService.clearAll();
         appauth.reset($scope.email).success(function(data){
             $location.path('/signin');

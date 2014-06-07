@@ -1,4 +1,4 @@
-
+var BASE_URL = "https://api.dotmarks.dev/";
 
 var dotmarksUrl = "https://api.dotmarks.dev/dotmarks";
 var auditUrl =  "https://api.dotmarks.dev/logs/";
@@ -55,7 +55,14 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
         reset: function(email){
             var o = {};
             o['email'] = email;
-            return $http.post( authUrl + 'reset', JSON.stringify(o));
+            var config = {
+                headers: {
+                    // "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                // responseType: "application/json",
+            };
+            return $http.post( BASE_URL + 'reset', JSON.stringify(o));
         }
     };
 

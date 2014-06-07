@@ -87,10 +87,17 @@ def version():
 def reset_password():
     data = json.loads(request.data)
     email = data['email']
+
     if email:
         send_mail_password_reset.delay(email)
-        return {'result': 'ok'}
-    return {'result': 'error'}
+        response = Response(
+            'confirmation mail sent', 200, 'confirmation mail sent')
+    else:
+        response = Response(
+            'email not found', 406, 'email not found')
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 if __name__ == '__main__':
