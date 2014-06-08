@@ -13,6 +13,10 @@ import json
 from dot_utils import get_date
 
 
+def get_hash(password, salt):
+    return bcrypt.hashpw(password.encode('utf-8'), salt.encode('utf-8'))
+
+
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
         if 'users' == resource:
@@ -24,10 +28,8 @@ class BCryptAuth(BasicAuth):
 
         if user:
             self.set_request_auth_value(user['username'])
-            is_valid_password = bcrypt.hashpw(
-                password.encode('utf-8'),
-                user['salt'].encode('utf-8')
-            ) == user['password']
+            is_valid_password = \
+                get_hash(password, user['salt']) == user['password']
 
             if user and is_valid_password:
                 post_login.delay(user)
@@ -94,7 +96,7 @@ def version():
 def send_mail_password():
     data = json.loads(request.data)
     email = data['email']
-
+    print data
     if email:
         send_mail_password_reset.delay(email)
         response = Response(
@@ -107,16 +109,17 @@ def send_mail_password():
     return response
 
 
-@app.route('/sendMailReset', methods=['POST'])
+@app.route('/resetPassword', methods=['POST'])
 def reset_password():
     data = json.loads(request.data)
+    print data
     password = data['password']
     token = data['token']
     if password and token:
         users = app.data.driver.db['users']
         user = users.find_one({"_reseth": token})
         if user:
-            pwd = bcrypt.hashpw(user['password'].encode('utf-8'), user['salt'])
+            pwd = get_hash(password, user['salt'])
             updates = {
                 RESET_PASSWORD_DATE: None,
                 RESET_PASSWORD_HASH: None,
