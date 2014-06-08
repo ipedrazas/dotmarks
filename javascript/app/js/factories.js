@@ -21,11 +21,13 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
         login: function(username, password){
             var config = {
                 headers: {
+                    "Access-Control-Allow-Origin": "*",
                     "Content-Type": "application/json",
                 },
                 responseType: "application/json",
             };
             var token = Base64.encode(username + ':' + password);
+            log(token);
             $http.defaults.headers.common['Authorization'] = 'Basic ' + token;
             $http.defaults.headers.common['mozSystem'] = true;
             return $http.get( authUrl + username);

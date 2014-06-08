@@ -34,7 +34,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
 
       // On request failure
       requestError: function (rejection) {
-        console.log(rejection); // Contains the data about the error on the request.
+        // console.log(rejection); // Contains the data about the error on the request.
 
         // Return the promise rejection.
         return $q.reject(rejection);
@@ -42,7 +42,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
 
       // On response success
       response: function (response) {
-        console.log(response); // Contains the data from the response.
+        // console.log(response); // Contains the data from the response.
 
         // Return the response or promise.
         return response || $q.when(response);
@@ -50,7 +50,7 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
 
       // On response failture
       responseError: function (rejection) {
-        console.log(rejection); // Contains the data about the error.
+        // console.log(rejection); // Contains the data about the error.
         return $q.reject(rejection);
       }
     };

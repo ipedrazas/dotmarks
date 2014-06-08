@@ -19,6 +19,10 @@ def get_hash(password, salt):
 
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
+
+        app.logger.debug(username + ' - ' + password)
+        app.logger.debug(resource + ' - ' + method)
+
         if 'users' == resource:
             if username == 'admin' and password == 'admin':
                 return True
@@ -37,6 +41,7 @@ class BCryptAuth(BasicAuth):
         return False
 
     def authenticate(self):
+        app.logger.debug('authenticate called')
         response = Response(
             'Please provide valid credentials', 401,
             {'WWW-Authenticate': 'Basic realm:"%s"' % __package__})
@@ -94,6 +99,7 @@ def version():
 
 @app.route('/sendMailReset', methods=['POST'])
 def send_mail_password():
+    app.logger.debug('send_mail_password')
     data = json.loads(request.data)
     email = data['email']
     print data

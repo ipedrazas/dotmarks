@@ -113,6 +113,8 @@ users = {
 }
 
 dotmarks = {
+    'public_methods': ['GET'],
+    'public_item_methods': ['GET'],
 
     'schema': {
         # 'public_methods': ['GET'],
