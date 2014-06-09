@@ -1,9 +1,9 @@
-var BASE_URL = "https://api.dotmarks.dev/";
+var BASE_URL = "http://dotmarks.dev:5000/";
 
-var dotmarksUrl = "https://api.dotmarks.dev/dotmarks";
-var auditUrl =  "https://api.dotmarks.dev/logs/";
-var authUrl = "https://api.dotmarks.dev/users/";
-var mediaUrl = "https://api.dotmarks.dev/attachments/";
+var dotmarksUrl = BASE_URL + "dotmarks";
+var auditUrl =  BASE_URL + "logs/";
+var authUrl = BASE_URL + "users/";
+var mediaUrl = BASE_URL + "attachments/";
 
 var config = {
     headers: {
@@ -22,7 +22,7 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             var config = {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
-                    "Content-Type": "application/json",
+                    // "Content-Type": "application/json",
                 },
                 responseType: "application/json",
             };
@@ -64,6 +64,7 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
                 },
                 // responseType: "application/json",
             };
+            // var BASE_URL = "http://api.dotmarks.dev:5000/";
             return $http.post( BASE_URL + 'sendMailReset', JSON.stringify(o));
         },
         resetPassword: function(password, token){
@@ -73,9 +74,12 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             var config = {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
+                    // "Access-Control-Request-Headers": "*"
                 },
-                responseType: "application/json",
+                // responseType: "application/json",
             };
+            // var BASE_URL = "http://api.dotmarks.dev:5000/";
+            log(o);
             return $http.post( BASE_URL + 'resetPassword', JSON.stringify(o));
         }
     };
