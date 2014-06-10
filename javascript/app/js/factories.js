@@ -1,9 +1,11 @@
-var BASE_URL = "http://dotmarks.dev:5000/";
+var BASE_URL = "http://api.dotmarks.dev/";
 
 var dotmarksUrl = BASE_URL + "dotmarks";
 var auditUrl =  BASE_URL + "logs/";
 var authUrl = BASE_URL + "users/";
 var mediaUrl = BASE_URL + "attachments/";
+var passwordUrl = "http://dotmarks.dev:5001/"
+
 
 var config = {
     headers: {
@@ -57,15 +59,19 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
         sendMailReset: function(email){
             var o = {};
             o['email'] = email;
+
             var config = {
                 headers: {
-                    // "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "OPTIONS, GET, POST, HEAD",
+                    // "Access-Control-Request-Headers": "accept, origin, x-requested-with",
+                    // "Access-Control-Request-Headers": "*"
                 },
                 // responseType: "application/json",
             };
             // var BASE_URL = "http://api.dotmarks.dev:5000/";
-            return $http.post( BASE_URL + 'sendMailReset', JSON.stringify(o));
+            return $http.post( passwordUrl + 'sendMailReset', JSON.stringify(o), config);
+
         },
         resetPassword: function(password, token){
             var o = {};
@@ -74,13 +80,15 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             var config = {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "OPTIONS, GET, POST, HEAD",
+                    "Access-Control-Request-Headers": "accept, origin, x-requested-with",
                     // "Access-Control-Request-Headers": "*"
                 },
                 // responseType: "application/json",
             };
             // var BASE_URL = "http://api.dotmarks.dev:5000/";
             log(o);
-            return $http.post( BASE_URL + 'resetPassword', JSON.stringify(o));
+            return $http.post( passwordUrl + 'resetPassword', JSON.stringify(o), config);
         }
     };
 
