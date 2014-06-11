@@ -67,9 +67,8 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
                     // "Access-Control-Request-Headers": "accept, origin, x-requested-with",
                     // "Access-Control-Request-Headers": "*"
                 },
-                // responseType: "application/json",
+                responseType: "application/json",
             };
-            // var BASE_URL = "http://api.dotmarks.dev:5000/";
             return $http.post( passwordUrl + 'sendMailReset', JSON.stringify(o), config);
 
         },
