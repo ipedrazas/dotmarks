@@ -101,7 +101,7 @@ def version():
 @crossdomain(origin='*')
 @app.route('/sendMailReset', methods=['POST'])
 def send_mail_password():
-    # app.logger.debug('send_mail_password')
+    app.logger.debug('send_mail_password')
     print('send_mail_password')
     data = json.loads(request.data)
     email = data['email']
@@ -146,10 +146,6 @@ def reset_password():
             response = Response('email not found', 406)
     except:
         response = Response('data not valid', 400)
-
-    # response.headers.add('Access-Control-Allow-Origin', '*')
-    # response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
-    # response.headers.add('Access-Control-Allow-Headers', '*')
 
     return response
 
