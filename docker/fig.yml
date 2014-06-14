@@ -1,0 +1,14 @@
+redis:
+  image: orchardup/redis
+  ports:
+    - "6379:6379"
+
+web:
+  build: .
+  command: python app.py
+  ports:
+   - "5000:5000"
+  volumes:
+   - .:/code
+  links:
+   - redis
