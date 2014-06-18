@@ -147,6 +147,8 @@ def reset_password():
     except:
         response = Response('data not valid', 400)
 
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
     return response
 
 if __name__ == '__main__':
