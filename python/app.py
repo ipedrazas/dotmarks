@@ -115,7 +115,7 @@ def send_mail_password():
             'email not found', 406)
 
     response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
+    # response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
     return response
 
 

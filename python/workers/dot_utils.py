@@ -17,6 +17,7 @@ def get_title_from_url(url):
 
         req = Request(url, headers=hdr)
         soup = BeautifulSoup(urlopen(req))
+        print str(soup)
         if soup.title is not None:
             return soup.title.string
         elif soup.h1 is not None:
