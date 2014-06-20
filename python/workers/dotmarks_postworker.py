@@ -92,7 +92,7 @@ def parse_log(item):
 
 @celery.task()
 def populate_dotmark(item):
-    logger.inf("processing %s" % item['url'])
+    logger.info("processing %s" % item['url'])
     updates = {}
     if 'url' and '_id' in item:
         atags = auto_tag(item)

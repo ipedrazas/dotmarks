@@ -1,7 +1,7 @@
 
 #
-#  docker build -t dotmarks .
-#  docker run -d -p 5000:5000 dotmarks
+#  docker build -t dotmarks-api .
+#  docker run -d -p 5000:5000 dotmarks-api
 #
 
 
