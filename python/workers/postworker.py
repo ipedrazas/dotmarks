@@ -138,7 +138,8 @@ def send_invitation_mail(mail):
         status, msg = sg.send(message)
         logger.info('Mail sent to ' + mail['to_address'])
     else:
-        logger.error('SendGridClient credentials not valid')
+        logger.error('SendGridClient credentials not valid: ' +
+                     sendgrid_user + " " + sendgrid_password)
 
 
 def create_reset_mail_object(email, hashlink):
