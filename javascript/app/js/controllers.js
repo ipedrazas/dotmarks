@@ -232,7 +232,7 @@ angular.module('dotApp').controller('authCtl',
 
       $scope.login = function (){
             var user = $scope.username;
-            appauth.login($scope.username, $scope.password).success(authCallback).error(function(){
+            appauth.login($scope.username, $scope.password).success(authCallback).error(function(data){
                 $scope.errors = "Login not valid";
             });
       };
@@ -254,7 +254,7 @@ angular.module('dotApp').controller('authCtl',
     $scope.sendEmailResetPassword = function(){
         localStorageService.clearAll();
         appauth.sendMailReset($scope.email).success(function(data){
-            $location.path('/signin');
+            $scope.message = $scope.email;
         });
     };
     $scope.resetPassword = function(){
