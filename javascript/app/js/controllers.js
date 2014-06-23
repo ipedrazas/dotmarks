@@ -238,7 +238,7 @@ angular.module('dotApp').controller('authCtl',
       };
 
       $scope.signup = function (){
-            appauth.signup($scope.username, $scope.password).success(authCallback).error(function(){
+            appauth.signup($scope.username, $scope.password, $scope.email).success(authCallback).error(function(){
                 $scope.errors = "Login not valid";
             });
       };

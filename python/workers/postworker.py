@@ -1,14 +1,16 @@
 from flask import Flask
 from celery import Celery
 from pymongo import MongoClient
+from bson.objectid import ObjectId
+from urlparse import urlparse
+from dot_delicious import parse_html
+from dot_utils import get_date, get_title_from_url
+from celery.utils.log import get_task_logger
 from constants import LAST_UPDATED, RESET_PASSWORD_DATE, RESET_PASSWORD_HASH
-from dot_utils import get_date
 import hashlib
 from os.path import join, abspath, dirname
 import os
 import sendgrid
-from bson.objectid import ObjectId
-from celery.utils.log import get_task_logger
 
 
 logger = get_task_logger(__name__)
@@ -17,7 +19,7 @@ db = client.eve
 
 
 def make_celery(app):
-    celery = Celery('mail', broker=app.config['CELERY_BROKER_URL'])
+    celery = Celery('dotmarks', broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     TaskBase = celery.Task
 
@@ -37,6 +39,75 @@ flask_app.config.update(
     CELERY_RESULT_BACKEND='redis://localhost:6379'
 )
 celery = make_celery(flask_app)
+
+
+def do_update(oid, updates):
+    updates[LAST_UPDATED] = get_date()
+    db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
+
+
+def get_domain(url):
+    parsed_uri = urlparse(url)
+    # ignore the uri.scheme (http|s)
+    domain = parsed_uri.netloc
+    posWWW = domain.find('www')
+    if posWWW != -1:
+        domain = domain[4:]
+    return domain
+
+
+def tags_by_url(url):
+    results = db.atags.find({'entries': get_domain(url)})
+    tags = []
+    for result in results:
+        logger.info(result)
+        tags.append(result['tag'])
+    return tags
+
+
+def auto_tag(item):
+    atags = []
+    at_url = tags_by_url(item['url'])
+    if at_url:
+        atags.extend(at_url)
+    return atags
+
+
+@celery.task()
+def process_attachment(item):
+    if '_id' in item:
+        parse_html(item['_id'])
+
+
+@celery.task()
+def parse_log(item):
+    if 'source_id' in item:
+        oid = item['source_id']
+        if(item['action'] == 'click'):
+            db.dotmarks.update(
+                {"_id": ObjectId(oid)},
+                {"$inc": {"views": 1}, "$set": {LAST_UPDATED: get_date()}},
+                upsert=False)
+
+        if(item['action'] == 'star'):
+            updates = {'star': 'true' in item['value']}
+            do_update(oid, updates)
+
+
+@celery.task()
+def populate_dotmark(item):
+    logger.info("processing %s" % item['url'])
+    updates = {}
+    if 'url' and '_id' in item:
+        atags = auto_tag(item)
+        if atags:
+            updates['atags'] = atags
+
+        if 'title' not in item or not item['title']:
+            updates['title'] = get_title_from_url(item['url'])
+
+        if updates:
+            do_update(item['_id'], updates)
 
 
 def get_hash(email):
@@ -101,3 +172,17 @@ def send_mail_password_reset(email):
             upsert=False)
     else:
         logger.error("no user found with email: " + email)
+
+
+@celery.task()
+def post_login(item):
+    if 'username' in item:
+        updates = {
+            RESET_PASSWORD_DATE: None,
+            RESET_PASSWORD_HASH: None,
+            LAST_UPDATED: get_date()
+        }
+        db.users.update(
+            {{'username': item['username']}},
+            {"$set": updates},
+            upsert=False)

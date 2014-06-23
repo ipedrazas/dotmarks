@@ -1,17 +1,19 @@
 from eve import Eve
 from eve.auth import BasicAuth
+from eve.utils import config
 import bcrypt
-from workers.dotmarks_postworker import populate_dotmark, parse_log
-from workers.dotmarks_postworker import process_attachment
+from workers.postworker import populate_dotmark, parse_log
+from workers.postworker import process_attachment
 from flask import Response, request
 import os
-from workers.mail_worker import send_mail_password_reset
-from workers.user_worker import post_login
+from workers.postworker import send_mail_password_reset
+from workers.postworker import post_login
 from workers.constants import LAST_UPDATED
 from workers.constants import RESET_PASSWORD_DATE, RESET_PASSWORD_HASH
 import json
 from dot_utils import get_date
-from decorators import crossdomain
+
+from flask import make_response, jsonify
 
 
 def get_hash(password, salt):
@@ -20,9 +22,6 @@ def get_hash(password, salt):
 
 class BCryptAuth(BasicAuth):
     def check_auth(self, username, password, allowed_roles, resource, method):
-
-        app.logger.debug(username + ' - ' + password)
-        app.logger.debug(resource + ' - ' + method)
 
         if 'users' == resource:
             if username == 'admin' and password == 'admin':
@@ -98,58 +97,96 @@ def version():
     return '.dotMarks v0.0.1a'
 
 
-@crossdomain(origin='*')
-@app.route('/sendMailReset', methods=['POST'])
-def send_mail_password():
-    app.logger.debug('send_mail_password')
-    print('send_mail_password')
-    data = json.loads(request.data)
-    email = data['email']
-    print data
-    if email:
-        send_mail_password_reset.delay(email)
-        response = Response(
-            'confirmation mail sent', 200)
+def add_headers(resp):
+    if isinstance(config.X_DOMAINS, str):
+        domains = [config.X_DOMAINS]
     else:
-        response = Response(
-            'email not found', 406)
+        domains = config.X_DOMAINS
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    # response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
-    return response
+    if config.X_HEADERS is None:
+        headers = []
+    elif isinstance(config.X_HEADERS, str):
+        headers = [config.X_HEADERS]
+    else:
+        headers = config.X_HEADERS
+
+    xdomains = ', '.join(domains)
+    xheaders = ', '.join(headers)
+
+    methods = app.make_default_options_response().headers.get('allow', '')
+    resp.headers.add('Access-Control-Allow-Origin', xdomains)
+    resp.headers.add('Access-Control-Allow-Headers', xheaders)
+    resp.headers.add('Access-Control-Allow-Methods', methods)
+    resp.headers.add('Access-Control-Allow-Max-Age', config.X_MAX_AGE)
+
+    return resp
 
 
-@crossdomain(origin='*')
+@app.route('/sendMailReset', methods=['POST', 'OPTIONS'])
+def send_mail_password():
+
+    ## TODO: Check that email exists
+    document = {}
+    status = 200
+
+    if request.method == 'OPTIONS':
+        resp = app.make_default_options_response()
+    else:
+        data = json.loads(request.data)
+        email = data['email']
+        if email:
+            send_mail_password_reset.delay(email)
+            document = {'result': 'All ok'}
+        else:
+            status = 406
+            document = {'error': 'email not found'}
+
+        resp = make_response(jsonify(document), status)
+        resp.mimetype = 'application/json'
+
+    return add_headers(resp)
+
+
+# @crossdomain(origin='*')
 @app.route('/resetPassword', methods=['POST, OPTIONS'])
 def reset_password():
     print "reset_password"
-    try:
-        data = json.loads(request.data)
-        print data
-        password = data['password']
-        token = data['token']
+    document = {}
+    status = 200
 
-        if password and token:
-            users = app.data.driver.db['users']
-            user = users.find_one({"_reseth": token})
-            if user:
-                pwd = get_hash(password, user['salt'])
-                updates = {
-                    RESET_PASSWORD_DATE: None,
-                    RESET_PASSWORD_HASH: None,
-                    LAST_UPDATED: get_date(),
-                    "password": pwd
-                }
-                users.update({"_reseth": token}, {"$set": updates})
-                response = Response('password updated', 200)
-        else:
-            response = Response('email not found', 406)
-    except:
-        response = Response('data not valid', 400)
+    if request.method == 'OPTIONS':
+        resp = app.make_default_options_response()
+    else:
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('AccessControlAllowMethods', 'POST, OPTIONS')
-    return response
+        try:
+            data = json.loads(request.data)
+            password = data['password']
+            token = data['token']
+            if password and token:
+                users = app.data.driver.db['users']
+                user = users.find_one({"_reseth": token})
+                if user:
+                    pwd = get_hash(password, user['salt'])
+                    updates = {
+                        RESET_PASSWORD_DATE: None,
+                        RESET_PASSWORD_HASH: None,
+                        LAST_UPDATED: get_date(),
+                        "password": pwd
+                    }
+                    users.update({"_reseth": token}, {"$set": updates})
+                    document = {'result': 'password updated'}
+            else:
+                status = 406
+                document = {'err': 'email not found'}
+        except:
+            document = {'err': 'data not valid'}
+            status = 400
+
+        resp = make_response(jsonify(document), status)
+        resp.mimetype = 'application/json'
+
+    return add_headers(resp)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

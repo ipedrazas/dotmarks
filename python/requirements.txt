@@ -28,4 +28,5 @@ python-oauth2
 pocket
 gunicorn
 sendgrid
+flask-cors
 

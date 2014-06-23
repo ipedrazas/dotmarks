@@ -19,10 +19,11 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
             return $http.get( authUrl + username);
         },
 
-        signup: function(username, password){
+        signup: function(username, password, email){
             var o = {};
             o['username'] = username;
             o['password'] = password;
+            o['email'] = email;
             return $http.post(authUrl, JSON.stringify(o));
         },
 
@@ -48,10 +49,11 @@ angular.module('dotApp').factory('appauth',  ['$http', '$rootScope', 'Base64',
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "OPTIONS, GET, POST, HEAD",
+                    "Content-Type": "application/json",
                     // "Access-Control-Request-Headers": "accept, origin, x-requested-with",
                     // "Access-Control-Request-Headers": "*"
                 },
-                responseType: "application/json",
+                // responseType: "application/json",
             };
             return $http.post( passwordUrl + 'sendMailReset', JSON.stringify(o), config);
 
