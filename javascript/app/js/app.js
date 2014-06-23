@@ -6,7 +6,8 @@ angular.module('dotApp', ['ngRoute','ui.bootstrap', 'LocalStorageModule', 'angul
 .config(['$routeProvider', '$httpProvider' ,function ($routeProvider, $httpProvider) {
 	  $routeProvider
           .when('/dotmarks', {templateUrl: 'partials/dotmarks.html', controller: 'dotMarkController'})
-          .when('/terminal', {templateUrl: 'partials/terminal.html', controller: 'terminalCtl'})
+          .when('/bulk_import', {templateUrl: 'partials/bulk_import.html', controller: 'terminalCtl'})
+          .when('/upload_html', {templateUrl: 'partials/upload_html.html', controller: 'terminalCtl'})
           .when('/signin', {templateUrl: 'partials/signin.html', controller: 'authCtl'})
           .when('/signup', {templateUrl: 'partials/signup.html', controller: 'authCtl'})
           .when('/reset', {templateUrl: 'partials/reset.html', controller: 'authCtl'})

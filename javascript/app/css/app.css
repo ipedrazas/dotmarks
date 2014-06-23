@@ -110,12 +110,13 @@
   margin-top: 10px;
 }
 .terminal{
-  width: 600px;
-  height: 400px;
+  width: 800px;
+  height: 600px;
   background-color: black;
   color: rgb(0, 238, 0);
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 1.2em;
+  margin: 25px;
 }
 
 .sideSubTitle{
