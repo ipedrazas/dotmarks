@@ -2,29 +2,16 @@
 
 - name: Assures {{virtualenv_dir}}/etc dir exists
   file: path={{virtualenv_dir}}/etc state=directory
-  sudo_user: dotmarks
+  sudo_user: vagrant
 
 - name: create folder for gunicorn.conf.py
   template: src=gunicorn.conf.py.j2
             dest={{virtualenv_dir}}/etc/gunicorn.conf.py
-  sudo_user: dotmarks
+  sudo_user: vagrant
 
 
 - name: write gunicorn init script
-  template: src=gunicorn-{{ api_name }}.conf.j2
-            dest=/etc/supervisor/conf.d/gunicorn-{{ api_name }}.conf
+  template: src=postworker.conf.j2
+            dest=/etc/supervisor/conf.d/postworker.conf
 
-
-- name: write celery dotmarks post processing
-  template: src=celery-{{ api_name }}.conf.j2
-            dest=/etc/supervisor/conf.d/celery-{{ api_name }}.conf
-
-- name: write celery mail_worker
-  template: src=user-worker.conf.j2
-            dest=/etc/supervisor/conf.d/user-worker.conf
-
-- name: write celery mail_worker
-  template: src=mail-worker.conf.j2
-            dest=/etc/supervisor/conf.d/mail-worker.conf
-  notify: reload supervisor
 

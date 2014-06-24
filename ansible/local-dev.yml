@@ -1,14 +1,20 @@
 - hosts: vagrant
+  user: vagrant
+  sudo: yes
 
   vars:
       server_name: dotmarks.dev
       user: www-data
       ssl_cert: dotmarks.dev
+      virtualenv_dir: "/home/vagrant/Env"
+      api_name: api.dotmarks.dev
+      current_code: /vagrant
 
   roles:
-    - upgrade
-    - common
-    - ohmyzsh
-    - redis
-    - python
-    - mongo
+    # - upgrade
+    # - common
+    # - ohmyzsh
+    # - redis
+    # - python
+    - nginx
+    # - mongo

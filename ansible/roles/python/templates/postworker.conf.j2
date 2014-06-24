@@ -1,0 +1,21 @@
+[program:gunicorn]
+command = /home/vagrant/Envs/dotmarks/bin/gunicorn --debug --config /home/vagrant/etc/gunicorn.conf.py app:app
+
+directory=/vagrant/python
+user=vagrant
+stdout_logfile=/var/log/gunicorn.log
+stderr_logfile=/var/log/gunicorn.log
+priority=300
+startsecs=5
+
+
+
+[program:postworker]
+command=/home/vagrant/Envs/dotmarks/bin/celery -A workers.postworker worker
+directory=/vagrant/python
+user=vagrant
+startsecs=11
+stdout_logfile=/var/log/supervisor/postworker.log
+stderr_logfile=/var/log/supervisor/postworker.log
+priority=300
+environment=SENDGRID_USER=127biscuits,SENDGRID_PASSWORD=t0t0r012:se

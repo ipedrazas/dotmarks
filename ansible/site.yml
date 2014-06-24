@@ -9,5 +9,6 @@
     - common
     - redis
     - python
+    - virtualenv
     - mongo
     - nginx

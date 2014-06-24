@@ -5,3 +5,6 @@ virtualenv_dir:~/Envs
 server_name: dotmarks.dev
 user: www-data
 ssl_cert: dotmarks.dev
+
+api_name: api.dotmarks.dev
+current_code: /vagrant
