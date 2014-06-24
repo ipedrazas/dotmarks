@@ -75,13 +75,13 @@ def tags_by_url(url):
 
 def tag_title(title):
     if title:
-        logger.debug("tagging " + title)
-        tokens = title.split()
-        logger.debug(tokens)
-        results = db.tags.find({'tag': {'$in': tokens}})
+        print ("tagging " + title)
+        tokens = title.lower().split()
+        print str(tokens)
+        results = db.atags.find({'keywords': {'$in': tokens}}, {'tag': 1})
         tags = []
-        logger.debug(results)
         for result in results:
+            print str(result)
             tags.append(result['tag'])
         return tags
 
