@@ -32,11 +32,14 @@ def get_title_from_url(url):
             return soup.title.string
         elif not soup.h1:
             return soup.h1.string.strip()
+
     except IOError as e:
         logger.error(e)
         logger.error("    I/O error({0}): {1}".format(e.errno, e.strerror))
     except URLError, err:
         logger.error(err.reason)
+    except AttributeError:
+        pass
 
 
 def get_hash(email):
@@ -70,10 +73,13 @@ def tags_by_url(url):
 
 
 def tag_title(title):
+    logger.debug("tagging " + title)
     if title:
         tokens = title.split()
+        logger.debug(tokens)
         results = db.tags.find({'tag': {'$in': tokens}})
         tags = []
+        logger.debug(results)
         for result in results:
             tags.append(result['tag'])
         return tags
