@@ -82,12 +82,14 @@ def send_mail_password_reset(email):
     if user:
         hashlink = get_hash(email)
         create_reset_mail_object(email, str(hashlink))
-        #update user
+        updates = {
+            RESET_PASSWORD_DATE: get_date(),
+            RESET_PASSWORD_HASH: get_date(),
+            LAST_UPDATED: get_date()
+        }
         db.users.update(
             {'_id': ObjectId(user['_id'])},
-            {"$inc": {"r": 1}, "$set": {LAST_UPDATED: get_date(),
-                                        RESET_PASSWORD_DATE: get_date(),
-                                        RESET_PASSWORD_HASH: hashlink}},
+            {"$inc": {"r": 1}, "$set": updates},
             upsert=False)
     else:
         logger.error("no user found with email: " + email)
@@ -102,6 +104,6 @@ def post_login(item):
             LAST_UPDATED: get_date()
         }
         db.users.update(
-            {{'username': item['username']}},
+            {'username': item['username']},
             {"$set": updates},
             upsert=False)
