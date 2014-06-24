@@ -64,12 +64,13 @@ def populate_dotmark(item):
     logger.info("processing %s" % item['url'])
     updates = {}
     if 'url' and '_id' in item:
+        if 'title' not in item or not item['title']:
+            updates['title'] = get_title_from_url(item['url'])
+            item['title'] = updates['title']
+
         atags = auto_tag(item)
         if atags:
             updates['atags'] = atags
-
-        if 'title' not in item or not item['title']:
-            updates['title'] = get_title_from_url(item['url'])
 
         if updates:
             do_update(item['_id'], updates)
