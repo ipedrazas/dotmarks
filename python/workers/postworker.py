@@ -2,15 +2,12 @@ from flask import Flask
 from celery import Celery
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from urlparse import urlparse
 from dot_delicious import parse_html
-from dot_utils import get_date, get_title_from_url
+from dot_utils import get_date, get_title_from_url, get_hash, do_update
+from dot_utils import auto_tag
+from mail_utils import create_reset_mail_object
 from celery.utils.log import get_task_logger
 from constants import LAST_UPDATED, RESET_PASSWORD_DATE, RESET_PASSWORD_HASH
-import hashlib
-from os.path import join, abspath, dirname
-import os
-import sendgrid
 
 
 logger = get_task_logger(__name__)
@@ -39,38 +36,6 @@ flask_app.config.update(
     CELERY_RESULT_BACKEND='redis://localhost:6379'
 )
 celery = make_celery(flask_app)
-
-
-def do_update(oid, updates):
-    updates[LAST_UPDATED] = get_date()
-    db.dotmarks.update({'_id': ObjectId(oid)}, {'$set': updates}, upsert=False)
-
-
-def get_domain(url):
-    parsed_uri = urlparse(url)
-    # ignore the uri.scheme (http|s)
-    domain = parsed_uri.netloc
-    posWWW = domain.find('www')
-    if posWWW != -1:
-        domain = domain[4:]
-    return domain
-
-
-def tags_by_url(url):
-    results = db.atags.find({'entries': get_domain(url)})
-    tags = []
-    for result in results:
-        logger.info(result)
-        tags.append(result['tag'])
-    return tags
-
-
-def auto_tag(item):
-    atags = []
-    at_url = tags_by_url(item['url'])
-    if at_url:
-        atags.extend(at_url)
-    return atags
 
 
 @celery.task()
@@ -108,54 +73,6 @@ def populate_dotmark(item):
 
         if updates:
             do_update(item['_id'], updates)
-
-
-def get_hash(email):
-    m = hashlib.sha1()
-    m.update(email + str(get_date()))
-    return m.hexdigest()
-
-
-def read_file(filename):
-    path = abspath(join(dirname(__file__), '.')) + filename
-    print path
-    f = open(path, 'r')
-    return f.read()
-
-
-def send_invitation_mail(mail):
-    sendgrid_user = os.getenv("SENDGRID_USER")
-    sendgrid_password = os.getenv("SENDGRID_PASSWORD")
-
-    if sendgrid_user and sendgrid_password:
-        sg = sendgrid.SendGridClient(sendgrid_user, sendgrid_password)
-        message = sendgrid.Mail()
-        message.add_to(mail['to_address'])
-        message.set_subject(mail['subject'])
-        message.set_html(mail['html_body'])
-        message.set_text('Body')
-        message.set_from(mail['from'])
-        status, msg = sg.send(message)
-        logger.info('Mail sent to ' + mail['to_address'])
-    else:
-        logger.error('SendGridClient credentials not valid: ' +
-                     sendgrid_user + " " + sendgrid_password)
-
-
-def create_reset_mail_object(email, hashlink):
-    subject = 'Reset Password Request'
-    mail = read_file('/mail_templates/reset_password_mail.html')
-    html_mail = mail.decode('utf-8') % (hashlink)
-    txt_mail = 'All '
-    mail = {'from': "info@dotmarks.net",
-            'from_name': '.dotMarks',
-            'subject': subject,
-            'txt_body': txt_mail,
-            'html_body': html_mail,
-            'to_address': email,
-            'to_name': email
-            }
-    send_invitation_mail(mail)
 
 
 @celery.task()
