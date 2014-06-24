@@ -1,4 +1,4 @@
-- hosts: local-dev
+- hosts: vagrant
 
   vars:
       server_name: dotmarks.dev
