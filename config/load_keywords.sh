@@ -11,5 +11,5 @@ curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "code", "entries": ["cod
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "github", "entries": ["github.com"]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "google", "entries": ["google.com" , "developer.google.com"]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "hn", "entries": ["news.ycombinator.com" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
-curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "linux", "entries": ["ubuntu.com", "debian.org", "archlinux.org"]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
-curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "devops", "entries": ["docker.com", "vimeo.com"], "keywords": ["docker", "nginx", "ansible", "puppet", "chef", "apache" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
+curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "linux", "entries": ["ubuntu.com", "debian.org", "archlinux.org"], "keywords": ["linux", "arch", "ubuntu", "debian", "red hat", "suse", "kernel", "lxc"]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
+curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "devops", "entries": ["docker.com", "vimeo.com"], "keywords": ["devops","docker", "nginx", "ansible", "puppet", "chef", "apache" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags

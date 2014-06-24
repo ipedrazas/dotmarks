@@ -28,9 +28,10 @@ def get_title_from_url(url):
 
         req = Request(url, headers=hdr)
         soup = BeautifulSoup(urlopen(req))
-        if not soup.title:
+        # print str(soup)
+        if soup.title:
             return soup.title.string
-        elif not soup.h1:
+        elif soup.h1:
             return soup.h1.string.strip()
 
     except IOError as e:
@@ -38,8 +39,8 @@ def get_title_from_url(url):
         logger.error("    I/O error({0}): {1}".format(e.errno, e.strerror))
     except URLError, err:
         logger.error(err.reason)
-    except AttributeError:
-        pass
+    except AttributeError as at:
+        logger.error(at)
 
 
 def get_hash(email):
