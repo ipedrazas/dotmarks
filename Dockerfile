@@ -9,7 +9,7 @@ FROM ubuntu
 
 # Install Python Setuptools
 RUN apt-get update && apt-get install -y \
-    python-setuptools
+    python-setuptools build-essential libffi-dev python-dev
 
 # Install pip
 RUN easy_install pip
