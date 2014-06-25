@@ -16,3 +16,4 @@ curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "devops", "entries": ["d
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "python", "keywords": ["python","pip", "flask", "celery", "BeautifulSoup", "pymongo", "Werkzeug" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "java", "keywords": ["java","jre", "javac", "jvm", "j2ee", "servlet", "tomcat", "weblogic", "maven" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
 curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "javascript", "keywords": ["javascript","nodejs", "angularjs", "underscore", "npm", "js", "grunt" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
+curl -H "Authorization: Basic aXZhbjppdmFu" -d '{"tag": "mobile", "keywords": ["ios","android", "iphone", "mobile", "ipad", "tablet", "blackberry" ]}' -H 'Content-Type: application/json' http://api.dotmarks.dev/atags
